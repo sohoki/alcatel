@@ -1,0 +1,133 @@
+CREATE TABLE `ids` (
+  `TABLE_NAME` varchar(20) NOT NULL DEFAULT '',
+  `NEXT_ID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE `lettccmmnclcode` (
+  `CL_CODE` char(3) NOT NULL COMMENT '분류코드',
+  `CL_CODE_NM` varchar(60) DEFAULT NULL COMMENT '분류코드명',
+  `CL_CODE_DC` varchar(200) DEFAULT NULL COMMENT '분류코드 설명',
+  `USE_AT` char(1) DEFAULT NULL COMMENT '사용여부',
+  `FRST_REGIST_PNTTM` datetime DEFAULT current_timestamp() COMMENT '최초등록시점',
+  `FRST_REGISTER_ID` varchar(20) DEFAULT NULL COMMENT '최초등록자ID',
+  `LAST_UPDT_PNTTM` datetime DEFAULT NULL COMMENT '최종수정시점',
+  `LAST_UPDUSR_ID` varchar(20) DEFAULT NULL COMMENT '최종수정자ID',
+  PRIMARY KEY (`CL_CODE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='공통분류코드 정보 관리';
+
+CREATE TABLE `lettccmmncode` (
+  `CODE_ID` varchar(20) NOT NULL COMMENT '코드ID',
+  `CODE_ID_NM` varchar(60) DEFAULT NULL COMMENT '코드명',
+  `CODE_ID_DC` varchar(200) DEFAULT NULL COMMENT '코드ID설명',
+  `USE_AT` char(1) DEFAULT NULL COMMENT '사용여부',
+  `CL_CODE` char(3) DEFAULT NULL COMMENT '분류코드',
+  `FRST_REGIST_PNTTM` datetime DEFAULT current_timestamp() COMMENT '최초등록시점',
+  `FRST_REGISTER_ID` varchar(20) DEFAULT NULL COMMENT '최초등록자ID',
+  `LAST_UPDT_PNTTM` datetime DEFAULT NULL COMMENT '최종수정시점',
+  `LAST_UPDUSR_ID` varchar(20) DEFAULT NULL COMMENT '최종수정자ID',
+  PRIMARY KEY (`CODE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='공통코드 정보  관리';
+
+CREATE TABLE `lettccmmndetailcode` (
+  `CODE_ID` varchar(20) NOT NULL COMMENT '코드ID',
+  `CODE` varchar(25) NOT NULL COMMENT '코드',
+  `CODE_NM` varchar(60) DEFAULT NULL COMMENT '코드명',
+  `CODE_DC` varchar(200) DEFAULT NULL COMMENT '코드설명',
+  `USE_AT` char(1) DEFAULT NULL COMMENT '사용여부',
+  `FRST_REGIST_PNTTM` datetime DEFAULT current_timestamp() COMMENT '최초등록시점',
+  `FRST_REGISTER_ID` varchar(20) DEFAULT NULL COMMENT '최초등록자ID',
+  `LAST_UPDT_PNTTM` datetime DEFAULT NULL COMMENT '최종수정시점',
+  `LAST_UPDUSR_ID` varchar(20) DEFAULT NULL COMMENT '최종수정자ID',
+  PRIMARY KEY (`CODE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='공통코드 상세';
+
+
+CREATE TABLE `lettnauthorinfo` (
+  `AUTHOR_CODE` varchar(30) NOT NULL COMMENT '권한코드',
+  `AUTHOR_NM` varchar(60) NOT NULL COMMENT '권한명',
+  `AUTHOR_DC` varchar(200) DEFAULT NULL COMMENT '권한설명',
+  `AUTHOR_CREAT_DE` char(20) NOT NULL COMMENT '권한생성일',
+  PRIMARY KEY (`AUTHOR_CODE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='권한정보';
+
+
+CREATE TABLE `lettnfiledetail` (
+  `ATCH_FILE_ID` char(20) NOT NULL COMMENT '파일 아이디',
+  `FILE_STRE_COURS` varchar(2000) NOT NULL COMMENT '파일 저장 경로',
+  `STRE_FILE_NM` varchar(255) NOT NULL COMMENT '저장 파일명',
+  `ORIGNL_FILE_NM` varchar(255) DEFAULT NULL COMMENT '원본 파일명',
+  `FILE_EXTSN` varchar(20) NOT NULL COMMENT '파일 확장자',
+  `FILE_SIZE` int(11) DEFAULT NULL COMMENT '파일 크기',
+  `REPORT_SEQ` int(11) DEFAULT 0 COMMENT '화면 시퀀스',
+  `FILE_THUMNAIL` varchar(40) DEFAULT NULL COMMENT '썸네일',
+  `PLAY_TIME` varchar(20) DEFAULT '1' COMMENT '재생시간',
+  `FILE_WIDTH` varchar(10) DEFAULT NULL COMMENT '파일 넓비',
+  `FILE_HEIGHT` varchar(20) DEFAULT NULL COMMENT '파일 높이',
+  `USEYN` char(1) DEFAULT 'N' COMMENT '사용유무',
+  `FRST_REGIST_PNTTM` datetime DEFAULT current_timestamp() COMMENT '최초 등록일자',
+  `FRST_REGISTER_ID` varchar(20) DEFAULT NULL COMMENT '최초 등록자 아이디',
+  PRIMARY KEY (`ATCH_FILE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='콘텐츠 파일 상세';
+
+
+
+CREATE TABLE `rtetccode` (
+  `CODE_ID` varchar(20) DEFAULT NULL,
+  `CODE_NM` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `rtetnauth` (
+  `MNGR_SE` varchar(20) DEFAULT NULL,
+  `URL` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tb_managerinfo` (
+  `ADMIN_ID` varchar(30) NOT NULL COMMENT '관리자 아이디',
+  `ADMIN_PASSWORD` varchar(255) NOT NULL COMMENT '관리자 패스워드',
+  `ADMIN_NAME` varchar(30) NOT NULL COMMENT '관리자명',
+  `USE_YN` char(1) DEFAULT 'Y' COMMENT '사용유무',
+  `PART_ID` int(11) DEFAULT 0 COMMENT '부서아이디',
+  `ADMIN_EMAIL` varchar(255) DEFAULT NULL COMMENT '이메일',
+  `ADMIN_TEL` varchar(15) DEFAULT NULL COMMENT '전화번호',
+  `REG_DATE` datetime DEFAULT current_timestamp() COMMENT '등록일',
+  `UPDATE_PASSWORD` datetime DEFAULT NULL COMMENT '패스워드 수정일자',
+  `ADMIN_LEVEL` varchar(20) DEFAULT NULL COMMENT '관리 등급',
+  `LOCK_YN` char(1) DEFAULT 'N' COMMENT '잠김여부',
+  `EMP_NO` varchar(20) DEFAULT NULL COMMENT '사번',
+  PRIMARY KEY (`ADMIN_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='관리자 정보';
+
+
+CREATE TABLE `tb_errorhis` (
+  `ERROR_SEQ` int(11) NOT NULL AUTO_INCREMENT COMMENT '시퀀스',
+  `ERROR_TYPE` varchar(80) DEFAULT NULL COMMENT '에러 타입',
+  `ERROR_MESSAGE` varchar(1000) DEFAULT NULL COMMENT '상세내역',
+  `ERROR_REGDATE` datetime DEFAULT current_timestamp() COMMENT '발생 시간',
+  PRIMARY KEY (`ERROR_SEQ`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 COMMENT='프로그램 애러 내역';
+
+
+CREATE TABLE `tb_sendmessagetypr` (
+  `XML_SEQ` int(11) NOT NULL AUTO_INCREMENT,
+  `WORK_GUBUN` varchar(15) DEFAULT NULL,
+  `XML_PROCESS_NAME` varchar(50) DEFAULT NULL,
+  `PROCESS_REMARK` varchar(150) DEFAULT NULL,
+  `XML_INPUTPARAM` varchar(1000) DEFAULT NULL,
+  `XML_OTPUTPARAM` varchar(1000) DEFAULT NULL,
+  `RESULT_CODE_EXAMPLE` varchar(1000) DEFAULT NULL,
+  `ETC1` varchar(255) DEFAULT NULL,
+  `ETC2` varchar(255) DEFAULT NULL,
+  `ETC3` varchar(255) DEFAULT NULL,
+  `TEST_OK` char(1) DEFAULT NULL,
+  `XML_INPUTPARAMSAMPLE` varchar(1000) DEFAULT NULL,
+  `XML_EXPLAIN` varchar(1000) DEFAULT NULL,
+  `FRST_REGIST_PNTTM` datetime DEFAULT current_timestamp(),
+  `FRST_REGISTER_ID` varchar(20) DEFAULT NULL,
+  `LAST_UPDT_PNTTM` datetime DEFAULT NULL,
+  `LAST_UPDUSR_ID` varchar(20) DEFAULT NULL,
+  `ERROR_MESSAGE` varchar(1000) DEFAULT NULL,
+  `PROT_TYPE` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`XML_SEQ`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='전문 정보';

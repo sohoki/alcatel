@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:egov-security="http://www.egovframe.go.kr/schema/egov-security"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.egovframe.go.kr/schema/egov-security http://www.egovframe.go.kr/schema/egov-security/egov-security-3.0.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+    <!-- loaded by 'EgovSecurityConfigInitializerBeanDefinitionParser' BeanDefinitionParser  -->
+    <!-- import resource="classpath*:/META-INF/spring/security/security-*.xml" /-->
+
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/images/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/js/**" security="none"/>
+    <security:http pattern="/upload/**" security="none"/>    
+    <security:http pattern="\A/WEB-INF/jsp/.*\Z" request-matcher="regex" security="none"/>
+    
+    <egov-security:config id="securityConfig"
+        loginUrl="/backoffice/login.do"
+        logoutSuccessUrl="/backoffice/basicManage/empList.do"
+        loginFailureUrl="/backoffice/basicManage/empList.do"        
+        accessDeniedUrl="/backoffice/ram/accessDenied.do"
+
+        dataSource="dataSource"
+        jdbcUsersByUsernameQuery="SELECT ADMIN_ID, ADMIN_PASSWORD, ADMIN_NAME, USE_YN, ADMIN_EMAIL,  ADMIN_TEL, ADMIN_LEVEL, LOCK_YN, EMP_NO, PART_ID  FROM  tb_managerinfo WHERE CONCAT(ADMIN_NAME,ADMIN_ID) =?"
+        jdbcAuthoritiesByUsernameQuery="SELECT ADMIN_ID , ADMIN_LEVEL AS AUTHOR_CODE  FROM tb_managerinfo WHERE ADMIN_ID = ?"
+        jdbcMapClass="egovframework.let.uat.uia.service.impl.EgovSessionMapping"
+
+        requestMatcherType="regex"
+        
+        concurrentMaxSessons  = "1"
+    />
+    
+    <egov-security:initializer id="initializer"   supportPointcut="false"   supportMethod="false" />
+    
+    <egov-security:secured-object-config id="securedObjectConfig"
+		roleHierarchyString="
+				ROLE_ADMIN > ROLE_USER
+				ROLE_USER > ROLE_RESTRICTED
+				ROLE_RESTRICTED > IS_AUTHENTICATED_FULLY
+				IS_AUTHENTICATED_FULLY >	IS_AUTHENTICATED_REMEMBERED
+				IS_AUTHENTICATED_REMEMBERED > IS_AUTHENTICATED_ANONYMOUSLY"
+		sqlRolesAndUrl="
+				SELECT auth.URL url, code.CODE_NM authority
+				FROM rtetnauth auth, rtetccode code
+				WHERE code.CODE_ID = auth.MNGR_SE"
+	/>
+	
+</beans>

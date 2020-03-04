@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>		
+		<setting name="mapUnderscoreToCamelCase" value="true" />		
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="cacheEnabled" value="true"/>		
+	</settings>
+	
+	<!-- 전자정부 프레임워크 공통 Alias 정의-->	  
+	<typeAliases>
+	    <package name="egovframework.com.cmm"/>
+	    <package name="egovframework.let.uat.uia.service"/>
+	    
+	    
+	    <package name="aten.com.backoffice.uat.service"/>
+	    <package name="aten.com.backoffice.sym.rnt.service"/>
+	    <package name="aten.com.backoffice.sym.ccm.cca.service"/>
+	    <package name="aten.com.backoffice.sym.ccm.ccc.service"/>
+	    <package name="aten.com.backoffice.sym.ccm.cde.service"/>
+	    
+	    
+	    <package name="aten.com.backoffice.sts.cnt.service"/>
+	    <package name="aten.com.backoffice.sts.sch.service"/>
+	    <package name="aten.com.backoffice.sts.error.service"/>
+	    <package name="aten.com.backoffice.sts.message.service"/>
+	    <package name="aten.com.backoffice.sts.report.service"/>
+	    <package name="aten.com.backoffice.sts.xml.service"/>
+
+	    <package name="aten.com.backoffice.sym.monter.service"/>
+	    <package name="aten.com.backoffice.sym.agent.service"/>
+	    <package name="aten.com.backoffice.sym.state.service"/>
+	    <package name="aten.com.backoffice.sym.cnt.service"/>
+	    
+	    
+	</typeAliases>
+	
+	
+    <!-- <typeHandlers>       
+       <typeHandler handler="egovframework.let.utl.fcc.service.OracleUsTypeHandler" javaType="java.lang.String"/>  
+    </typeHandlers> -->
+	
+	<!-- Mapper 정의 -->
+	<mappers>
+		<!-- 전자정부 프레임워크 공통 컴포넌트 -->
+		<mapper resource="egovframework/sqlmap/oracle/sym/ccm/cca/EgovCmmnCodeManageMapper.xml"/>
+		<mapper resource="egovframework/sqlmap/oracle/sym/ccm/ccc/EgovCmmnClCodeManageMapper.xml"/>
+		<mapper resource="egovframework/sqlmap/oracle/sym/ccm/cde/EgovCmmnDetailCodeManageMapper.xml"/>
+		<!-- did 사용자 정의 -->
+		
+		<mapper resource="egovframework/sqlmap/oracle/sym/rnt/AuthorInfoManagerMapper.xml"/>
+		<mapper resource="egovframework/sqlmap/oracle/uat/uia/AdminInfoManageMapper.xml"/>
+		<mapper resource="egovframework/sqlmap/oracle/uat/uia/EgovLoginUsrMapper.xml"/>
+		<!--  aten 으로 이동 -->
+		
+		<mapper resource="aten/sqlmap/oracle/sym/cnt/CenterInfoManagerMapper.xml"/>
+		<mapper resource="aten/sqlmap/oracle/sym/rpt/ReportPageInfoManageMapper.xml"/>
+		<mapper resource="aten/sqlmap/oracle/sym/agt/AgentInfoManageMapper.xml"/>
+		<mapper resource="aten/sqlmap/oracle/sym/agt/OrderInfoManageMapper.xml"/>
+		
+		<mapper resource="aten/sqlmap/oracle/sts/xml/XmlInfoManagerMapper.xml"/>
+		<mapper resource="aten/sqlmap/oracle/sts/sch/SchduleInfoManageMapper.xml"/>
+		<mapper resource="aten/sqlmap/oracle/sts/msg/SendMessageManageMapper.xml"/>
+		<mapper resource="aten/sqlmap/oracle/sts/err/ErrorInfoManageMapper.xml"/>
+		
+		<mapper resource="aten/sqlmap/oracle/sts/dis/DetailPageInfoManageMapper.xml"/>
+		<mapper resource="aten/sqlmap/oracle/sts/dis/DisplayPageInfoManageMapper.xml"/>
+		<mapper resource="aten/sqlmap/oracle/sts/cnt/ContentFileManagerMapper.xml"/>
+		<mapper resource="aten/sqlmap/oracle/sts/agentState/AgentStateManageMapper.xml"/>
+		
+		<mapper resource="aten/sqlmap/oracle/sts/uia/PartInfoManageMapper.xml"/>
+		<mapper resource="aten/sqlmap/oracle/sts/uia/UniUtilManageMapper.xml"/>
+		
+								
+	</mappers>
+</configuration>
