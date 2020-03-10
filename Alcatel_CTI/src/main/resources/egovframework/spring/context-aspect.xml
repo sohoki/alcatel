@@ -52,7 +52,7 @@
 			</list>
 		</property>
 	</bean>
-
 	<bean id="egovHandler" class="egovframework.com.cmm.EgovComExcepHndlr" />
-	<bean id="otherHandler" class="egovframework.com.cmm.EgovComOthersExcepHndlr" />
+	<bean id="otherHandler" class="egovframework.com.cmm.EgovComOthersExcepHndlr" />	
+
 </beans>

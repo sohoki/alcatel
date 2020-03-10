@@ -1,3 +1,9 @@
+create database CTI_INFO ;
+create user 'aten'@'%' identified by '1234';
+grant all privileges on  CIT_INFO.* to 'aten'@'%'; 
+flush privileges;
+
+
 CREATE TABLE `ids` (
   `TABLE_NAME` varchar(20) NOT NULL DEFAULT '',
   `NEXT_ID` int(11) DEFAULT NULL
@@ -131,3 +137,59 @@ CREATE TABLE `tb_sendmessagetypr` (
   `PROT_TYPE` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`XML_SEQ`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='전문 정보';
+
+
+//기초 프로시져 
+CREATE OR REPLACE PROCEDURE sp_maxValue(IN IS_FIELD VARCHAR(30), IN IS_TABLE varchar(50))
+BEGIN
+   set @query = CONCAT(' select    ifnull(   max(', IS_FIELD, ') , 0)    from ' ,    IS_TABLE  , '' ) ;
+      
+   PREPARE stmt FROM @query;
+   EXECUTE STMT; 
+   DEALLOCATE PREPARE STMT;
+end;
+
+
+CREATE OR REPLACE PROCEDURE sp_uniCheck(IN is_tableNm VARCHAR(255),
+                                         IN is_chekNm varchar(25),
+                                         IN is_tableCondition varchar(1000)
+                                         )
+BEGIN
+   set @ot = 0;
+   set @query = CONCAT(' select ifnull(count( ', is_chekNm, '  ),0)   from ', is_tableNm, '  where ',    replace(    is_tableCondition  , '[','''')   );
+   
+   PREPARE stmt FROM @query;
+   EXECUTE STMT; 
+   DEALLOCATE PREPARE stmt;
+
+end;
+
+
+CREATE OR REPLACE PROCEDURE sp_uniDel(IN IS_table VARCHAR(50),
+                                       IN IS_condition VARCHAR(1000) )
+BEGIN
+      
+      
+      set @query = CONCAT(' delete from ', IS_table, '  where ', replace(IS_condition, '[',''''));
+      
+      PREPARE stmt FROM @query;
+      EXECUTE STMT; 
+      DEALLOCATE PREPARE stmt;
+END;
+
+
+
+//권한 등록
+insert into  lettnauthorinfo
+select 'ROLE_ADMIN', '통합관리자', '시스템통합관리자', '2011-08-03';
+
+insert into  lettnauthorinfo
+select 'ROLE_ANONYMOUS', '통합조회유저', '시스템통합유저', '2011-08-03';
+
+insert into  lettnauthorinfo
+select 'ROLE_USER_MEMBER', '통합이용자', '시스템통합이용자', '2011-08-03';
+
+
+//관리자 등록
+insert into tb_managerinfo (ADMIN_ID, ADMIN_PASSWORD, ADMIN_NAME, LOCK_YN, USE_YN)
+values ('admin','1234', '관리자', 'N','Y');

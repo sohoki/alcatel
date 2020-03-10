@@ -2,6 +2,8 @@ package egovframework.let.uat.uia.web;
 
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 
@@ -128,14 +130,8 @@ public class EgovLoginController {
             HttpSession session = request.getSession(true);
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);	
             
-            
-           
-            
             //날짜 체크 이후 값 확인 하기 
-            
-     	    SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd");
-     	    Date today = new Date();
-     	    String currentDay = date.format(today);
+            String currentDay =  LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
      	   
             try{
             	 if ( Integer.valueOf(resultVO.getUpdatePassword()) < Integer.valueOf(currentDay) ){
@@ -178,14 +174,8 @@ public class EgovLoginController {
 		    	HttpSession httpSession = request.getSession(true);
 		    	AdminLoginVO loginVO = (AdminLoginVO)httpSession.getAttribute("AdminLoginVO");
 		    	 
-		    	if ( loginVO.getAdminLevel().equals("ROLE_ADMIN")  ){
-		    		return "forward:backoffice/basicManage/dashboardInfo.do";
-		     	}else if ( loginVO.getAdminLevel().equals("ROLE_COOK")  ){
-		    		return "forward:backoffice/RestManage/restPageInfoList.do";
-		     	}else {
-		     		LOGGER.debug("user");
-		     		return "forward:backoffice/basicManage/dashboardInfo.do";
-		     	}
+		     	return "forward:backoffice/basicManage/user_list.do";
+		     	
     	} catch(Exception e){
     		LOGGER.debug("login Error:" + e.toString());
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));

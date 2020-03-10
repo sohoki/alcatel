@@ -10,50 +10,32 @@
 	<!-- 전자정부 프레임워크 공통 Alias 정의-->	  
 	<typeAliases>
 	    <package name="egovframework.com.cmm"/>
+	    <package name="egovframework.let.src.ram.service"/>
 	    <package name="egovframework.let.uat.uia.service"/>
-	    
-	    
-	    <package name="aten.com.backoffice.uat.service"/>
 	    <package name="aten.com.backoffice.sym.rnt.service"/>
-	    <package name="aten.com.backoffice.sym.ccm.cca.service"/>
-	    <package name="aten.com.backoffice.sym.ccm.ccc.service"/>
-	    <package name="aten.com.backoffice.sym.ccm.cde.service"/>
+	    <package name="egovframework.let.sym.ccm.cca.service"/>
+	    <package name="egovframework.let.sym.ccm.ccc.service"/>
+	    <package name="egovframework.let.sym.ccm.cde.service"/>
 	    
 	    
-	    <package name="aten.com.backoffice.sts.cnt.service"/>
-	    <package name="aten.com.backoffice.sts.sch.service"/>
-	    <package name="aten.com.backoffice.sts.error.service"/>
-	    <package name="aten.com.backoffice.sts.message.service"/>
-	    <package name="aten.com.backoffice.sts.report.service"/>
-	    <package name="aten.com.backoffice.sts.xml.service"/>
-
-	    <package name="aten.com.backoffice.sym.monter.service"/>
-	    <package name="aten.com.backoffice.sym.agent.service"/>
-	    <package name="aten.com.backoffice.sym.state.service"/>
-	    <package name="aten.com.backoffice.sym.cnt.service"/>
-	    <!--  식당 -->
-	    <package name="aten.com.backoffice.etc.rest.service"/>
+	    <package name="com.sohoki.backoffice.util.service"/>
+	    
 	</typeAliases>
-	
-	
-    <!-- <typeHandlers>       
-       <typeHandler handler="egovframework.let.utl.fcc.service.OracleUsTypeHandler" javaType="java.lang.String"/>  
-    </typeHandlers> -->
 	
 	<!-- Mapper 정의 -->
 	<mappers>
 		<!-- 전자정부 프레임워크 공통 컴포넌트 -->
-		<mapper resource="egovframework/sqlmap/mysql/sym/ccm/cca/EgovCmmnCodeManageMapper.xml"/>
-		<mapper resource="egovframework/sqlmap/mysql/sym/ccm/ccc/EgovCmmnClCodeManageMapper.xml"/>
-		<mapper resource="egovframework/sqlmap/mysql/sym/ccm/cde/EgovCmmnDetailCodeManageMapper.xml"/>
-		<!-- did 사용자 정의 -->
+		<mapper resource="egovframework/sqlmap/mariadb/sym/ccm/cca/EgovCmmnCodeManageMapper.xml"/>
+		<mapper resource="egovframework/sqlmap/mariadb/sym/ccm/ccc/EgovCmmnClCodeManageMapper.xml"/>
+		<mapper resource="egovframework/sqlmap/mariadb/sym/ccm/cde/EgovCmmnDetailCodeManageMapper.xml"/>
 		
-		<mapper resource="egovframework/sqlmap/mysql/sym/rnt/AuthorInfoManagerMapper.xml"/>
-		<mapper resource="egovframework/sqlmap/mysql/uat/uia/AdminInfoManageMapper.xml"/>
-		<mapper resource="egovframework/sqlmap/mysql/uat/uia/EgovLoginUsrMapper.xml"/>
-		<!--  aten 으로 이동 -->
+		<mapper resource="egovframework/sqlmap/mariadb/sym/rnt/AuthorInfoManagerMapper.xml"/>
+		<mapper resource="egovframework/sqlmap/mariadb/uat/uia/AdminInfoManageMapper.xml"/>
+		<mapper resource="egovframework/sqlmap/mariadb/uat/uia/EgovLoginUsrMapper.xml"/>
+		<!--  sohoki 으로 이동 -->
+		<mapper resource="sohoki/sqlmap/mariadb/uti/EgovLoginUsrMapper.xml"/>
 		
-		<mapper resource="aten/sqlmap/mysql/sym/cnt/CenterInfoManagerMapper.xml"/>
+		<!-- <mapper resource="aten/sqlmap/mysql/sym/cnt/CenterInfoManagerMapper.xml"/>
 		<mapper resource="aten/sqlmap/mysql/sym/rpt/ReportPageInfoManageMapper.xml"/>
 		<mapper resource="aten/sqlmap/mysql/sym/agt/AgentInfoManageMapper.xml"/>
 		<mapper resource="aten/sqlmap/mysql/sym/agt/OrderInfoManageMapper.xml"/>
@@ -78,7 +60,7 @@
 		<mapper resource="aten/sqlmap/mysql/sts/uia/UniUtilManageMapper.xml"/>
 		
 		<mapper resource="aten/sqlmap/mysql/etc/rest/RestNoticeInfoManageMapper.xml"/> 
-		<mapper resource="aten/sqlmap/mysql/etc/rest/RestInfoManageMapper.xml"/>
+		<mapper resource="aten/sqlmap/mysql/etc/rest/RestInfoManageMapper.xml"/> -->
 								
 	</mappers>
 </configuration>

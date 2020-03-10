@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.com.mapper.AdminInfoManagerMapper">
+
+   <select id="selectAdminUserManageListByPagination" resultType="AdminInfoVO">     	      
+		SELECT  TB.* FROM (
+			   SELECT
+						      a.ADMIN_ID as  "adminId",
+				              a.ADMIN_NAME as  "adminName",
+				              a.ADMIN_TEL as "adminTel",
+	                          a.ADMIN_EMAIL as "adminEmail",
+				              a.PART_ID  as "partId",
+				              case a.LOCK_YN when 'Y' then 'O'
+	                               else 'X'
+	                          end as lockYn,
+	                          case a.Use_YN when 'Y' then 'O'
+	                               else 'X'
+	                          end as UseYn,		
+	                          DATE_FORMAT(a.REG_DATE, '%Y-%m-%d') as regDate	,              
+				              c.AUTHOR_NM as "deptLevel",
+				              a.EMP_NO ,
+	                          CASE a.ADMIN_LEVEL WHEN 'ROLE_ADMIN'  THEN '관리자'
+	                          ELSE (SELECT ifnull(part_nm , '없음') FROM tb_partinfo b WHERE b.PART_ID = a.PART_ID)
+	                          END as partNm		
+			    FROM   tb_managerinfo a , lettnauthorinfo c
+				WHERE   a.ADMIN_LEVEL = c.AUTHOR_CODE
+		        <if test="searchKeyword != ''">
+						<choose>
+							<when test="searchCondition == 'adminId'">
+								and a.ADMIN_ID LIKE CONCAT('%',#{searchKeyword},'%') 
+							</when>
+							<otherwise>
+								and a.ADMIN_NAME LIKE CONCAT('%',#{searchKeyword},'%') 
+							</otherwise>
+						</choose>
+				</if>		        
+				<if test="useYn != ''">
+				         and a.USE_YN = #{useYn}
+				</if>		     
+		        ORDER BY a.REG_DATE  DESC
+	        ) TB 
+              limit #{firstIndex} , #{recordCountPerPage}      		 	    
+   </select>
+   
+   <select id="selectAdminUserManageDetail" resultType="AdminInfoVO">
+     select ADMIN_ID, ADMIN_PASSWORD, ADMIN_NAME, USE_YN, PART_ID, ADMIN_EMAIL, ADMIN_TEL, ADMIN_LEVEL, UPDATE_PASSWORD, 
+            LOCK_YN, USE_YN, EMP_NO, REG_DATE
+     from tb_managerinfo
+     where ADMIN_ID = #{adminId}
+   </select>
+   
+   <select id="selectAdminUserMangerIDCheck" resultType="java.lang.Integer">
+            SELECT  ifnull(count(*),0)      
+		    FROM   tb_managerinfo
+		    WHERE  ADMIN_ID = #{adminId}
+   </select>
+   
+   <insert id="insertAdminUserManage">
+      insert into tb_managerinfo( ADMIN_ID, ADMIN_PASSWORD, ADMIN_NAME, USE_YN, PART_ID,  ADMIN_EMAIL, 
+       ADMIN_TEL, REG_DATE, UPDATE_PASSWORD, ADMIN_LEVEL, LOCK_YN, EMP_NO)
+      values (#{adminId}, #{adminPassword}, #{adminName}, #{useYn}, #{partId,jdbcType=VARCHAR },  #{adminEmail ,jdbcType=VARCHAR},
+       #{adminTel ,jdbcType=VARCHAR}, now(), now(), #{adminLevel ,jdbcType=VARCHAR}, 'N' , #{empNo ,jdbcType=VARCHAR}  )
+   </insert>
+   <update id="updateAdminUserManage">
+      update tb_managerinfo set ADMIN_NAME = #{adminName}
+                                                  ,  USE_YN = #{useYn}
+                                                  ,  PART_ID = #{partId }
+                                                  ,  ADMIN_EMAIL = #{adminEmail, jdbcType=VARCHAR }
+                                                  ,  ADMIN_TEL = #{adminTel, jdbcType=VARCHAR }
+                                                  ,  ADMIN_LEVEL = #{adminLevel , jdbcType=VARCHAR }
+                                                  <if test="adminPassword != ''">
+                                                  , ADMIN_PASSWORD = #{adminPassword}
+                                                  , UPDATE_PASSWORD = now()
+                                                  , LOCK_YN ='N'
+                                                  </if> 
+                                                  <if test="empNo != ''">
+                                                  ,  EMP_NO = #{empNo, jdbcType=VARCHAR }
+                                                  </if>
+      where ADMIN_ID = #{adminId}
+   </update>
+   <update id="updatePassChange">
+       update tb_managerinfo set ADMIN_PASSWORD = #{adminPassword}
+                           , UPDATE_PASSWORD = now()
+       where  ADMIN_ID = #{adminId} 
+   </update>
+   <update id="updateAdminUserLockManage">
+      update tb_managerinfo set LOCK_YN = 'Y'
+             where ADMIN_ID = #{adminId}
+   </update>
+   
+</mapper>
+

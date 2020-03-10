@@ -9,7 +9,6 @@ import egovframework.let.sym.ccm.cca.service.CmmnCodeVO;
 @Mapper("CmmnCodeManageMapper")
 public interface EgovCmmnCodeManageMapper {
 
-	
 	    public List<CmmnCodeVO> selectCmmnCodeListByPagination(CmmnCodeVO vo);
 		
 		public List<CmmnCode> selectCmmnCodeList(String clCode);
