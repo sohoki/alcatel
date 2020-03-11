@@ -175,6 +175,35 @@
             <version>2.2.1</version>
         </dependency>
 		<!--  quartz -->
+		<!--  비디오 코덱 -->
+		<dependency>
+			<groupId>org.jcodec</groupId>
+			<artifactId>jcodec</artifactId>
+			<version>0.1.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jcodec</groupId>
+			<artifactId>jcodec-javase</artifactId>
+			<version>0.1.9</version>
+		</dependency>
+		<!--  비디오 코덱 -->
+		<!-- mp3 코덱 -->
+		<dependency>
+		    <groupId>javazoom</groupId>
+		    <artifactId>jlayer</artifactId>
+		    <version>1.0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.googlecode.soundlibs</groupId>
+		    <artifactId>tritonus-share</artifactId>
+		    <version>0.3.7-1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.googlecode.soundlibs</groupId>
+		    <artifactId>mp3spi</artifactId>
+		    <version>1.9.5-1</version>
+		</dependency>		
+		<!-- mp3 코덱 -->
 		<dependency>
 		    <groupId>com.googlecode.json-simple</groupId>
 		    <artifactId>json-simple</artifactId>

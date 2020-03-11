@@ -20,7 +20,11 @@
 	    
 	    <package name="com.sohoki.backoffice.util.service"/>
 	    <package name="com.sohoki.backoffice.sts.error.service"/>
+	    <package name="com.sohoki.backoffice.sts.cnt.service"/>
 	    <package name="com.sohoki.backoffice.uat.uia.service"/>
+	    
+	    <package name="com.sohoki.backoffice.sym.cnt.service"/>
+	    <package name="com.sohoki.backoffice.sym.agt.service"/>
 	    
 	</typeAliases>
 	
@@ -38,6 +42,10 @@
 		<mapper resource="sohoki/sqlmap/mariadb/uti/UniUtilManageMapper.xml"/>
 		<mapper resource="sohoki/sqlmap/mariadb/sts/err/ErrorInfoManageMapper.xml"/>
 		<mapper resource="sohoki/sqlmap/mariadb/uat/uia/PartInfoManageMapper.xml"/>
+		<mapper resource="sohoki/sqlmap/mariadb/sym/cnt/CenterInfoManagerMapper.xml"/>
+		<mapper resource="sohoki/sqlmap/mariadb/sts/cnt/ContentFileManagerMapper.xml"/>
+		<mapper resource="sohoki/sqlmap/mariadb/sts/agt/TelephoneInfoManageMapper.xml"/>
+		<mapper resource="sohoki/sqlmap/mariadb/sts/agt/UserPhoneInfoManageMapper.xml"/>
 		
 		<!-- <mapper resource="aten/sqlmap/mysql/sym/cnt/CenterInfoManagerMapper.xml"/>
 		<mapper resource="aten/sqlmap/mysql/sym/rpt/ReportPageInfoManageMapper.xml"/>
