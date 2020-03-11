@@ -20,6 +20,7 @@
 	    
 	    <package name="com.sohoki.backoffice.util.service"/>
 	    <package name="com.sohoki.backoffice.sts.error.service"/>
+	    <package name="com.sohoki.backoffice.uat.uia.service"/>
 	    
 	</typeAliases>
 	
@@ -36,6 +37,7 @@
 		<!--  sohoki 으로 이동 -->
 		<mapper resource="sohoki/sqlmap/mariadb/uti/UniUtilManageMapper.xml"/>
 		<mapper resource="sohoki/sqlmap/mariadb/sts/err/ErrorInfoManageMapper.xml"/>
+		<mapper resource="sohoki/sqlmap/mariadb/uat/uia/PartInfoManageMapper.xml"/>
 		
 		<!-- <mapper resource="aten/sqlmap/mysql/sym/cnt/CenterInfoManagerMapper.xml"/>
 		<mapper resource="aten/sqlmap/mysql/sym/rpt/ReportPageInfoManageMapper.xml"/>
