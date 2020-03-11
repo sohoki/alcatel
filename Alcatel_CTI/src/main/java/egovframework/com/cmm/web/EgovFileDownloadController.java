@@ -144,7 +144,6 @@ public class EgovFileDownloadController {
 
 				//response.setBufferSize(fSize);	// OutOfMemeory 발생
 				response.setContentType(mimetype);
-				//response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(fvo.getOrignlFileNm(), "utf-8") + "\"");
 				setDisposition(fvo.getOrignlFileNm(), request, response);
 				//response.setContentLength(fSize);
 

@@ -33,7 +33,7 @@
 		<mapper resource="egovframework/sqlmap/mariadb/uat/uia/AdminInfoManageMapper.xml"/>
 		<mapper resource="egovframework/sqlmap/mariadb/uat/uia/EgovLoginUsrMapper.xml"/>
 		<!--  sohoki 으로 이동 -->
-		<mapper resource="sohoki/sqlmap/mariadb/uti/EgovLoginUsrMapper.xml"/>
+		<mapper resource="sohoki/sqlmap/mariadb/uti/UniUtilManageMapper.xml"/>
 		
 		<!-- <mapper resource="aten/sqlmap/mysql/sym/cnt/CenterInfoManagerMapper.xml"/>
 		<mapper resource="aten/sqlmap/mysql/sym/rpt/ReportPageInfoManageMapper.xml"/>
