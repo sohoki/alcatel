@@ -1,0 +1,99 @@
+body {
+	background: url("/images/bg.jpg"); 
+	min-height:1080px;
+	overflow:hidden; 
+}
+.clearfix { clear: both; }
+.container {
+	width: 97%;
+	margin: auto;
+	height:100%;
+	position: relative;
+	
+}
+.header { height: 85px; overflow:hidden; }
+.logo{ float: left; padding-top: 15px; }
+.logo img { display: block; }
+.dateBox ul { padding-top: 15px; }
+.dateBox { float: right;text-align: right; line-height: 2.4em;}
+.dateBox .time {font-size: 37px ; color:#000000; font-weight: 600; }
+.dateBox .date {font-size: 25px ; color:#5a5a5a; font-weight: 500 }
+
+
+
+table {
+	width: 100%;
+	text-align: center;
+	height: 100%;
+}
+
+table thead th {		
+	border-radius: 12px;
+	box-shadow: 0px 6px 4px -2px #b3b3b3;
+	background:#4d5a68;
+	font-weight:500;
+	font-size: 65px;
+	color: #fff;
+	height: 105px;
+}
+table thead th:nth-child(1){ background:#333434;  }
+
+table tbody td {
+	background-color: rgba( 255, 255, 255, 0.8 );
+	border-radius: 12px;
+	color: #585757;
+	height: 111px;
+	font-size: 72px;
+	font-weight: 500;
+}
+table tbody th {
+	background-color: rgba( 113, 123, 132, 0.8 );
+	border-radius: 12px;
+	color: #fff;
+	height: 98px;
+	font-size: 55px;
+	font-weight: 500;
+	line-height: 0.7em;
+}
+.total th{background: #c01818; }
+.total td{color:#272727 }
+.noti_txt { font-size:26px  }
+.noti_tit { font-size:45px  }
+/*가로6개*/
+.width6, .width5 {border-spacing: 9px;}
+.width6 thead th { width: 13.6% }
+.width5 thead th { width: 19.6% }
+table.height9 tbody td {height: 98px;font-size: 65px;}
+table.height9 tbody tj{height: 98px;font-size: 50px;}
+/*20190130*/
+table.Page04 {border-spacing:6px !important;}
+table.Page04 tbody td{font-size: 54px !important;height: 68px !important;}
+table.Page04 tbody th {font-size: 38px !important;line-height:1em !important;height: 70px;}
+table.page05 tbody th {font-size: 44px;width: 16% ;}
+/*20190212*/
+table.page03 tbody td{font-size: 58px !important;height: 75px !important;}
+table.page03 tbody th {font-size: 46px !important;height: 75px;}
+
+
+/*popup*/
+.needpopup_wrapper {
+      background-color:rgba(0, 0, 0, 0.1);
+}
+.needpopup{
+     -moz-box-shadow:8px 10px 6px -8px #cacaca;
+      -webkit-box-shadow:8px 10px 6px -8px #cacaca;
+      box-shadow: 8px 10px 6px -8px #cacaca; 
+}
+.needpopup .user_top {
+      background: #3775f6;
+      padding:35px 0;
+      font-size: 35px;
+      text-align: center;
+      color: #fff
+}
+.needpopup .check_pop{
+      font-size: 25px;
+      text-align: center;
+      padding: 80px  0;
+}
+.close_black .needpopup_remover{ color: #404040 !important; }

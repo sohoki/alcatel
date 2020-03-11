@@ -1,0 +1,117 @@
+#calendarSelector {
+  position:absolute;
+  padding:3px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  background-color:#ffffff;
+  border:1px solid #666666;
+  -webkit-box-shadow:0px 3px 6px #a09f9f;
+  -moz-box-shadow:0px 3px 6px #a09f9f;
+  box-shadow:0px 3px 6px #a09f9f;
+  font-size:12px;
+  -moz-user-select:none;
+  cursor:default;
+  width:auto;
+  height:auto;
+  min-width:0;
+  min-height:0;
+  display:block;
+}
+#calendarSelector * {
+  position:static;
+  color:#000000;
+  background:transparent;
+  font:normal 12px tahoma,sans-serif;
+  width:auto;
+  height:auto;
+  min-width:0;
+  min-height:0;
+  margin:0px;
+  padding:0px;
+  border:0px none;
+  outline:0px;
+  vertical-align:baseline;
+  line-height:1.3em;
+}
+#calendarSelector table {
+  background-color:#777777;
+}
+#calendarSelector table thead tr td {
+  background-color:#e7e7e7;
+  text-align:center;
+  cursor:pointer;
+}
+#calendarSelector table thead tr td:hover {
+  background-color:#cccccc;
+}
+#calendarSelector table thead tr td.disabled {
+  cursor:default;
+  color:#999999;
+  background-color:#e7e7e7;
+}
+#calendarSelector table thead tr th {
+  background-color:#e7e7e7;
+  padding:0.1em 0px;
+  font-weight:normal;
+}
+#calendarSelector table thead tr th em,
+#calendarSelector table thead tr th strong {
+  padding:0px 4px;
+  cursor:pointer;
+  font-weight:normal;
+  font-style:normal;
+}
+#calendarSelector table thead tr th em {
+  float:right;
+}
+#calendarSelector table thead tr th strong {
+  float:left;
+}
+#calendarSelector table thead tr th *.disabled {
+  cursor:default;
+  color:#999999;
+}
+#calendarSelector table thead tr th span {
+  font-size:90%;
+}
+
+#calendarSelector table tfoot tr td {
+  font-size:80%;
+  text-align:center;
+  padding:0px;
+  background-color:#d6d6d6;
+  cursor:pointer;
+}
+#calendarSelector table tfoot tr td:hover {
+  background-color:#cccccc;
+}
+
+#calendarSelector table tbody tr td {
+  text-align:center;
+  padding:0.1em 0.4em;
+  background-color:#eeeeee;
+  color:#999999;
+}
+#calendarSelector table tbody tr td.valid {
+  color:#000000;
+  cursor:pointer;
+}
+#calendarSelector table tbody tr td.month {
+  background-color:#ffffff;
+}
+#calendarSelector table tbody tr td.weekend {
+  background-color:#fbccd2;
+}
+#calendarSelector table tbody tr td.today {
+  background-color:#7fc7e9;
+}
+#calendarSelector table tbody tr td.selected {
+  outline:1px solid #ff0000;
+}
+#calendarSelector table tbody:hover tr td.selected {
+  outline:0px none;
+}
+#calendarSelector table tbody tr td.valid:hover {
+  background-color:#a7eaed;
+  outline:1px solid #7ebdc0;
+}

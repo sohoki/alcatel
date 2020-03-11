@@ -6,7 +6,6 @@
    	       SELECT a.ADMIN_ID AS adminId
 			     , a.ADMIN_NAME AS adminName			     
 			     , a.ADMIN_PASSWORD AS adminPassword				     
-			     , b.PART_NM AS partNm
 			     , a.ADMIN_EMAIL AS adminEmail
 			     , a.ADMIN_TEL AS adminTel			     
 			     , a.ADMIN_LEVEL  AS adminLevel

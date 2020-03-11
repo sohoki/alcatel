@@ -1,0 +1,61 @@
+﻿body{background-color:black; color:white; position:relative; width:100%; height:100vh;}
+.floatL{float:left;}
+.floatR{float:right;}
+.clear{clear:both; display:block; visibility:hidden; content:'';}
+.content{padding:0 70px; margin:0 auto;}
+.orangeFont{color:#c86501;}
+.width50{width:50%;}
+
+header{padding:40px 0;}
+header .day{font-size:30px; font-weight:bold;}
+header .time{margin-left:10px; font-weight:bold; font-size:45px;}
+footer{position:absolute; left:0; bottom:0; width:100%; padding:20px 0; border-top:1px solid #767676;}
+footer .noticeArea span{line-height:45px; font-weight:400; font-size:22px;}
+footer .noticeArea .orangeFont{border-right:2px solid white; padding-right:10px; margin-right:10px;}
+
+/*외부*/
+.outArea h4{display:inline-block; font-size:45px; font-weight:bold; padding-left:20px; border-left:5px solid #c86501;}
+.outArea hr{border-top:1px dashed grey; border-bottom:none;}
+.outArea .imgArea{width:815px; height:470px; background-repeat:no-repeat; background-position:center center; background-size:cover;}
+.outArea .textArea{margin-top:15px;}
+.outArea .textArea span{display:inline-block; font-size:24px; height:120px; font-weight:bold; margin-left:20px; word-break: keep-all; word-wrap: break-word; width:685px; vertical-align:top; line-height:35px;}
+
+/*내부*/
+.inArea h4{display:inline-block; font-size:45px; font-weight:bold; padding-left:20px; border-left:5px solid #c86501;}
+.inArea hr{border-top:1px dashed grey; border-bottom:none;}
+.inArea .imgArea{width:815px; height:470px; background-repeat:no-repeat; background-position:center center; background-size:cover;}
+.inArea .textArea{margin-top:15px;}
+.inArea .textArea span{display:inline-block; font-size:24px; height:120px; font-weight:bold; margin-left:20px; word-break: keep-all; word-wrap: break-word; width:685px; vertical-align:top; line-height:35px;}
+.inArea .score li{background:url('/images/icon.png')no-repeat left center; padding:35px; display:inline-block;}
+.inArea .score li.active, .inArea .score li:hover{background:url('/images/icon_active.png')no-repeat left center; padding:35px; display:inline-block;}
+.inArea p{font-size:22px; line-height:70px;}
+.inArea button{border:2px solid #c86501; display:block; background-color:black; color:white; font-size:18px; font-weight:bold; padding:20px 30px; text-align:center; border-radius:50px; margin:55px auto 0 auto;}
+.inArea button.active, .inArea button:hover{border:2px solid #c86501; display:block; background-color:#c86501; color:white; font-size:18px; font-weight:bold; padding:20px 30px; text-align:center; border-radius:50px; margin:55px auto 0 auto;}
+.inArea ol{padding:0 20px; margin-top:60px;}
+.inArea ol li{margin-bottom:50px;}
+.inArea ol li > div:first-child {font-size:30px; font-weight:bold; color:white; display:inline-block; min-width:180px;}
+.inArea ol li > div span{font-size:94px; color:#8f8e8e; font-weight:400;}
+.inArea ol li hr{display:inline-block; width:500px; margin:10px 20px;}
+.inArea ol li > div:last-child {font-size:55px; font-weight:bold; color:white; display:inline-block;}
+.inArea a{border:2px solid #c86501; display:block; background-color:black; color:white; font-size:18px; font-weight:bold; padding:20px 30px; text-align:center; border-radius:50px; margin:55px auto 0 auto;}
+.inArea a.active, .inArea button:hover{border:2px solid #c86501; display:block; background-color:#c86501; color:white; font-size:18px; font-weight:bold; padding:20px 30px; text-align:center; border-radius:50px; margin:55px auto 0 auto;}
+
+
+/*notice.html*/
+.noticeText{text-align:center; font-weight:bold; font-size:60px; line-height:90px; padding-top:200px;}
+
+
+.lightpick--inlined{display:block;}
+.lightpick__months{display:inline-block;}
+#demo-4{display:none;}
+.graphT{font-size:24px; font-weight:bold; border-left: 5px solid #c86501; padding-left:15px;}
+#result-4{border:1px solid gray; border-radius:3px; margin-top:15px; padding:15px; width:360px;}
+.lightpick{background-color:black;}
+.lightpick__month-title-bar{padding:10px 0 0 0; margin-bottom:10px; border-bottom:1px dashed gray;}
+.lightpick__month-title{color:white;}
+.lightpick__toolbar{position:absolute; top:10px ; right:10px;}
+.lightpick__month{width:385px; padding:4px 6px; box-sizing:content-box; color:white; background-color:black;}
+.lightpick__day{height:55px;}
+.lightpick__select-months, .lightpick__select-years{color:white;}
+.lightpick__day.is-today{font-size:16px; font-weight:bold;}
+.lightpick__day.is-today{color:#ffc800;background-image:url('/images/dot_icon.png'); background-repeat:no-repeat;}

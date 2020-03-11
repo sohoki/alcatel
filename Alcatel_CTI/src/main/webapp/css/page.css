@@ -1,0 +1,1030 @@
+﻿/*login*/
+.loginBox {
+	width: 513px;
+	margin: auto;
+	position: relative;
+	border:1px solid #e2e2e2;
+	box-shadow: 0px 10px 14px -7px #a2a2a2;
+	margin-top: 150px;
+}
+.login_title {
+	width: 100%;
+	background-color: #474c55;
+	color: #fff;
+	padding: 23px 0;
+	text-align: center;
+	font-size: 40px;
+}
+.login_con {
+	width: 70%;
+	margin:auto;
+	padding: 50px 0;
+	font-size: 18px;
+}
+.login_con p { color: #1f5ab2; }
+.login_con div { margin-bottom: 20px; }
+.login_con input {border:none;width:  100%;padding: 5px 5px;border-bottom: 1px solid #ebebeb;font-size: 18px; outline: none;}
+.loginBtn { 
+	display: block; 
+	color: #fff; 
+	text-align: center; 
+	padding: 20px 0; 
+	background-color: #e8392f; 
+	font-size: 22px;
+	border-radius: 5px;
+}
+
+/*top_title*/
+.content-title {
+	text-align: center;
+	font-size: 25px;
+	font-weight: 700;
+}
+/*search*/
+.seachbox {
+	position: relative;
+
+}
+/*관리자테이블*/
+.backTable {
+	width: 100%;
+	font-size: 16px;
+	border-radius: 10px 10px 0 0;
+	overflow: hidden;
+
+}
+.backTable thead th {
+	font-weight: 500; 
+	color: #fff;
+	background: #446279;
+}
+.backTable tbody td { border-bottom: 1px dashed #bababa; } 
+.backTable th, .backTable td { padding: 13px 5px; text-align: center; }
+/*페이지쪽수*/
+.pageNum {
+	width: 100%;
+	text-align: center;
+}
+.pageBtn { 
+	display: inline-block;
+	width: 36px;
+	height: 36px; 
+	margin: 0 -2px;
+	border:1px solid #cccccc;
+}
+.pageNum .back1{
+	background: url("../img/back1.png") no-repeat center;
+}
+.pageNum .back2{
+	background: url("../img/back2.png") no-repeat center;
+}
+.pageNum .next1{
+	background: url("../img/next1.png") no-repeat center;
+}
+.pageNum .next2{
+	background: url("../img/next2.png") no-repeat center;
+}
+.pageNum ul {
+	display: inline-block;
+	margin: 0 20px;
+}
+.pageNum ul li { float: left;}
+.pageNum ul li a {
+	color: #545555;
+	font-weight: 600;
+	display: inline-block;
+	width: 36px;
+	line-height: 2.5em;
+	height: 36px; 
+	text-align:center;
+}
+.pageNum ul li.active a {
+	border:1px solid #cccccc;
+	color: #c11920;
+}
+
+/*sub_page*/
+.Swrap {
+    position: relative;
+}
+
+* table tr th,
+* table tr td {
+    vertical-align: middle;
+}
+
+.infomenuA {
+    font-size: 12px;
+    color: #868686;
+    font-weight: 500;
+    margin: 40px 0 45px 0;
+    text-align: left !important;
+}
+
+    .infomenuA img {
+        vertical-align: middle;
+    }
+
+    .infomenuA strong {
+        color: #272727;
+        font-size: 16px;
+        font-weight: 500;
+        margin-left: 5px;
+    }
+
+    .infomenuA span {
+        margin-left: 5px;
+    }
+
+.Atitle {
+    font-size: 18px;
+    font-weight: 500;
+    color: #868686;
+    margin-bottom: 35px;
+}
+
+    .Atitle span {
+        color: #a14346 !important;
+    }
+
+
+
+.Asearch section select {
+    padding: 0.5px 10px 4.5px 10px;
+    vertical-align: bottom;
+}
+
+.seatN {
+    margin-left: 5px;
+}
+
+.oranBox a {
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    color: white !important;
+    background-color: #ea423d;
+    padding: 5px 15px;
+    display: inline-block;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+
+.redBox a {
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    color: white !important;
+    background-color: #8f0208;
+    padding: 5px 15px;
+    display: inline-block;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+
+.rightB {
+    float: right;
+}
+
+.Bclear:after {
+    display: block;
+    visibility: hidden;
+    content: '';
+    clear: both;
+    margin-bottom: 30px;
+}
+
+.tableArea {
+    margin-bottom: 50px;
+}
+
+    .tableArea table {
+        width: 100%;
+        text-align: center;
+    }
+
+        .tableArea table tr {
+            border-bottom: 1px solid #cbcbcb;
+        }
+
+        .tableArea table thead tr:first-child {
+            border-bottom: none;
+        }
+
+        .tableArea table th, .tableArea table td {
+            padding: 12px 0;
+        }
+
+        .tableArea table th {
+            background-color: #efefef;
+            border-top: 3px solid #e8342f;
+            font-size: 14px;
+            font-weight: bold;
+            color: #343434;
+        }
+
+.ButtonC {
+    background-color: #a7042a;
+    color: white;
+    padding: 3px 7px;
+    border-radius: 15px;
+}
+
+.ButtonF {
+    background-color: #616161;
+    color: white;
+    padding: 3px 7px;
+    border-radius: 15px;
+}
+
+.underline {
+    border-bottom: 1px solid #bbbaba;
+    padding-bottom: 3px;
+    color: #616161;
+}
+
+.tableArea table td {
+    font-size: 14px;
+    font-weight: 400;
+    color: #616161;
+}
+
+.reviseBtn {
+    color: #fff;
+    padding: 5px 20px;
+    display: inline-block;
+    font-weight: 400;
+    font-size: 15px;
+    cursor: pointer;
+    background: #abaaa9;
+    border-radius: 5px;
+}
+
+.grayBtn {
+    color: #fff;
+    padding: 5px 20px;
+    display: inline-block;
+    font-weight: 400;
+    font-size: 15px;
+    cursor: pointer;
+    background: #535354;
+    border-radius: 5px;
+}
+
+.pagenum {
+    margin-bottom: 50px;
+}
+
+.pager {
+    position: relative;
+    padding: 0 3%;
+    width: 50%;
+    margin: 0 auto;
+}
+
+    .pager > a {
+        position: absolute;
+    }
+
+    .pager a {
+        text-decoration: none;
+        color: #555;
+        display: block;
+        text-align: center;
+    }
+
+    .pager > a:first-of-type {
+        left: 0;
+        top: 0;
+    }
+
+    .pager > a:last-of-type {
+        right: 0;
+        top: 0;
+    }
+
+    .pager ol {
+        display: block;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+        .pager ol li {
+            font-size: 13px;
+            display: block;
+            width: 9%;
+            float: left;
+            margin-left: 1%;
+            line-height: 23px;
+        }
+
+    .pager a {
+        text-decoration: none;
+        color: #555;
+        display: block;
+        text-align: center;
+    }
+
+    .pager ol li :first-child {
+        margin-left: 0;
+    }
+
+    .pager ol:after {
+        content: '';
+        display: block;
+        visibility: hidden;
+        clear: both;
+    }
+
+    .pager ol li a:hover {
+        color: #e8342f;
+        border-radius: 24px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+.sideM {
+    width: 10%;
+    margin-right: 5%;
+    margin-top: 40px;
+}
+
+.rightT {
+    width: 100% !important;
+}
+
+.Aconbox .sideM, .Aconbox .rightT {
+    float: left;
+}
+
+.Aconbox:after {
+    display: block;
+    visibility: hidden;
+    clear: both;
+    content: '';
+}
+
+.sideM h2 {
+    color: #868686;
+    font-size: 20px;
+    font-weight: 400;
+    border-bottom: 2px solid #e8342f;
+    padding-bottom: 10px;
+}
+
+.sideM ul {
+    margin-top: 20px;
+}
+
+    .sideM ul li {
+        margin-bottom: 30px;
+    }
+
+        .sideM ul li:last-child {
+            margin-bottom: 0;
+        }
+
+        .sideM ul li a {
+            font-size: 15px;
+            font-weight: 400;
+            color: #868686;
+            margin-left: 6%;
+        }
+
+    .sideM ul li {
+        background: url(../images/gray_c.png) no-repeat left center;
+    }
+
+        .sideM ul li:hover {
+            background: url(../images/red_c.png) no-repeat left center;
+        }
+
+        .sideM ul li.imgR {
+            background: url(../images/red_c.png) no-repeat left center !important;
+        }
+
+        .sideM ul li a:hover, .active {
+            font-size: 15px;
+            font-weight: 400;
+            color: #8f0208;
+        }
+
+.centerA {
+    margin-left: 8px;
+}
+
+.searchN {
+    vertical-align: bottom;
+    padding: 7.5px 15px !important;
+    margin-left: 8px;
+}
+
+.Oborder a {
+    background-color: white;
+    border: 1px solid #ea423d;
+    color: #ea423d;
+    padding: 5px 7px;
+}
+
+.Rborder a {
+    background-color: white;
+    border: 1px solid #8f0208;
+    color: #8f0208;
+    padding: 5px 7px;
+}
+
+.bottomB {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.adminiA {
+    margin-bottom: 30px !important;
+}
+
+.Apager {
+    margin-top: 100px !important;
+}
+
+a.active {
+    font-size: 15px;
+    font-weight: 400;
+    color: #8f0208 !important;
+}
+
+.redBtn {
+    color: white !important;
+    padding: 5px 20px;
+    display: inline-block;
+    font-weight: 400 !important;
+    cursor: pointer;
+    font-size: 15px !important;
+    background: #e8392f;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+.deepBtn {
+    color: white !important;
+    padding: 5px 20px;
+    display: inline-block;
+    font-weight: 400 !important;
+    cursor: pointer;
+    font-size: 15px !important;
+    background: #8e0309;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+
+.clear {
+    clear: both;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-raight {
+    float: right;
+}
+
+.margin-top10 {
+    margin-top: 10px;
+}
+
+.margin-top20 {
+    margin-top: 20px;
+}
+
+.margin-top30 {
+    margin-top: 30px;
+}
+
+.margin-top50 {
+    margin-top: 50px;
+}
+
+.margin-top160 {
+    margin-top: 160px;
+}
+
+.margin-bottom20 {
+    margin-bottom: 20px;
+}
+
+.color-red {
+    color: #e8392f;
+}
+
+.click {
+    cursor: pointer;
+}
+
+.active {
+    color: #e8342f;
+}
+
+.tableM {
+    border-top: 3px solid #e8342f !important;
+}
+
+.mattersArea tr {
+    border-bottom: 1px solid #cbcbcb !important;
+}
+
+.noneT {
+    margin-bottom: 30px !important;
+}
+
+    .noneT table td {
+        text-align: left;
+    }
+
+    .noneT img {
+        vertical-align: sub;
+        margin-left: 5px;
+    }
+
+    .noneT table th {
+        border-top: none;
+        width: 25%;
+    }
+
+    .noneT table td {
+        padding-left: 15px;
+        width: 25%;
+    }
+
+.textBox {
+    padding: 0 !important;
+    width: 90% !important;
+}
+
+.addB {
+    margin-left: 5px;
+}
+
+.titleBox {
+    width: 90%;
+}
+
+.adminBox {
+    border-bottom: 1px solid #cbcbcb;
+}
+
+.adminS {
+    padding: 60px 20px !important;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.backBox {
+    padding: 35px !important;
+    line-height: 20px;
+}
+
+.anBox {
+    border-top: 1px solid #cbcbcb !important;
+}
+
+.textBox {
+    line-height: 20px;
+    padding: 35px !important;
+}
+
+    .textBox textarea {
+        border: 0;
+        resize: none;
+        outline: none;
+        width: 100%;
+        line-height: 20px;
+        font-family: Noto Sans CJK KR;
+    }
+
+.buttonS {
+    padding: 0 !important;
+}
+
+.cancleT th {
+    width: 8% !important;
+}
+
+.Bclear img {
+    margin-left: 3px;
+    vertical-align: sub;
+}
+
+.lineRed {
+    color: #8f0208 !important;
+    padding: 5px 20px;
+    display: inline-block;
+    font-weight: 500 !important;
+    cursor: pointer;
+    font-size: 15px !important;
+    border: 1px solid #8f0208;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+.lineOrange {
+    color: #e8342f !important;
+    padding: 5px 20px;
+    display: inline-block;
+    font-weight: 500 !important;
+    cursor: pointer;
+    font-size: 15px !important;
+    border: 1px solid #e8342f;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+/*.box {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    height: 480px;
+    margin-bottom: 30px;
+}*/
+
+.Tscroll {
+    white-space: nowrap;
+}
+
+.Tcolor td {
+    border-left: 3px solid white;
+}
+
+.backTable th, .backTable td {
+    padding: 13px 5px;
+    text-align: center;
+}
+
+.Gline td:first-child {
+    padding: 15px;
+}
+
+.Gline td:nth-child(4n+2) {
+    border-left: 2px solid #cccccc;
+}
+
+.backTable tbody td {
+    border-bottom: 1px dashed #bababa;
+    padding: 10px;
+}
+
+.scrollArea {
+    margin-bottom: 0 !important;
+}
+
+.Dline td:nth-child(4n+2) {
+    border-left: 2px solid #cccccc;
+}
+
+.Dline td:nth-child(1) {
+    border-left: none;
+}
+
+.Tsection td {
+    border-left: 2px solid #cccccc;
+    font-weight: bold !important;
+}
+
+    .Tsection td:first-child {
+        border-left: none;
+    }
+
+.Tcolor td:nth-child(4n+1) {
+    border-left: 2px solid #cccccc;
+}
+
+.Tcolor td:first-child {
+    border-left: none;
+}
+
+.Tadd {
+    padding: 25px !important;
+    font-weight: bold !important;
+}
+
+.Gline td:first-child {
+    font-weight: bold;
+}
+
+td a {
+    margin-left: 5px;
+}
+
+input {
+    margin-left: 5px;
+    vertical-align: bottom;
+}
+
+.nameB {
+    height: 18px;
+   	padding: 1.5px 10px 5px 10px;
+}
+
+.checkB {
+    width: 5%;
+}
+
+    .checkB input {
+        width: 15px;
+    }
+
+.width20 {
+    width: 23%;
+}
+
+.third {
+    position: absolute;
+    right: -50px !important;
+}
+
+.bold {
+    font-weight: 500 !important;
+    color: #343434 !important;
+}
+
+.width35 {
+    width: 34% !important;
+}
+
+.tabletext {
+    font-size: 14px;
+    font-weight: 400;
+    color: #616161;
+    margin-bottom: 10px;
+}
+
+.clear:after {
+    display: block;
+    visibility: hidden;
+    content: '';
+    clear: both;
+    margin-bottom: 0px !important;
+}
+
+
+
+
+/*팝업*/
+.view_container {
+    width: 100%;
+    position: relative;
+}
+
+.pop_contents {
+    width: 100%;
+    margin: auto;
+}
+
+.pop_header {
+    background: #e5e5e4;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 20px 0;
+}
+
+.viewArea table th{
+        background-color: #efefef;
+    border-top: none !important;
+    font-size: 14px;
+    font-weight: bold;
+    color: #343434;
+}
+
+.margin-top10 {
+    margin-top: 10px;
+}
+/*table*/
+.pop_table {
+    margin-top: 20px;
+    width: 100%;
+    position: relative;
+    border-top: 3px solid #e8342f;
+}
+
+    .pop_table th {
+        background-color: #eeeeed;
+        font-weight: 600;
+        color: #555656;
+    }
+
+    .pop_table th, .pop_table td {
+        padding: 15px 10px;
+        border-bottom: 1px solid #bababa;
+        font-size:14px;
+    }
+
+.thStyle th {
+    width: 20%;
+    vertical-align: middle;
+}
+
+textarea {
+    resize: none;
+    width: 100%;
+}
+
+.footerBtn {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    text-decoration: none;
+}
+
+.redBtn {
+    color: #fff;
+    padding: 5px 20px;
+    display: inline-block;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 16px;
+    background: #e8392f;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.pop_table tbody tr td select {
+    padding-bottom: 4px;
+}
+
+.deepBtn {
+    color: white !important;
+    padding: 5px 20px;
+    display: inline-block;
+    font-weight: 400 !important;
+    cursor: pointer;
+    font-size: 15px !important;
+    background: #8e0309;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+img {
+    vertical-align: sub;
+    margin-right: 5px;
+}
+
+.search tr td,
+.search tr th {
+    text-align: left;
+}
+
+.click {
+    cursor: pointer;
+}
+
+.searchT {
+    margin-top: 5px;
+}
+
+.searchP {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.reviseBtn {
+    color: #fff;
+    padding: 5px 20px;
+    display: inline-block;
+    font-weight: 400;
+    font-size: 15px;
+    cursor: pointer;
+    background: #abaaa9;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+td img {
+    margin-left: 3px;
+}
+
+.addBox {
+    border: 1px solid #bababa;
+    margin-top: 5px;
+    padding: 1%;
+    width: 78%;
+    float: right;
+    overflow-x: auto;
+    overflow-y: scroll;
+    height: 70px;
+}
+
+    .addBox img {
+        margin-left: 3px;
+    }
+
+.dot {
+    vertical-align: middle !important;
+}
+
+.Bclear:after {
+    display: block;
+    visibility: hidden;
+    content: '';
+    clear: both;
+}
+.addBox p{
+    margin-bottom:5px;
+}
+td a{margin-left:5px;}
+.fullsize{width:100%;}
+.time{width:100px;}
+.delete{padding:45px !important; text-align:center !important;}
+.viewArea td{text-align:left !important; padding-left:25px !important;}
+
+/*basic_code 20180312*/
+.code_width{width: 48%; float: left; padding : 0px 4px;}
+.code_width4 {width: 4%; float: left; text-align: center; padding-top: 18%}
+
+.code_text span{ margin-right: 20px }
+
+.rightListBox{
+	margin-top: 70px;
+}
+
+
+/* paging css 19.01.26 */
+.new_pager{
+	text-align: center;
+}
+
+.new_pager a.active{
+	background: #e8342f !important;
+    color: #fff !important;
+    border: 1px solid #e8342f;
+}
+
+.new_pager a {
+	display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #d0d0d0;
+    border-radius: 50%;
+    margin: 0 5px;
+    color: #8e8d8d;
+    text-align: center;
+}
+
+/*popup*/
+.needpopup_wrapper {
+      background-color:rgba(0, 0, 0, 0.1);
+}
+.needpopup{
+     -moz-box-shadow:8px 10px 6px -8px #cacaca;
+      -webkit-box-shadow:8px 10px 6px -8px #cacaca;
+      box-shadow: 8px 10px 6px -8px #cacaca; 
+}
+.needpopup .user_top {
+      background: #3775f6;
+      padding:35px 0;
+      font-size: 35px;
+      text-align: center;
+      color: #fff
+}
+.needpopup .check_pop{
+      font-size: 25px;
+      text-align: center;
+      padding: 80px  0;
+}
+.close_black .needpopup_remover{ color: #404040 !important; }
+
+/*20191022*/
+.tableArea tr td{border-bottom: 1px dashed #bababa; padding: 10px;}
+.new_pager li{display: inline-block;}
+.width100{width: 100%;}
+.joinSubTxt{float:right;} 
+.id-pw-warning{font-weight: bold;color : #EA4335;}
+.id-pw-posible{font-weight: bold;color : #34A853;}
+.join_pop_main_subTxt{float:left;font-weight: bold;}.pw_pop_main_subTxt{float:left;font-weight: bold;}      
+table tr td a{color:#616161;}
+/*dashboard*/
+.datetimeLine{font-weight: 500;}
+.terminalLine li{width: 32%; float: left; background-color: #dcdcdc; margin-left: 2%; box-sizing: border-box; padding: 20px 25px; border-radius: 3px;}
+.terminalLine li:first-child{margin-left: 0;}
+.terminalLine li span{display: block; text-align: right; font-size: 22px; font-weight: 500; border-top: 1px dashed white; padding-top: 5px; margin-top: 10px;}
+.viewArea table th a{color: #343434;}
+.alltext{font-weight: 500; font-size: 13px; display: inline-block; margin-right: 0 !important;}
+/*20191114*/
+.needpopup input{width:100%; box-sizing:border-box; margin-left:0;}
+.needpopup select{width:100%;}
+.width40{width:40% !important;}
+.hasDatepicker{height:24px;}
+.startTime, .endTime{width:47.5% !important;height:24px;}
+.width49{width:49% !important;}
+.needpopup .margin-top30{margin-top:0;}
+.needpopup .new_pager{margin-top:15px;}
+.pop_table input[type="text"], .pop_table select, .pop_table input[type="password"], .pop_table textarea{width:200px !important;}
+.tableauto input{width:auto !important;}
+.marginbottom10{margin-bottom:10px;}
+.pop_table .auto100 .width100{width:100% !important;}
+.pop_table .tableauto input{width:auto !important;}
+.needpopup input[type="radio"]{width:auto;}
+.pop_box100, .pop_box50{height:50px;}
+.inputhalf{width:48% !important;}
+.heightAuto{height:auto;}
+.margintop30{margin-top:30px;}
