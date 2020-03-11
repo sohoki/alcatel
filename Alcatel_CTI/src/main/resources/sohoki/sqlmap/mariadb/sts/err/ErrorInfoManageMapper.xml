@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sohoki.backoffice.mapper.ErrorInfoManageMapper">
+   <select id="selectErrorMessage" resultType="ErrorInfoVO">     	      
+		 	 SELECT  TB.* FROM (
+						    SELECT a.ERROR_SEQ, a.ERROR_TYPE, a.ERROR_MESSAGE, a.ERROR_REGDATE
+							FROM tb_errorhis a
+							WHERE 1=1
+		        <if test="searchKeyword != ''">
+						<choose>
+							<when test="searchCondition == 'errorType'">
+								and a.ERROR_TYPE LIKE CONCAT('%',#{searchKeyword},'%') 
+							</when>
+							<otherwise>
+								and a.ERROR_MESSAGE LIKE CONCAT('%',#{searchKeyword},'%')  
+							</otherwise>
+						</choose>
+				</if>		        
+				ORDER BY a.ERROR_SEQ  DESC
+	        ) TB 
+	        limit #{firstIndex}, #{recordCountPerPage}         		 	    
+   </select>
+   <select id="selectErrorMessageCnt" resultType="java.lang.Integer">
+           SELECT ifnull(count(*),0) from tb_errorhis a
+           WHERE 1=1 
+           <if test="searchKeyword != ''">
+						<choose>
+							<when test="searchCondition == 'errorType'">
+								and a.ERROR_TYPE LIKE  CONCAT('%',#{searchKeyword},'%')  
+							</when>
+							<otherwise>
+								and a.ERROR_MESSAGE LIKE CONCAT('%',#{searchKeyword},'%')  
+							</otherwise>
+						</choose>
+				</if>	
+   
+   </select>
+   
+   <insert id="insertErrorMessage">
+      insert into tb_errorhis( ERROR_TYPE, ERROR_MESSAGE, ERROR_REGDATE)
+      values ( #{errorType, jdbcType=VARCHAR}, #{errorMessage, jdbcType=VARCHAR}, now() )
+   </insert>
+   
+   <delete id="deleteErrorMessage">
+      delete from   tb_errorhis   
+      where ERROR_SEQ = #{errorSeq}   
+   </delete>
+   
+
+</mapper>
