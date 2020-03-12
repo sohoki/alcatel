@@ -16,8 +16,7 @@
 		        a.CENTER_REGDATE as "centerRegdate"	,
 		        b.PART_NM partNm	  ,
 		        fn_centerCnt(CENTER_ID) as centerAgentCnt     
-		    FROM    tb_centerinfo a, tb_partinfo b
-		    
+		    FROM  tb_centerinfo a, tb_partinfo b
 		        WHERE a.part_id = b.part_id        
 		        <if test="searchKeyword != ''">
 						<choose>

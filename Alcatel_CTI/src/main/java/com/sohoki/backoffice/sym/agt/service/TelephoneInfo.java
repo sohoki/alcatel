@@ -18,23 +18,43 @@ public class TelephoneInfo implements  Serializable {
 	private String lastUpusrId = "";
 	private String mode = "";
 	private String userId = "";
-	private String updateChange = "";
+	
 	private String updateDate = "";
 	//신규 추가 
 	private String centerId = "";
 	private String partId = "";
-	private String agentStarttime = "";
-	private String agentEndtime = "";
-	private String agentGubun = "";
+	private String agentState = "";
+	private String agentNownumber = "";
+	private String agentBasicnumber = "";
 	private int agentFloor = 0;
-	private String agentContentgubun = "";
 	
-	//추가
-	private String basicNumber = "";
 
 	
 	
-	
+	public String getAgentState() {
+		return agentState;
+	}
+
+	public void setAgentState(String agentState) {
+		this.agentState = agentState;
+	}
+
+	public String getAgentNownumber() {
+		return agentNownumber;
+	}
+
+	public void setAgentNownumber(String agentNownumber) {
+		this.agentNownumber = agentNownumber;
+	}
+
+	public String getAgentBasicnumber() {
+		return agentBasicnumber;
+	}
+
+	public void setAgentBasicnumber(String agentBasicnumber) {
+		this.agentBasicnumber = agentBasicnumber;
+	}
+
 	public String getAgentCode() {
 		return agentCode;
 	}
@@ -131,14 +151,6 @@ public class TelephoneInfo implements  Serializable {
 		this.userId = userId;
 	}
 
-	public String getUpdateChange() {
-		return updateChange;
-	}
-
-	public void setUpdateChange(String updateChange) {
-		this.updateChange = updateChange;
-	}
-
 	public String getUpdateDate() {
 		return updateDate;
 	}
@@ -163,30 +175,6 @@ public class TelephoneInfo implements  Serializable {
 		this.partId = partId;
 	}
 
-	public String getAgentStarttime() {
-		return agentStarttime;
-	}
-
-	public void setAgentStarttime(String agentStarttime) {
-		this.agentStarttime = agentStarttime;
-	}
-
-	public String getAgentEndtime() {
-		return agentEndtime;
-	}
-
-	public void setAgentEndtime(String agentEndtime) {
-		this.agentEndtime = agentEndtime;
-	}
-
-	public String getAgentGubun() {
-		return agentGubun;
-	}
-
-	public void setAgentGubun(String agentGubun) {
-		this.agentGubun = agentGubun;
-	}
-
 	public int getAgentFloor() {
 		return agentFloor;
 	}
@@ -195,24 +183,6 @@ public class TelephoneInfo implements  Serializable {
 		this.agentFloor = agentFloor;
 	}
 
-	public String getAgentContentgubun() {
-		return agentContentgubun;
-	}
-
-	public void setAgentContentgubun(String agentContentgubun) {
-		this.agentContentgubun = agentContentgubun;
-	}
-
-	public String getBasicNumber() {
-		return basicNumber;
-	}
-
-	public void setBasicNumber(String basicNumber) {
-		this.basicNumber = basicNumber;
-	}
-	
-	
-	
 	
 
 }

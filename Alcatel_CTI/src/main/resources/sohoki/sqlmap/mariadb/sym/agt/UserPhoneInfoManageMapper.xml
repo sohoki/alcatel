@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="aten.com.backoffice.mapper.UserPhoneInfoManageMapper">
-    
+
+    <select id="selectUsserPhoneInfoDetail"  resultType="UserPhoneInfoVO">   
+       SELECT a.PHONE_NUMBER, a.PHONE_GUBUN, a.PHONE_USEYN, 
+              a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID, a.PHONE_STATE 
+       FROM tb_userphoneinfo
+       WHERE PHONE_NUMBER = #{phoneNumber}
+    </select>
     <select id="selectAgentPageInfoManageListByPagination" resultType="UserPhoneInfoVO">     	      
 		 	SELECT SUM(1) OVER(PARTITION BY NULL) AS TOTAL_RECORD_COUNT,
 		 	       TB.* FROM (
 						    SELECT a.PHONE_NUMBER, a.PHONE_GUBUN, a.PHONE_USEYN, 
                                    a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID, a.PHONE_STATE
-							FROM tb_userphoneinfo
+							FROM tb_userphoneinfo a
 							WHERE 1=1
 		        <if test="searchKeyword != ''">
 						<choose>
@@ -83,16 +88,20 @@
 				     and a.PHONE_STATE = #{searchPhoneState}
 				</if> 
 			     		 	    
-   </select>
-    <seelect id="selectUsserPhoneInfoDetail" resultType="UserPhoneInfoVO">
-       SELECT * FROM tb_userphoneinfo
-       WHERE PHONE_NUMBER =#{phoneNumber}
-    </seelect>
+    </select>
+    
     <insert id="insertUserPhoneInfo">
-       INSERT INTO tb_userphoneinfo
+       INSERT INTO tb_userphoneinfo (PHONE_NUMBER, PHONE_GUBUN, PHONE_USEYN, PHONE_STATE
+                                     FRST_REGIST_PNTTM, FRST_REGISTER_ID, LAST_UPDT_PNTTM, LAST_UPDUSR_ID)
+       VALUES(#{phoneNumber}, #{phoneGubun}, #{phoneUseyn}, #{phoneState}, 
+              now(), #{userId}, now(), #{userId})
     </insert>    
     <update id="updateUserPhoneInfo">
-       UPDATE tb_userphoneinfo set 
+       UPDATE tb_userphoneinfo SET PHONE_GUBUN =#{phoneGubun},
+                                   PHONE_USEYN = #{phoneUseyn},
+                                   PHONE_STATE = #{phoneState},
+                                   LAST_UPDT_PNTTM = now(),
+                                   LAST_UPDUSR_ID = #{userId}
        WHERE PHONE_NUMBER =#{phoneNumber}
     </update>
     <delete id="deleteUserPhoneInfo">

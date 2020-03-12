@@ -139,6 +139,83 @@ CREATE TABLE `tb_sendmessagetypr` (
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='전문 정보';
 
 
+CREATE TABLE `tb_partinfo` (
+  `PART_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '부서 아이디',
+  `PART_NM` varchar(100) DEFAULT NULL COMMENT '부서명',
+  `PART_CREATE_DE` varchar(20) DEFAULT NULL COMMENT '부서 등록일',
+  `PART_DC` varchar(250) DEFAULT NULL COMMENT '부서 상세 설명',
+  `PART_USEYN` char(1) DEFAULT 'N' COMMENT '사용유무',
+  `PARENT_PART_ID` int(11) DEFAULT NULL COMMENT '상위 부서 코드',
+  `PART_ORDER` int(11) DEFAULT 0 COMMENT '정렬 순서',
+  PRIMARY KEY (`PART_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='부서 정보';
+
+
+
+
+CREATE TABLE `tb_centerinfo` (
+  `CENTER_ID` char(9) NOT NULL COMMENT '지점 아이디',
+  `CENTER_NM` varchar(30) DEFAULT NULL COMMENT '지점명',
+  `CENTER_ZIPCODE` char(7) DEFAULT NULL COMMENT '우편번호',
+  `CENTER_ADDR1` varchar(200) DEFAULT NULL COMMENT '주소1',
+  `CENTER_ADDR2` varchar(200) DEFAULT NULL COMMENT '주소2',
+  `CENTER_TEL` varchar(15) DEFAULT NULL COMMENT '대표 전화번호',
+  `CENTER_FAX` varchar(15) DEFAULT NULL COMMENT '대표 팩스 번호',
+  `CENTER_REG_ID` varchar(30) DEFAULT NULL COMMENT '등록자 아이디',
+  `CENTER_REGDATE` datetime DEFAULT current_timestamp() COMMENT '등록일자',
+  `CENTER_UPDATE_USER_ID` varchar(30) DEFAULT NULL COMMENT '수정자 아이디',
+  `CENTER_UPDATE_DATE` datetime DEFAULT NULL COMMENT '수정일자',
+  `CENTER_IMG` varchar(50) DEFAULT NULL COMMENT '대표 이미지',
+  `CENTER_URL` varchar(250) DEFAULT NULL COMMENT '대표 URL',
+  `CENTER_SEAT_IMG` varchar(50) DEFAULT NULL COMMENT '내부 이미지',
+  `CENTER_USE_YN` char(1) NOT NULL DEFAULT 'N' COMMENT '사용 유무',
+  `REST_INFO` text DEFAULT NULL COMMENT '휴게실 정보',
+  `MEETINGROOM_INFO` text DEFAULT NULL COMMENT '미팅룸 정보',
+  `CENTER_INFO` text DEFAULT NULL COMMENT '센터 정보',
+  `ADMIN_APPROVAL_YN` char(1) DEFAULT 'N' COMMENT '관리 승인 여부',
+  `PART_ID` int(11) DEFAULT 0 COMMENT '부서 아이디',
+  `CENTER_FLOOR` varchar(20) DEFAULT NULL COMMENT '지점 시작 층수',
+  `CENTER_FLOOR_END` varchar(20) DEFAULT NULL COMMENT '지점 마지막 층수',
+  PRIMARY KEY (`CENTER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='지점 정보';
+
+
+CREATE TABLE `tb_telephoneinfo` (
+  `AGENT_CODE` char(15) NOT NULL COMMENT '단말기 코드',
+  `AGENT_NM` varchar(200) NOT NULL COMMENT '단말기 명',
+  `AGENT_REMARK` varchar(1000) DEFAULT NULL COMMENT '비고',
+  `AGENT_IP` varchar(20) DEFAULT NULL COMMENT '단말기 아이피',
+  `AGENT_MAC` varchar(200) DEFAULT NULL COMMENT '단말기 맥 정보',
+  `AGENT_USEYN` char(1) DEFAULT 'Y' COMMENT '사용유무',
+  `CENTER_ID` char(9) DEFAULT NULL COMMENT '지점 아이디',
+  `PART_ID` int(11) DEFAULT 0 COMMENT '부서아이디',
+  `AGENT_FLOOR` int(11) DEFAULT 0 COMMENT '단말기 층수',
+  `AGENT_BASICNUMBER` varchar(20)  DEFAULT 0 COMMENT '단말기 기본 전화번호',
+  `AGENT_NOWNUMBER` varchar(20)  DEFAULT 0 COMMENT '단말기 현재 상태 전화번호',
+  `AGENT_OSVERSION` varchar(50) DEFAULT NULL COMMENT '단말기 OS 버전',
+  `UPDATE_DATE` datetime DEFAULT NULL COMMENT '말기 변경 시간',
+  `AGENT_STATE` varchar(20) comment '단말기 생태',
+  `FRST_REGIST_PNTTM` datetime DEFAULT current_timestamp() COMMENT '최초 등록시간',
+  `FRST_REGISTER_ID` varchar(20) DEFAULT NULL COMMENT '최초 등록자',
+  `LAST_UPDT_PNTTM` datetime DEFAULT NULL COMMENT '최종 수정일자',
+  `LAST_UPDUSR_ID` varchar(20) DEFAULT NULL COMMENT '최종 수정자',
+  PRIMARY KEY (`AGENT_CODE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='단말기 정보';
+
+
+CREATE TABLE `tb_userphoneinfo` (
+  `PHONE_NUMBER` varchar(20) NOT NULL COMMENT '전화번호',
+  `PHONE_GUBUN` varchar(20) NOT NULL COMMENT '번호 구분',
+  `PHONE_USEYN` char(1) DEFAULT NULL COMMENT '사용유무',
+  `PHONE_STATE` varchar(20) DEFAULT NULL COMMENT '전화 상태',
+  `FRST_REGIST_PNTTM` datetime  DEFAULT current_timestamp() COMMENT '등록시간' ,
+  `FRST_REGISTER_ID` varchar(20) DEFAULT NULL COMMENT '들록자',
+  `LAST_UPDT_PNTTM` datetime DEFAULT NULL COMMENT '수정 시간',
+  `LAST_UPDUSR_ID` varchar(20) DEFAULT NULL COMMENT '수정자 아이디', 
+  PRIMARY KEY (`PHONE_NUMBER`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='전화번호 정보';
+
+
 //기초 프로시져 
 CREATE OR REPLACE PROCEDURE sp_maxValue(IN IS_FIELD VARCHAR(30), IN IS_TABLE varchar(50))
 BEGIN
@@ -177,6 +254,75 @@ BEGIN
       DEALLOCATE PREPARE stmt;
 END;
 
+//사용자 함수 
+CREATE OR REPLACE FUNCTION fn_hierarchy (value int) RETURNS int(11)
+    READS SQL DATA
+BEGIN 
+    DECLARE _partid varchar(20); 
+    DECLARE _parentPartId varchar(20); 
+    DECLARE _next INT; 
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET @partId = NULL; 
+    SET _parentPartId = @partId; 
+    SET _partid = -1; 
+
+    IF @partId IS NULL THEN 
+       RETURN NULL; 
+    END IF; 
+    
+    LOOP 
+       SELECT min(part_id)  INTO @partId 
+       FROM tb_partinfo  
+       WHERE parent_part_id = _parentPartId 
+              AND part_id > _partid; 
+              
+       IF @partId IS NOT NULL OR _parentPartId = @start_with THEN 
+               SET @level = @level + 1; 
+               RETURN @partId; 
+       END IF;
+        
+       SET @level := @level - 1; 
+       SELECT part_id, parent_part_id 
+               INTO _partid, _parentPartId 
+       FROM tb_partinfo 
+       WHERE part_id = _parentPartId; 
+    END LOOP; 
+END;
+
+CREATE OR REPLACE FUNCTION  FN_CENTERID() RETURNS varchar(9) CHARSET utf8
+begin 
+     declare RTN_CENTERID char(9);
+     
+     SELECT CASE WHEN ( (cast(ifnull(SUBSTR(MAX(center_id),8),0) as UNSIGNED) + 1) < 10 )THEN
+                   CONCAT('C', SUBSTR(CONCAT(DATE_FORMAT(now(), '%Y%m%d')),3,8),'0', CONCAT(cast(ifnull(SUBSTR(MAX(center_id),8),0) as UNSIGNED) + 1))
+                    ELSE CONCAT('C' , SUBSTR(CONCAT(DATE_FORMAT(now(), '%Y%m%d')),3,8), CONCAT(cast(ifnull(SUBSTR(MAX(center_id),8),0)  as UNSIGNED) + 1))
+                    END AS centerID INTO RTN_CENTERID
+     FROM tb_centerinfo
+     WHERE date_format(CENTER_REGDATE,'%Y%m%d') = CONCAT(DATE_FORMAT(now(), '%Y%m%d'));
+
+     RETURN         RTN_CENTERID;
+
+END;
+
+
+CREATE OR REPLACE FUNCTION fn_DetailCodeNm (AS_Code varchar(30) ) RETURNS varchar(60) CHARSET utf8
+begin 
+    declare RTN_CDOENM VARCHAR(60);
+    set RTN_CDOENM = (SELECT CODE_NM  FROM lettccmmndetailcode WHERE code = AS_Code);
+    RETURN RTN_CDOENM;
+END;
+
+
+
+CREATE OR REPLACE FUNCTION  fn_DetailCoodeId(AS_parentCode VARCHAR(20)) RETURNS varchar(20) CHARSET utf8
+begin 
+    declare RTN_Code VARCHAR(20);
+    SELECT CONCAT (AS_parentCode , '_' , 
+                   ifnull(REPLACE( max(code), CONCAT(AS_parentCode,'_') , ''),0) + 1) 
+    INTO RTN_Code FROM  lettccmmndetailcode WHERE CODE_ID = AS_parentCode;
+
+    RETURN RTN_Code;
+
+END;
 
 
 //권한 등록

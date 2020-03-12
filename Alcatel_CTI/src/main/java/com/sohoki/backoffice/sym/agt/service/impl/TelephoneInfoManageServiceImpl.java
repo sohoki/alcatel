@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfo;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfoManageService;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfoVO;
+
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 import com.sohoki.backoffice.mapper.TelephoneInfoManageMapper;
 
 @Service("TelephoneInfoManageService")
@@ -32,29 +34,11 @@ public class TelephoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 		return agentMapper.selectAgentPageInfoManageDetail(agentCode);
 	}
 
-	@Override
-	public TelephoneInfoVO selectAgentPageInfoManageView(TelephoneInfoVO searchVO)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return agentMapper.selectAgentPageInfoManageView(searchVO);
-	}
-
-	@Override
-	public TelephoneInfoVO selectAgentUrlCheck(TelephoneInfo searchVO) throws Exception {
-		// TODO Auto-generated method stub
-		return agentMapper.selectAgentUrlCheck(searchVO);
-	}
-
+	
 	@Override
 	public int selectAgentExist(String agentCode) throws Exception {
 		// TODO Auto-generated method stub
 		return agentMapper.selectAgentExist(agentCode);
-	}
-
-	@Override
-	public String selectDisplayCheck(TelephoneInfo vo) throws Exception {
-		// TODO Auto-generated method stub
-		return agentMapper.selectDisplayCheck(vo);
 	}
 
 	@Override
@@ -69,17 +53,11 @@ public class TelephoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 		// TODO Auto-generated method stub
 		int ret = 0;
 		if (vo.getMode().equals("Ins")){
-			ret = agentMapper.insertAgentPageInfoManage(vo);
+			ret = agentMapper.insertAgentInfoManage(vo);
 		}else {
 			ret = agentMapper.updateAgentPageInfoManage(vo);
 		}
 		return ret;
-	}
-
-	@Override
-	public int updateAgentUrlRec(TelephoneInfo vo) throws Exception {
-		// TODO Auto-generated method stub
-		return agentMapper.updateAgentUrlRec(vo);
 	}
 
 	@Override
@@ -88,17 +66,6 @@ public class TelephoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 		return agentMapper.updateAgentIpMac(vo);
 	}
 
-	@Override
-	public int updateAgentStateUpdate(String displaySeq) throws Exception {
-		// TODO Auto-generated method stub
-		return agentMapper.updateAgentStateUpdate(displaySeq);
-	}
-
-	@Override
-	public int updateDisplayUpdate(TelephoneInfo vo) throws Exception {
-		// TODO Auto-generated method stub
-		return agentMapper.updateDisplayUpdate(vo);
-	}
 
 	@Override
 	public int deleteAgentPageInfoManage(String agentCode) throws Exception {
@@ -107,22 +74,14 @@ public class TelephoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 	}
 
 	@Override
-	public List<TelephoneInfoVO> selectAgentCenterPageList(TelephoneInfoVO searchVO)
-			throws Exception {
+	public int updateAgentChangeNumber(TelephoneInfo vo) throws Exception {
 		// TODO Auto-generated method stub
-		return agentMapper.selectAgentCenterPageList(searchVO);
+		return agentMapper.updateAgentChangeNumber(vo);
 	}
 
 	@Override
-	public List<TelephoneInfoVO> selectAgentNowStateInnfo(String centerId)
-			throws Exception {
+	public int updateAgentStateChange(TelephoneInfo vo) throws Exception {
 		// TODO Auto-generated method stub
-		return agentMapper.selectAgentNowStateInnfo(centerId);
-	}
-
-	@Override
-	public int updateAgentState() throws Exception {
-		// TODO Auto-generated method stub
-		return agentMapper.updateAgentState();
+		return agentMapper.updateAgentStateChange(vo);
 	}
 }
