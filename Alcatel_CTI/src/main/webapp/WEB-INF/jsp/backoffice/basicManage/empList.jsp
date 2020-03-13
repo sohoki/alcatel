@@ -18,6 +18,8 @@
     <script type="text/javascript" src="/js/jquery-1.12.3.min.js"></script>
     <script type="text/javascript" src="/js/common.js"></script>
     <script src="/js/popup.js"></script>    
+    
+    <link rel="stylesheet" href="/css/needpopup.min.css" />
 </head>
 <body>
 <noscript>자바스크립트를 지원하지 않는 브라우저에서는 일부 기능을 사용하실 수 없습니다.</noscript>
@@ -50,7 +52,7 @@
                     <input class="nameB" type="text" name="searchKeyword" id="searchKeyword" placeholder="이름" value="${searchVO.searchKeyword }">
                     <a href="javascript:search_form()"><span class="redBtn"><spring:message code="button.inquire" /></span></a>
                     <div class="rightB">
-                        <a href="javascript:fn_MBER('Ins','0')"><span class="deepBtn"><spring:message code="button.create" /></span></a>
+                        <a href="javascript:fn_MBER('Ins','0')" data-needpopup-show="#userPop" ><span class="deepBtn"><spring:message code="button.create" /></span></a>
                     </div>
                 </section>
             </div>
@@ -61,7 +63,6 @@
                         <tr>
                             <th><spring:message code="common.Number.title" /></th>
                             <th><spring:message code="page.emp.title" /></th>
-                            <th><spring:message code="page.emp.part" /></th>
                             <th><spring:message code="page.emp.usrid" /></th>
                             <th><spring:message code="page.emp.usertel" /></th>
                             <th><spring:message code="page.emp.userEmail" /></th>
@@ -75,8 +76,7 @@
                        <c:forEach items="${resultList }" var="userinfo" varStatus="status">
                         <tr>
                             <td><c:out value="${(searchVO.pageIndex - 1) * searchVO.pageSize + status.count}"/></td>
-                            <td><a href="javascript:fn_MBER('Edt','${ userinfo.adminId }')" class="underline">${ userinfo.adminName }(${ userinfo.empNo })</a></td>
-                            <td>${ userinfo.partNm }</td>
+                            <td><a href="#" onclick="fn_MBER('Edt','${ userinfo.adminId }')" class="underline" data-needpopup-show="#userPop">${ userinfo.adminName }(${ userinfo.empNo })</a></td>
                             <td>${ userinfo.adminId }</td>
                             <td>${ userinfo.adminTel }</td>
                             <td>${ userinfo.adminEmail }</td>
@@ -98,20 +98,96 @@
     </div>
 <c:import url="/backoffice/inc/bottom_inc.do" />    
 </form:form>    
+<div id='userPop' class="needpopup">
+        <div class="user_top">
+            <p><span id="sp_title" /></p>
+        </div>
+        <div class="user_info">
+            <table class="pop_table">
+                <tbody>
+                    <tr>
+                        <th><spring:message code="page.emp.usrid" /></th>
+                        <td style="text-align:left">
+                        <input type="text" id="adminId" name="adminId" />
+                        <span id="uniCheck" ></span>
+                        </td>
+                        <th><spring:message code="page.emp.title" /></th>
+                        <td style="text-align:left">
+                        <input type="text" id="adminName" name="adminName" />
+                        (<input type="text" id="empNo" name="empNo" size="10" maxlength="20" />)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><spring:message code="page.emp.usertel" /></th>
+                        <td style="text-align:left">
+                        <input type="text" id="adminTel" name="adminTel" size="25" maxlength="25"/>
+                        </td>
+                        <th><spring:message code="page.emp.userEmail" /></th>
+                        <td style="text-align:left">
+                        <input type="text" id="adminEmail" name="adminEmail" size="40" maxlength="120"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><spring:message code="page.emp.password" /></th>
+                        <td style="text-align:left">
+                        <input type="password" id="adminPassword" name="adminPassword" size="20" maxlength="20" title='<spring:message code="page.emp.password" />'/>
+                        </td>
+                        <th><spring:message code="page.emp.passwordCk" /></th>
+                        <td style="text-align:left">
+                        <input name="adminPassword2" id="adminPassword2" title='<spring:message code="page.emp.passwordCk" />' type="password" size="20" maxlength="20" /></td>
+                    </tr>
+                    <tr>
+                        <th><spring:message code="page.emp.userReg" /></th>
+                        <td style="text-align:left"><span id="reg_date"></span></td>
+                        <th><spring:message code="common.UseYn.title" /></th>
+                        <td style="text-align:left">
+                            <input type="radio" name="useYn" value="Y" <c:if test="${regist.useYn == 'Y' }"> checked </c:if> /><spring:message code="button.use" />
+							<input type="radio" name="useYn" value="N" <c:if test="${regist.useYn == 'N' }"> checked </c:if> /><spring:message code="button.nouse" />					
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><spring:message code="page.emp.userAuth" /> </th>
+                        <td style="text-align:left">
+	                        <select id="adminLevel" onClick="javascript:fn_ComboView()">
+	                        </select>					
+                        </td>
+                        <th><spring:message code="page.emp.part" /></th>
+                        <td style="text-align:left">
+                            <select id="partId" name="partId">
+	                        </select>	
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="clear"></div>
+        </div>
+    </div>
 	
-<script type="text/javascript">
-	function linkPage(pageNo) {
-		$(":hidden[name=pageIndex]").val(pageNo);		
-		$("form[name=regist]").attr("action","/backoffice/basicManage/empList.do").submit();
-	}
-	function fn_MBER(code, code1){
-		  location.href = "/backoffice/basicManage/managerCheck.do?mode="+code+"&adminId="+code1;
-	}
-	function del_check(code){
-		fn_uniDelJSON("/backoffice/basicManage/managerDelete.do"
-				  , {adminId : code}
-		          , "/backoffice/basicManage/empList.do");		
-	}  
+     <script src="/js/needpopup.min.js" ></script> 
+	 <script type="text/javascript">
+		function linkPage(pageNo) {
+			$(":hidden[name=pageIndex]").val(pageNo);		
+			$("form[name=regist]").attr("action","/backoffice/basicManage/empList.do").submit();
+		}
+		function fn_MBER(code, code1){
+			  location.href = "/backoffice/basicManage/managerCheck.do?mode="+code+"&adminId="+code1;
+		}
+		function del_check(code){
+			fn_uniDelJSON("/backoffice/basicManage/managerDelete.do"
+					  , {adminId : code}
+			          , "/backoffice/basicManage/empList.do");		
+		}  
+	    needPopup.config.custom = {
+	            'removerPlace': 'outside',
+	            'closeOnOutside': false,
+	            onShow: function() {
+	                console.log('needPopup is shown');
+	            },
+	            onHide: function() {
+	                console.log('needPopup is hidden');
+	            }
+	    };
+	    needPopup.init();
     </script>
 </body>
 </html>

@@ -8,16 +8,19 @@ import egovframework.let.uat.uia.service.AdminInfoVO;
 
 
 
+
 import com.sohoki.backoffice.util.service.UniUtilInfo;
 import com.sohoki.backoffice.util.service.UniUtilManageService;
+
 import egovframework.com.cmm.AdminLoginVO;
+
 
 
 import com.sohoki.backoffice.mapper.ErrorInfoManageMapper;
 import com.sohoki.backoffice.sts.error.service.ErrorInfo;
+
 import egovframework.let.src.ram.service.AuthorInfoManageService;
 import egovframework.let.sym.ccm.cde.service.EgovCcmCmmnDetailCodeManageService;
-
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.fdl.security.userdetails.util.EgovUserDetailsHelper;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
@@ -123,8 +126,8 @@ public class AdminInfoManageController {
 	       model.addObject("resultList",  adminList);      
 	       
 	       
-	       //int totCnt = adminList.size() > 0 ? adminList.get(0).getTotalRecordCount() : 0;  
-	       int totCnt = userManagerService.selectAdminUserManageListTotCnt_S(searchVO);
+	       int totCnt = adminList.size() > 0 ? adminList.get(0).getTotalRecordCount() : 0;  
+	       //int totCnt = userManagerService.selectAdminUserManageListTotCnt_S(searchVO);
 	       paginationInfo.setTotalRecordCount(totCnt);
 	       model.addObject("paginationInfo", paginationInfo);
 	       model.addObject("totalCnt", totCnt);
@@ -142,6 +145,7 @@ public class AdminInfoManageController {
 	   }
 	   return model;
 	}
+	
 	@RequestMapping(value="passChangeView.do")
 	public ModelAndView pagssChangeView(@ModelAttribute("AdminInfo") AdminInfo vo, 
 										    HttpServletResponse response,

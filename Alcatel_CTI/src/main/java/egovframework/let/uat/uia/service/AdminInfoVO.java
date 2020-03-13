@@ -28,10 +28,16 @@ public class AdminInfoVO extends AdminInfo implements Serializable {
     private int recordCountPerPage = 10;
     private String idCheck;
     
+    private int totalRecordCount = 0;
+
+   
     
-    
-    
-    
+	public int getTotalRecordCount() {
+		return totalRecordCount;
+	}
+	public void setTotalRecordCount(int totalRecordCount) {
+		this.totalRecordCount = totalRecordCount;
+	}
 	public String getIdCheck() {
 		return idCheck;
 	}

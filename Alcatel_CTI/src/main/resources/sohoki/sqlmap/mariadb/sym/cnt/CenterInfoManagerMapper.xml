@@ -93,7 +93,7 @@
              INSERT INTO tb_centerinfo (CENTER_ID, CENTER_NM, CENTER_ZIPCODE, CENTER_ADDR1, CENTER_ADDR2, CENTER_TEL,CENTER_FAX, 
                                  CENTER_REG_ID, CENTER_REGDATE, CENTER_UPDATE_USER_ID, CENTER_UPDATE_DATE, CENTER_IMG, CENTER_URL, 
                                  CENTER_SEAT_IMG, CENTER_USE_YN, REST_INFO, MEETINGROOM_INFO, CENTER_INFO, ADMIN_APPROVAL_YN,
-                                 part_id, CENTER_FLOOR, CENTER_FLOOR_END 
+                                 PART_ID, CENTER_FLOOR, CENTER_FLOOR_END 
                                  )
              VALUES (FN_CENTERID(), #{centerNm},    #{centerZipcode ,jdbcType=VARCHAR}, #{centerAddr1 ,jdbcType=VARCHAR}, #{centerAddr2 ,jdbcType=VARCHAR}, 
              #{centerTel,jdbcType=VARCHAR},  #{centerFax,jdbcType=VARCHAR},

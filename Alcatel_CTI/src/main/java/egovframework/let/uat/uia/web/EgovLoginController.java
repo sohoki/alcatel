@@ -38,8 +38,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import egovframework.let.uat.uia.service.AdminInfo;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class EgovLoginController {
@@ -68,6 +67,7 @@ public class EgovLoginController {
     
 	/*@Resource(name="EgovLoginLogService")
 	private EgovLoginLogService loginLogService;    */
+    
     /**
 	 * 로그인 화면으로 들어간다
 	 * @param vo - 로그인후 이동할 URL이 담긴 LoginVO
@@ -194,6 +194,8 @@ public class EgovLoginController {
     	
     	return "redirect:/backoffice/login.do";
     }
+    
+    
 }
 class RequestWrapperForSecurity extends HttpServletRequestWrapper {
 	private String username = null;

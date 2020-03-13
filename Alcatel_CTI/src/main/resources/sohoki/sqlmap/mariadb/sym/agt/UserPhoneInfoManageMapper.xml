@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="aten.com.backoffice.mapper.UserPhoneInfoManageMapper">
+<mapper namespace="com.sohoki.backoffice.mapper.UserPhoneInfoManageMapper">
 
     <select id="selectUsserPhoneInfoDetail"  resultType="UserPhoneInfoVO">   
        SELECT a.PHONE_NUMBER, a.PHONE_GUBUN, a.PHONE_USEYN, 

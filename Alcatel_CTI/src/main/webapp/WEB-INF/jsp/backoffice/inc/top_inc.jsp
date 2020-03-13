@@ -37,30 +37,19 @@ if(loginVO == null ){
                             <spring:message code="menu.menu02" />
                             </a>
                             <ul class="dropdown-content sedrop">
-                                <% if (loginVO.getAdminLevel().equals("ROLE_ADMIN")){ %>
+                               
                                 <li><a href="/backoffice/basicManage/codeList.do"><spring:message code="menu.menu02_1" /></a></li>
                                 <li><a href="/backoffice/operManage/xmlList.do"><spring:message code="menu.menu02_2" /></a></li>  
                                 <li><a href="/backoffice/errList.do"><spring:message code="menu.menu02_3" /></a></li>  
-                                <% } %>
                                 <li><a href="/backoffice/contentManage/schInfoList.do"><spring:message code="menu.menu02_4" /></a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a href="/backoffice/basicManage/empList.do" class="dropbtn"><spring:message code="menu.menu03" /></a>
                             <ul class="dropdown-content">
-                                <% if (loginVO.getAdminLevel().equals("ROLE_ADMIN")){ %>
                                 <li><a href="/backoffice/basicManage/empList.do"><spring:message code="menu.menu03_1" /></a></li>
                                 <li><a href="/backoffice/basicManage/partList.do"><spring:message code="menu.menu03_2" /></a></li>
-                                <% } %>
                                 <li><a href="/backoffice/basicManage/centerList.do"><spring:message code="menu.menu03_3" /></a></li>  
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="/backoffice/RestManage/restPageInfoList.do" class="dropbtn"><spring:message code="menu.menu04" /></a>
-                            <ul class="dropdown-content">
-                                <li><a href="/backoffice/RestManage/restPageInfoList.do"><spring:message code="menu.menu04" /></a></li>
-                                <li><a href="/backoffice/RestManage/restNoticeList.do"><spring:message code="menu.menu04_2" /></a></li>
-                                
                             </ul>
                         </li>
                     </ul>

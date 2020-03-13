@@ -1,8 +1,12 @@
 package com.sohoki.backoffice.util.service.impl;
 
-import javax.annotation.Resource;
-import org.springframework.stereotype.Service;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
+import javax.annotation.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import com.sohoki.backoffice.mapper.UniUtilManageMapper;
 import com.sohoki.backoffice.util.service.UniUtilInfo;
 import com.sohoki.backoffice.util.service.UniUtilManageService;
