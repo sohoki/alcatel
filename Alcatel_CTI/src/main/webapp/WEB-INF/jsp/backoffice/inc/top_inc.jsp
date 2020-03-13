@@ -7,8 +7,10 @@ AdminLoginVO loginVO = (AdminLoginVO)session.getAttribute("AdminLoginVO");
 
 
 if(loginVO == null ){
+	
 	%>
 	<script type="text/javascript">
+	alert("12");
 	location.href="/backoffice/login.do";
 	</script>
 	<%        
@@ -25,7 +27,6 @@ if(loginVO == null ){
                             <spring:message code="menu.menu01" />
                             </a>
                             <ul class="dropdown-content sedrop">
-                                <li><a href="/backoffice/basicManage/dashboardInfo.do"><spring:message code="menu.menu01_5" /></a></li>
                                 <li><a href="/backoffice/contentManage/pageInfoList.do"><spring:message code="menu.menu01_1" /></a></li>
                                 <li><a href="/backoffice/contentManage/displayList.do"><spring:message code="menu.menu01_2" /></a></li>
                                 <li><a href="/backoffice/contentManage/conSchInfoList.do"><spring:message code="menu.menu01_4" /></a></li>
@@ -54,7 +55,8 @@ if(loginVO == null ){
                         </li>
                     </ul>
                 </nav>
-                <p>                                   
+                <p>   
+                    <%=loginVO.getAdminId() %>                                
                     <a href="<c:url value='/backoffice/actionLogout.do'/>"><spring:message code="button.logout" /></a>
                 </p>
             </div>

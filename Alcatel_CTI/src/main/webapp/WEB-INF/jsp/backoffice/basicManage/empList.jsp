@@ -20,6 +20,20 @@
     <script src="/js/popup.js"></script>    
     
     <link rel="stylesheet" href="/css/needpopup.min.css" />
+    <style type="text/css">
+	    .needpopup input {
+	    width: 50%;
+	    box-sizing: border-box;
+	    margin-left: 0;
+	    }
+	    .tableArea table th {
+            background-color: #efefef;
+            font-size: 14px;
+            font-weight: bold;
+            color: #343434;
+        }
+    </style>
+    
 </head>
 <body>
 <noscript>자바스크립트를 지원하지 않는 브라우저에서는 일부 기능을 사용하실 수 없습니다.</noscript>
@@ -27,6 +41,7 @@
 <c:import url="/backoffice/inc/top_inc.do" />	
  
 <input type="hidden" name="pageIndex" id="pageIndex" value="${searchVO.pageIndex }">
+<input type="hidden" name="mode" id="mode">
 
 <div class="Aconbox">
         <div class="rightT">
@@ -52,7 +67,7 @@
                     <input class="nameB" type="text" name="searchKeyword" id="searchKeyword" placeholder="이름" value="${searchVO.searchKeyword }">
                     <a href="javascript:search_form()"><span class="redBtn"><spring:message code="button.inquire" /></span></a>
                     <div class="rightB">
-                        <a href="javascript:fn_MBER('Ins','0')" data-needpopup-show="#userPop" ><span class="deepBtn"><spring:message code="button.create" /></span></a>
+                        <a href="#" onclick="fn_MBER('Ins','0')" data-needpopup-show="#groupPop" ><span class="deepBtn"><spring:message code="button.create" /></span></a>
                     </div>
                 </section>
             </div>
@@ -76,7 +91,7 @@
                        <c:forEach items="${resultList }" var="userinfo" varStatus="status">
                         <tr>
                             <td><c:out value="${(searchVO.pageIndex - 1) * searchVO.pageSize + status.count}"/></td>
-                            <td><a href="#" onclick="fn_MBER('Edt','${ userinfo.adminId }')" class="underline" data-needpopup-show="#userPop">${ userinfo.adminName }(${ userinfo.empNo })</a></td>
+                            <td><a href="#" onclick="fn_MBER('Edt','${ userinfo.adminId }')" class="underline" data-needpopup-show="#groupPop">${ userinfo.adminName }(${ userinfo.empNo })</a></td>
                             <td>${ userinfo.adminId }</td>
                             <td>${ userinfo.adminTel }</td>
                             <td>${ userinfo.adminEmail }</td>
@@ -96,14 +111,13 @@
             </div>
         </div>
     </div>
-<c:import url="/backoffice/inc/bottom_inc.do" />    
-</form:form>    
-<div id='userPop' class="needpopup">
+
+<div id='groupPop' class="needpopup">
         <div class="user_top">
-            <p><span id="sp_title" /></p>
+            <p >관리자 관리</p>
         </div>
-        <div class="user_info">
-            <table class="pop_table">
+        <div class="Swrap tableArea">
+            <table class="pop_need_table" style="border-top: 0px solid #e8342f; ">
                 <tbody>
                     <tr>
                         <th><spring:message code="page.emp.usrid" /></th>
@@ -113,8 +127,7 @@
                         </td>
                         <th><spring:message code="page.emp.title" /></th>
                         <td style="text-align:left">
-                        <input type="text" id="adminName" name="adminName" />
-                        (<input type="text" id="empNo" name="empNo" size="10" maxlength="20" />)
+                        <input type="text" id="adminName" name="adminName"  style="150px;" /> (<input type="text" id="empNo" name="empNo"  style="150px;" maxlength="20" />)
                         </td>
                     </tr>
                     <tr>
@@ -148,8 +161,10 @@
                     <tr>
                         <th><spring:message code="page.emp.userAuth" /> </th>
                         <td style="text-align:left">
-	                        <select id="adminLevel" onClick="javascript:fn_ComboView()">
-	                        </select>					
+	                        <form:select path="adminLevel" id="adminLevel" title="소속" onClick="javascript:fn_ComboView()">
+						         <form:option value="" label='--선택하세요--'/>
+		                         <form:options items="${selectState}" itemValue="authorCode" itemLabel="authorNm"/>
+						    </form:select>					
                         </td>
                         <th><spring:message code="page.emp.part" /></th>
                         <td style="text-align:left">
@@ -160,17 +175,128 @@
                 </tbody>
             </table>
             <div class="clear"></div>
+            <div class="footerBtn">
+	            <a href="javascript:fn_update();" class="redBtn" id="btnUpdate"><spring:message code="button.update" /></a>
+	            <a href="javascript:del_form();" class="redBtn"><spring:message code="button.delete" /></a>
+	        </div>
+	        <div class="clear"></div>
         </div>
     </div>
-	
+	<c:import url="/backoffice/inc/bottom_inc.do" />    
+</form:form>    
      <script src="/js/needpopup.min.js" ></script> 
 	 <script type="text/javascript">
+		$(document).ready(function() {     
+			
+		});
+		function fn_update(){
+			if ($("#mode").val() == "Ins"){
+				   if ($("#idCheck").val() == "N"){
+					   alert('<spring:message code="page.emp.message01" />');
+					   return ;			   
+				   }			   
+				   if(!chkPwd( $.trim($('#adminPassword').val()))){ 
+					   alert('<spring:message code="page.emp.message02" />');    
+					   $('#adminPassword').val('');
+					   $('#adminPassword').focus(); return ;
+					   }
+				   if ( $.trim($('#adminPassword').val()) !=   $.trim($('#adminPassword2').val())  ){
+					   alert('<spring:message code="page.emp.message03" />')
+					   return;
+				   }
+			   }   	
+			   if (any_empt_line_id('adminLevel', '<spring:message code="page.emp.message04" />') == false) return;	  
+			   var params = $("#regist").serializeObject(); 
+			   uniAjax("/backoffice/basicManage/managerUpdate.do", params, 
+		     			function(result) {
+				                alert(result.message);
+						    	if (result.status == "SUCCESS"){
+									$("form[name=regist]").attr("action", "/backoffice/basicManage/empList.do").submit();
+								}else if (result.status == "LOGIN FAIL"){
+		  							location.href="/backoffice/login.do";
+		  						} else {
+		  							
+		  						}
+						    },
+						    function(request){
+							    alert("Error:" +request.status );	       						
+						    }    		
+		      );
+		}
 		function linkPage(pageNo) {
 			$(":hidden[name=pageIndex]").val(pageNo);		
 			$("form[name=regist]").attr("action","/backoffice/basicManage/empList.do").submit();
 		}
-		function fn_MBER(code, code1){
-			  location.href = "/backoffice/basicManage/managerCheck.do?mode="+code+"&adminId="+code1;
+		function fn_MBER(mode, userId){
+			 $("#mode").val(mode);
+			alert(mode);
+			 if (mode == "Edt"){
+				 
+				  $("#btnUpdate").text('<spring:message code="button.update" />');	
+				  url= "/backoffice/basicManage/managerDetail.do";
+				  var param = {
+			                'mode' : mode,
+			                'adminId' : userId
+			      };
+				  uniAjax(url, param, 
+		     			function(result) {
+						       if (result.status == "LOGIN FAIL"){
+						    	   alert(result.meesage);
+		  						   location.href="/backoffice/login.do";
+		  					   }else if (result.status == "SUCCESS"){
+		  						    //여기 부분 수정 어떻게 할지 추후 생각
+		  						    var obj = result.managerInfo;
+		  						    $("#adminId").val(obj.adminId);
+		  						    $("#empNo").val(obj.empNo);
+			  						$("#adminTel").val(obj.adminTel);
+			  						$("#adminEmail").val(obj.adminEmail);
+			  						$("#radioTest:radio[value='"+obj.useYn +"']").attr("checked", true) ;
+		 		            	    $('#adminLevel').val(obj.adminLevel);
+		 		            	    
+		  					   }
+						    },
+						    function(request){
+							    alert("Error:" +request.status );	       						
+						    }    		
+		          );
+				  fn_ComboView();
+		    	  $("#btnUpdate").text('<spring:message code="button.update" />');
+		   	      $("#uniCheck").html("");
+		   	      $("#reg_date").html($("#regDate").val());
+		   	      $("input[name=adminId]").attr("readOnly", true);
+			 }else{
+				 console.log("2");
+				 $("form[name=regist]").append("<input type='hidden'  id='idCheck' name='idCheck' />");	
+			 	 $("#adminId").val("");
+			 	 $("#uniCheck").html('<a href="javascript:fn_checkId();" class="deepBtn"><spring:message code="page.emp.userCheck" /></a>');
+			 	 $("#btnUpdate").text('<spring:message code="button.create" />');
+			 	 $("input:radio[name='useYn']:radio[value='Y']").prop('checked', true); 
+			 	 $("#partId").hide();
+			 	 console.log("3");
+			 }
+		}
+		function fn_checkId(){
+			 if ( $("#adminId").val()!= ""   ){	  
+		    	var params = {adminId : $("#adminId").val() };
+		    	uniAjax("${pageContext.request.contextPath}/backoffice/basicManage/IdCheck.do", params, 
+		       			function(result) {
+	  				    		if (result == "0"){
+	  								alert('<spring:message code="page.emp.message13" />');
+	  								$("#idCheck").val("Y");							
+	  							}else {
+	  								alert('<spring:message code="page.emp.message14" />');
+	  								$("#idCheck").val("N");
+	  							}
+		  				    },
+		  				    function(request){
+		  					    alert("Error:" +request.status );	       						
+		  				    }    		
+		        );
+		    }else {
+		    	alert ('<spring:message code="page.emp.message05" />');
+		    	$("#adminId").focus();
+		    	return;
+		    }
 		}
 		function del_check(code){
 			fn_uniDelJSON("/backoffice/basicManage/managerDelete.do"

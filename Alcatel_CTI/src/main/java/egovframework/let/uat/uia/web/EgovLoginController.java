@@ -170,11 +170,13 @@ public class EgovLoginController {
 		    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
 		    		return "/backoffice/login";
 		    	}
+		    	LOGGER.debug("isAuthenticated:" + isAuthenticated);
 		    	
 		    	HttpSession httpSession = request.getSession(true);
 		    	AdminLoginVO loginVO = (AdminLoginVO)httpSession.getAttribute("AdminLoginVO");
-		    	 
-		     	return "forward:backoffice/basicManage/user_list.do";
+		    	
+		    	
+		     	return "forward:/backoffice/basicManage/empList.do";
 		     	
     	} catch(Exception e){
     		LOGGER.debug("login Error:" + e.toString());

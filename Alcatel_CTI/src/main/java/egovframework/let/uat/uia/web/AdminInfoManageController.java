@@ -5,16 +5,9 @@ import java.util.List;
 import egovframework.let.uat.uia.service.AdminInfo;
 import egovframework.let.uat.uia.service.AdminInfoManageService;
 import egovframework.let.uat.uia.service.AdminInfoVO;
-
-
-
-
 import com.sohoki.backoffice.util.service.UniUtilInfo;
 import com.sohoki.backoffice.util.service.UniUtilManageService;
-
 import egovframework.com.cmm.AdminLoginVO;
-
-
 
 import com.sohoki.backoffice.mapper.ErrorInfoManageMapper;
 import com.sohoki.backoffice.sts.error.service.ErrorInfo;
@@ -53,21 +46,22 @@ public class AdminInfoManageController {
 
    private static final Logger LOGGER = LoggerFactory.getLogger(AdminInfoManageController.class);
 	
-	@Resource(name="AdminInfoManageService")
+	
+   @Resource(name="AdminInfoManageService")
 	private AdminInfoManageService userManagerService;
 	
 	@Resource(name ="AuthorInfoManageService")
 	private AuthorInfoManageService authorInfoManageService;
 	
 	/** EgovPropertyService */
-    @Resource(name = "propertiesService")
-    protected EgovPropertyService propertiesService;
-    
-    @Resource(name="CmmnDetailCodeManageService")
-    private EgovCcmCmmnDetailCodeManageService cmmnDetailCodeManageService;
-    
-    
-    @Resource(name="egovMessageSource")
+   @Resource(name = "propertiesService")
+   protected EgovPropertyService propertiesService;
+   
+   @Resource(name="CmmnDetailCodeManageService")
+   private EgovCcmCmmnDetailCodeManageService cmmnDetailCodeManageService;
+   
+   
+   @Resource(name="egovMessageSource")
 	protected EgovMessageSource egovMessageSource;
 
 	@Autowired
@@ -78,6 +72,7 @@ public class AdminInfoManageController {
 	
 	@Resource(name="ErrorInfoManageMapper")
 	private ErrorInfoManageMapper errorInfo;
+	
 	
 	
 	@RequestMapping(value="intro.do")
@@ -97,6 +92,8 @@ public class AdminInfoManageController {
 		  
 		   //공용 확인 하기 
 		   Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+		   LOGGER.debug("isAuthenticated:" + isAuthenticated);
+		   
 	       if(!isAuthenticated) {
 	    		model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
 	    		model.setViewName("/backoffice/login");
@@ -120,9 +117,7 @@ public class AdminInfoManageController {
 		   
 		   if (searchVO.getUseYn() == null){ searchVO.setUseYn("");}
 		   
-		   
 		   List<AdminInfoVO> adminList =  (List<AdminInfoVO>) userManagerService.selectAdminUserManageListByPagination(searchVO);
-
 	       model.addObject("resultList",  adminList);      
 	       
 	       
@@ -130,9 +125,9 @@ public class AdminInfoManageController {
 	       //int totCnt = userManagerService.selectAdminUserManageListTotCnt_S(searchVO);
 	       paginationInfo.setTotalRecordCount(totCnt);
 	       model.addObject("paginationInfo", paginationInfo);
+	       model.addObject("authInfo", authorInfoManageService.selectAuthorIInfoManageCombo());
 	       model.addObject("totalCnt", totCnt);
 	       
-		   
 	   }catch (Exception e){
 			LOGGER.debug("selectUserManagerList error:" + e.toString());
 			
@@ -178,7 +173,7 @@ public class AdminInfoManageController {
     	return model;
     }
 	
-	@RequestMapping(value="managerCheck.do")
+	/*@RequestMapping(value="managerCheck.do")
 	public ModelAndView userView( AdminInfoVO adminVO
 							, HttpServletRequest request
 							, BindingResult bindingResult) throws Exception{
@@ -199,6 +194,27 @@ public class AdminInfoManageController {
 			AdminInfoVO vo = userManagerService.selectAdminUserManageDetail(adminVO);
 			model.addObject("regist", vo);			
 		}				
+		return model;
+	}*/
+
+	@RequestMapping(value="managerDetail.do")
+	public ModelAndView managerDetail (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+									   ,@RequestBody  AdminInfoVO vo
+									   ,BindingResult bindingResult) throws Exception{
+		ModelAndView model = new ModelAndView("jsonView");
+		try{
+			Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+	        if(!isAuthenticated) {
+	        	model.addObject("status", Globals.STATUS_LOGINFAIL);
+	    		model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
+	        }
+	        model.addObject("status", Globals.STATUS_SUCCESS);
+	        model.addObject("managerInfo", userManagerService.selectAdminUserManageDetail(vo));
+	        
+		}catch(Exception e){
+			model.addObject("status", Globals.STATUS_FAIL);
+	        model.addObject("message", "ERROR:" + e.toString());
+		}
 		return model;
 	}
 	@RequestMapping(value="managerUpdate.do")
@@ -269,7 +285,7 @@ public class AdminInfoManageController {
 		return model;
 	}
 	@RequestMapping(value="IdCheck.do")
-	public String selectUserMangerIDCheck(@RequestBody AdminInfo vo) throws Exception {
+	public String selectUserMangerIDCheck(@RequestBody AdminInfoVO vo) throws Exception {
 		int IDCheck = userManagerService.selectAdminUserMangerIDCheck(vo.getAdminId());		
 		return Integer.toString( IDCheck ) ;
 	}

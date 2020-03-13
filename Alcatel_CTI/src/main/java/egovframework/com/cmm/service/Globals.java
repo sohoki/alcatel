@@ -54,6 +54,7 @@ public class Globals {
 	public static final String LOCAL_IP = EgovProperties.getProperty("Globals.LocalIp");
 
 	public static final String STATUS_SUCCESS = "SUCCESS";
+	public static final String STATUS_LOGINFAIL = "LOGIN FAIL";
 	public static final String STATUS_FAIL = "FAIL";
 	public static final String REGITER_SYSTEM = "SYSTEM";
 	

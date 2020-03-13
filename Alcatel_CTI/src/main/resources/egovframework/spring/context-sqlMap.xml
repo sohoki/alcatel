@@ -27,9 +27,19 @@
         <property name="lobHandler" ref="lobHandler"/>
     </bean>
     
+    <bean id="dataSourceLog4j" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="dataSource-mariadb" />
+        <property name="logFormatter">
+            <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+                <property name="loggingType" value="MULTI_LINE" />
+                <property name="sqlPrefix" value="SQL::  "/>
+            </bean>
+        </property>
+    </bean>
+    
     <!-- Mybatis -->
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="dataSourceLog4j" />
 		<property name="configLocation" value="classpath:/egovframework/sqlmap/mybatis/${Globals.DbType}-config.xml" />
 	</bean>
 	

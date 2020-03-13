@@ -215,7 +215,7 @@
 
         .tableArea table th {
             background-color: #efefef;
-            border-top: 3px solid #e8342f;
+            border-top: 3px solid #e8342f; 
             font-size: 14px;
             font-weight: bold;
             color: #343434;
@@ -818,6 +818,24 @@ input {
         border-bottom: 1px solid #bababa;
         font-size:14px;
     }
+//신규
+.pop_need_table {
+    margin-top: 20px;
+    width: 100%;
+    position: relative;
+}
+
+    .pop_need_table th {
+        background-color: #eeeeed;
+        font-weight: 600;
+        color: #555656;
+    }
+
+    .pop_need_table th, .pop_need_table td {
+        padding: 15px 10px;
+        border-bottom: 1px solid #bababa;
+        font-size:14px;
+    }
 
 .thStyle th {
     width: 20%;
@@ -981,7 +999,7 @@ td a{margin-left:5px;}
 }
 .needpopup .user_top {
       background: #3775f6;
-      padding:35px 0;
+      padding:25px 0;
       font-size: 35px;
       text-align: center;
       color: #fff

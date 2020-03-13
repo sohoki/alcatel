@@ -291,6 +291,7 @@ function fn_uniUpdate(_url, _data, _action ){
 function uniAjax(url, param, done_callback, fail_callback){
 	var jxFax =  $.ajax({
 		        type : 'POST',
+		        async: true ,
 		        url : url,
 		        contentType : "application/json; charset=utf-8",
 		        data : JSON.stringify(param)
