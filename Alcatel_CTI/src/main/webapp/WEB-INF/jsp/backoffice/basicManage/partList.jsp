@@ -98,15 +98,6 @@
                     <tr>
                         <th>부서명</th>
                         <td><input type="text" id="partNm" name="partNm"></td>
-                    </tr>
-                    <tr>
-                        <th>사용유무</th>
-                        <td>
-                           <input type="radio" name="partUseyn" value="Y" />사용
-						   <input type="radio" name="partUseyn" value="N" />사용안함	
-                        </td>
-                    </tr>
-                    <tr>
                         <th>상위부서코드</th>
                         <td><form:select path="parentPartId" id="parentPartId">
 							     <option value=""><spring:message code="combobox.text" /></option>
@@ -115,6 +106,11 @@
 					   </td>
                     </tr>
                     <tr>
+                        <th>사용유무</th>
+                        <td>
+                           <input type="radio" name="partUseyn" value="Y" />사용
+						   <input type="radio" name="partUseyn" value="N" />사용안함	
+                        </td>
                         <th>정렬순서</th>
                         <td><form:select path="partOrder" id="partOrder" title="소속">
 							     <option value=""><spring:message code="combobox.text" /></option>

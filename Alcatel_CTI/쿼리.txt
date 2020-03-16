@@ -339,3 +339,8 @@ select 'ROLE_USER_MEMBER', '통합이용자', '시스템통합이용자', '2011-
 //관리자 등록
 insert into tb_managerinfo (ADMIN_ID, ADMIN_PASSWORD, ADMIN_NAME, LOCK_YN, USE_YN)
 values ('admin','1234', '관리자', 'N','Y');
+
+
+//부서 등록
+insert into tb_partinfo (PART_ID, PART_NM, PART_CREATE_DE, PART_DC, PART_USEYN, PARENT_PART_ID, PART_ORDER)
+values (1, 'ROOT', '20200306120000', '','Y', 0, 1)

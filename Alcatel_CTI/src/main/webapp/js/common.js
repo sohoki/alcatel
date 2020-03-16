@@ -294,6 +294,7 @@ function uniAjax(url, param, done_callback, fail_callback){
 		        async: true ,
 		        url : url,
 		        contentType : "application/json; charset=utf-8",
+		        Accept: "application/json",
 		        data : JSON.stringify(param)
 		    }).done(done_callback).fail(fail_callback);
 	

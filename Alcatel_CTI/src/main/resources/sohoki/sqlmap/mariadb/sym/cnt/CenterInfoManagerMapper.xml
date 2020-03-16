@@ -14,8 +14,7 @@
 		        a.CENTER_USE_YN       as "centerUseYn"		,      	
 		        a.ADMIN_APPROVAL_YN       as "adminApprovalYn" ,	        
 		        a.CENTER_REGDATE as "centerRegdate"	,
-		        b.PART_NM partNm	  ,
-		        fn_centerCnt(CENTER_ID) as centerAgentCnt     
+		        b.PART_NM partNm	     
 		    FROM  tb_centerinfo a, tb_partinfo b
 		        WHERE a.part_id = b.part_id        
 		        <if test="searchKeyword != ''">

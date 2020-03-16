@@ -10,7 +10,6 @@ if(loginVO == null ){
 	
 	%>
 	<script type="text/javascript">
-	alert("12");
 	location.href="/backoffice/login.do";
 	</script>
 	<%        
@@ -23,26 +22,26 @@ if(loginVO == null ){
                 <nav id="topMenu">
                     <ul>
                         <li class="dropdown">
-                            <a href="/backoffice/contentManage/pageInfoList.do" class="dropbtn">
+                            <a href="/backoffice/contentManage/useInfoList.do" class="dropbtn">
                             <spring:message code="menu.menu01" />
                             </a>
-                            <ul class="dropdown-content sedrop">
+                         <%--    <ul class="dropdown-content sedrop">
                                 <li><a href="/backoffice/contentManage/pageInfoList.do"><spring:message code="menu.menu01_1" /></a></li>
                                 <li><a href="/backoffice/contentManage/displayList.do"><spring:message code="menu.menu01_2" /></a></li>
                                 <li><a href="/backoffice/contentManage/conSchInfoList.do"><spring:message code="menu.menu01_4" /></a></li>
                                 <li><a href="/backoffice/basicManage/AgentInfoList.do"><spring:message code="menu.menu01_3" /></a></li>
-                            </ul>
+                            </ul> --%>
                         </li>
                         <li class="dropdown">
-                            <a href="/backoffice/basicManage/pageInfoList.do" class="dropbtn">
+                            <a href="/backoffice/basicManage/AgentInfoList.do" class="dropbtn">
                             <spring:message code="menu.menu02" />
                             </a>
                             <ul class="dropdown-content sedrop">
                                
-                                <li><a href="/backoffice/basicManage/codeList.do"><spring:message code="menu.menu02_1" /></a></li>
-                                <li><a href="/backoffice/operManage/xmlList.do"><spring:message code="menu.menu02_2" /></a></li>  
-                                <li><a href="/backoffice/errList.do"><spring:message code="menu.menu02_3" /></a></li>  
-                                <li><a href="/backoffice/contentManage/schInfoList.do"><spring:message code="menu.menu02_4" /></a></li>
+                                <li><a href="/backoffice/operManage/agentList.do"><spring:message code="menu.menu02_1" /></a></li>
+                                <li><a href="/backoffice/operManage/userList.do"><spring:message code="menu.menu02_2" /></a></li>  
+                                <li><a href="/backoffice/operManage/errList.do"><spring:message code="menu.menu02_3" /></a></li>  
+                               <%--  <li><a href="/backoffice/contentManage/schInfoList.do"><spring:message code="menu.menu02_4" /></a></li> --%>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -51,12 +50,13 @@ if(loginVO == null ){
                                 <li><a href="/backoffice/basicManage/empList.do"><spring:message code="menu.menu03_1" /></a></li>
                                 <li><a href="/backoffice/basicManage/partList.do"><spring:message code="menu.menu03_2" /></a></li>
                                 <li><a href="/backoffice/basicManage/centerList.do"><spring:message code="menu.menu03_3" /></a></li>  
+                                <li><a href="/backoffice/basicManage/codeList.do"><spring:message code="menu.menu03_4" /></a></li>  
+                                <li><a href="/backoffice/operManage/xmlList.do"><spring:message code="menu.menu03_5" /></a></li>  
                             </ul>
                         </li>
                     </ul>
                 </nav>
                 <p>   
-                    <%=loginVO.getAdminId() %>                                
                     <a href="<c:url value='/backoffice/actionLogout.do'/>"><spring:message code="button.logout" /></a>
                 </p>
             </div>

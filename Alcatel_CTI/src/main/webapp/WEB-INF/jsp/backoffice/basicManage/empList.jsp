@@ -127,7 +127,7 @@
                         </td>
                         <th><spring:message code="page.emp.title" /></th>
                         <td style="text-align:left">
-                        <input type="text" id="adminName" name="adminName"  style="150px;" /> (<input type="text" id="empNo" name="empNo"  style="150px;" maxlength="20" />)
+                        <input type="text" id="adminName" name="adminName"  style="100px;" /> (<input type="text" id="empNo" name="empNo"  style="100px;" maxlength="20" />)
                         </td>
                     </tr>
                     <tr>
@@ -163,7 +163,7 @@
                         <td style="text-align:left">
 	                        <form:select path="adminLevel" id="adminLevel" title="소속" onClick="javascript:fn_ComboView()">
 						         <form:option value="" label='--선택하세요--'/>
-		                         <form:options items="${selectState}" itemValue="authorCode" itemLabel="authorNm"/>
+		                         <form:options items="${authInfo}" itemValue="authorCode" itemLabel="authorNm"/>
 						    </form:select>					
                         </td>
                         <th><spring:message code="page.emp.part" /></th>
@@ -206,7 +206,14 @@
 				   }
 			   }   	
 			   if (any_empt_line_id('adminLevel', '<spring:message code="page.emp.message04" />') == false) return;	  
-			   var params = $("#regist").serializeObject(); 
+			   //var params = $("#regist").serializeObject(); 
+			   var params = { mode : $("#mode").val(),  adminId : $("#adminId").val(), 
+					              adminName : $("#adminName").val(), empNo:   $("#empNo").val(),
+					              adminTel : $("#adminTel").val(),  adminEmail :  $("#empNo").val(),
+					              adminPassword : $("#adminPassword").val(),  partId : fn_emptyReplace ($("#partId").val(), "0") ,
+					              adminLevel : $('#adminLevel').val(), useYn : $('input[name="useYn"]:checked').val(),
+					            }
+			    
 			   uniAjax("/backoffice/basicManage/managerUpdate.do", params, 
 		     			function(result) {
 				                alert(result.message);
@@ -229,10 +236,11 @@
 		}
 		function fn_MBER(mode, userId){
 			 $("#mode").val(mode);
-			alert(mode);
 			 if (mode == "Edt"){
-				 
 				  $("#btnUpdate").text('<spring:message code="button.update" />');	
+				  
+				  fn_ComboView();
+				  
 				  url= "/backoffice/basicManage/managerDetail.do";
 				  var param = {
 			                'mode' : mode,
@@ -247,33 +255,36 @@
 		  						    //여기 부분 수정 어떻게 할지 추후 생각
 		  						    var obj = result.managerInfo;
 		  						    $("#adminId").val(obj.adminId);
+		  						    $("#adminName").val(obj.adminName);
 		  						    $("#empNo").val(obj.empNo);
 			  						$("#adminTel").val(obj.adminTel);
 			  						$("#adminEmail").val(obj.adminEmail);
-			  						$("#radioTest:radio[value='"+obj.useYn +"']").attr("checked", true) ;
-		 		            	    $('#adminLevel').val(obj.adminLevel);
-		 		            	    
+			  						$("input:radio[name='useYn']:radio[value='"+obj.useYn +"']").attr('checked', true);
+			  					    $('#adminLevel').val(obj.adminLevel);
+		 		            	    $("#partId").val(obj.partId);
+		 		            	   $("#reg_date").html( obj.regDate );
 		  					   }
 						    },
 						    function(request){
 							    alert("Error:" +request.status );	       						
 						    }    		
 		          );
-				  fn_ComboView();
+				 
 		    	  $("#btnUpdate").text('<spring:message code="button.update" />');
 		   	      $("#uniCheck").html("");
-		   	      $("#reg_date").html($("#regDate").val());
+		   	      
 		   	      $("input[name=adminId]").attr("readOnly", true);
 			 }else{
-				 console.log("2");
 				 $("form[name=regist]").append("<input type='hidden'  id='idCheck' name='idCheck' />");	
 			 	 $("#adminId").val("");
 			 	 $("#uniCheck").html('<a href="javascript:fn_checkId();" class="deepBtn"><spring:message code="page.emp.userCheck" /></a>');
 			 	 $("#btnUpdate").text('<spring:message code="button.create" />');
 			 	 $("input:radio[name='useYn']:radio[value='Y']").prop('checked', true); 
 			 	 $("#partId").hide();
-			 	 console.log("3");
 			 }
+		}
+		function fn_ComboView(){
+			
 		}
 		function fn_checkId(){
 			 if ( $("#adminId").val()!= ""   ){	  
