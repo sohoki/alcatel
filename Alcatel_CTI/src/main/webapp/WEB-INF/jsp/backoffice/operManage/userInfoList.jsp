@@ -169,7 +169,7 @@
              <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.agent.loginPassword" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  type="password" path="loginId" size="20" maxlength="20" id="loginId"   />
+                    <form:input  type="password" path="loginPassword" size="20" maxlength="20" id="loginPassword"   />
                 </div>   
             </div>
              <div class="pop_box50">
@@ -242,30 +242,17 @@
     	fn_uniDelJSON("/backoffice/basicManage/agentInfoDelete.do"
 				  , {agentCode : code}
 		          , "/backoffice/contentManage/AgentInfoList.do");	
+   }  
+   function fn_checkId(){
+	   fn_uniCheck(   {inTable : "tb_userphoneinfo",
+	       inCheckName : "PHONE_NUMBER",
+	       inCondition : "PHONE_NUMBER=["+$("#phoneNumber").val()+"["
+	      }, "phoneNumber", "phoneCheck", "<spring:message code='page.xml.confirm' />"
+	    );
+	   
    }
-  function fn_checkId(){
-	  if ( $("#adminId").val()!= ""   ){	  
-	    	var params = {adminId : $("#adminId").val() };
-	    	uniAjax("${pageContext.request.contextPath}/backoffice/basicManage/IdCheck.do", params, 
-	       			function(result) {
-				    		if (result == "0"){
-								alert('<spring:message code="page.emp.message13" />');
-								$("#idCheck").val("Y");							
-							}else {
-								alert('<spring:message code="page.emp.message14" />');
-								$("#idCheck").val("N");
-							}
-	  				    },
-	  				    function(request){
-	  					    alert("Error:" +request.status );	       						
-	  				    }    		
-	        );
-	    }else {
-	    	alert ('<spring:message code="page.emp.message05" />');
-	    	$("#adminId").focus();
-	    	return;
-	    }
-  }
+
+   
    function fn_CheckForm(){
 	   if (any_empt_line_id("phoneNumber", '<spring:message code="page.user.alert1" />') == false) return;
 	   if (any_empt_line_id("lgoinId", '<spring:message code="page.agent.alert2" />') == false) return;
@@ -278,20 +265,14 @@
 	   }
 	   
 	   var params = {  
-			           agentNm : $("#agentNm").val(),
-			           agentOsversion : $("#agentOsversion").val(),
-					   agentRemark : $("#agentRemark").val(),
-					   centerId : $("#centerId").val(),
-					   partId : $("#partId").val(),
-					   agentBasicnumber : $("#agentBasicnumber").val(),
-					   agentIp : $("#agentIp").val(),
-					   agentMac : $("#agentMac").val(),
-					   agentUseYn :  fn_emptyReplace($('input[name="agentUseYn"]:checked').val(),"Y"),
-					   mode : $("#mode").val(),
-					   agentFloor : $("#agentFloor").val(),
-					   agentCode : $("#agentCode").val()
+			           phoneNumber : $("#phoneNumber").val(),
+			           phoneGubun : $("#phoneGubun").val(),
+			           loginId : $("#loginId").val(),
+			           loginPassword : $("#loginPassword").val(),
+					   agentUseYn :  fn_emptyReplace($('input[name="phoneUseyn"]:checked').val(),"Y"),
+					   mode : $("#mode").val()
 			        };
-	            uniAjax("/backoffice/basicManage/agentInfoUpdate.do", params, 
+	            uniAjax("/backoffice/operManage/userUpdate.do", params, 
      			function(result) {
 				    	if (result.status == "SUCCESS"){
 				    		location.reload();
@@ -309,18 +290,12 @@
    function linkPage(pageNo) {
 		$(":hidden[name=pageIndex]").val(pageNo);	
 		$('#displaySeq').val("0");
-		$("form[name=regist]").attr("action","/backoffice/basicManage/AgentInfoList.do").submit();
-   }
-   function fn_viewAgent(agentCode){
-		  $('#mode').val("Edt");
-		  $('#agentCode').val(agentCode);
-		  $('#displaySeq').val("0");
-		  $("form[name=regist]").attr("action", "/backoffice/basicManage/agentInfoView.do").submit();
+		$("form[name=regist]").attr("action","/backoffice/operManage/userList.do").submit();
    }
    function search_form(){	
 		  $(":hidden[name=pageIndex]").val("1");	
 		  $('#displaySeq').val("0");
-		  $("form[name=regist]").attr("action", "/backoffice/basicManage/AgentInfoList.do").submit();		  
+		  $("form[name=regist]").attr("action", "/backoffice/operManage/userList.do").submit();		  
    }
 </script>
 </body>

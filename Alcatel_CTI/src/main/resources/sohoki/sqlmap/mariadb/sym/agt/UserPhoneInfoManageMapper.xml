@@ -104,8 +104,10 @@
                                    PHONE_STATE = #{phoneState},
                                    LAST_UPDT_PNTTM = now(),
                                    LAST_UPDUSR_ID = #{userId},
-                                   LOGIN_ID = #{loginId},
-                                   LOGIN_PASSWORD = #{loginPassword}  
+                                   LOGIN_ID = #{loginId}
+                                   <if test="loginPassword != ''">
+                                   ,LOGIN_PASSWORD = #{loginPassword}  
+                                   </if>
        WHERE PHONE_NUMBER =#{phoneNumber}
     </update>
     <delete id="deleteUserPhoneInfo">

@@ -93,7 +93,7 @@ public class AgentInfoManageController {
 																				  , BindingResult bindingResult						
 																				  , ModelMap model) throws Exception {
 																	
-				ModelAndView  mv = new ModelAndView("/backoffice/operManage/userList");
+				ModelAndView  mv = new ModelAndView("/backoffice/operManage/userInfoList");
 				try{
 					Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 					LOGGER.debug("isAuthenticated:" + isAuthenticated);
@@ -157,6 +157,37 @@ public class AgentInfoManageController {
 				model.addObject("status", Globals.STATUS_SUCCESS);
 				model.addObject("userInfo", userService.selectUsserPhoneInfoDetail(vo.getPhoneNumber())); 
 				
+			}catch(Exception e){
+			    model.addObject("status", Globals.STATUS_FAIL);
+		  	    model.addObject("message", "ERROR:" + e.toString());
+			}
+			return model;
+	 }
+	 @RequestMapping(value="userUpdate.do")
+	 public ModelAndView selectUserInfoUpdate (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+														   ,@RequestBody  UserPhoneInfoVO vo
+														   ,BindingResult bindingResult) throws Exception{
+			ModelAndView model = new ModelAndView("jsonView");
+			String meesage = "";
+			try{
+				Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+				if(!isAuthenticated) {
+				model.addObject("status", Globals.STATUS_LOGINFAIL);
+				model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
+				}
+				int ret = userService.updateUserPhoneInfo(vo) ;
+				if (vo.getMode().equals("Ins")){
+					meesage = "success.common.insert";
+				}else {
+					meesage = "success.common.update";
+				}	
+				System.out.println("ret:" + ret);
+				if (ret >0){
+					model.addObject("status", Globals.STATUS_SUCCESS);
+					model.addObject("message", egovMessageSource.getMessage(meesage));		
+				}else {	
+					throw new Exception();
+				}
 			}catch(Exception e){
 			    model.addObject("status", Globals.STATUS_FAIL);
 		  	    model.addObject("message", "ERROR:" + e.toString());
