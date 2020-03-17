@@ -37,7 +37,6 @@ public class UserPhoneInfoVO extends UserPhoneInfo implements Serializable{
     
     
     
-    
 	public String getSearchPhoneUseyn() {
 		return searchPhoneUseyn;
 	}

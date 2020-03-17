@@ -207,7 +207,7 @@
 							</form:select>~
 							<form:select path="centerFloorEnd" id="centerFloorEnd" title="소속">
 							     <option value=""><spring:message code="combobox.text" /></option>
-		                         <form:options items="${selectFloorEndCombo}" itemValue="code" itemLabel="codeNm"/>
+		                         <form:options items="${selectFloorCombo}" itemValue="code" itemLabel="codeNm"/>
 							</form:select>
                         </span>
                         </td>

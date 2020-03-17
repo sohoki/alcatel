@@ -8,26 +8,31 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
+import com.sohoki.backoffice.sym.cnt.service.CenterInfoService;
+import com.sohoki.backoffice.uat.uia.service.PartInfoManageService;
 import com.sohoki.backoffice.mapper.ErrorInfoManageMapper;
 import com.sohoki.backoffice.sts.error.service.ErrorInfo;
-import com.sohoki.backoffice.sym.cnt.service.CenterInfoVO;
 
 import egovframework.com.cmm.AdminLoginVO;
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.service.Globals;
+import egovframework.let.sym.ccm.cde.service.EgovCcmCmmnDetailCodeManageService;
 import egovframework.let.uat.uia.service.AdminInfoVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.fdl.security.userdetails.util.EgovUserDetailsHelper;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+
+
+
 
 
 
@@ -42,7 +47,7 @@ import com.sohoki.backoffice.sym.agt.service.UserPhoneInfoVO;
 import com.sohoki.backoffice.sym.agt.service.UserPhoneInfoManageService;
 import com.sohoki.backoffice.util.service.UniUtilManageService;
 
-@Controller
+@RestController
 @RequestMapping("/backoffice/operManage")
 public class AgentInfoManageController {
 
@@ -66,13 +71,22 @@ public class AgentInfoManageController {
 	 @Autowired
 	 private UserPhoneInfoManageService userService;
 	 
+	 @Autowired
+	 private CenterInfoService centerService;
+	 
+	 @Autowired
+	 private PartInfoManageService partService;
+	 
+	 @Resource(name="CmmnDetailCodeManageService")
+	 private EgovCcmCmmnDetailCodeManageService detailService;
+	 
 	 @Resource(name="UniUtilManageService")
 	 private UniUtilManageService utilService;
 		
 	 @Resource(name="ErrorInfoManageMapper")
 	 private ErrorInfoManageMapper errorInfo;
 	
-	 @RequestMapping(value="/backoffice/operManage/userList")
+	 @RequestMapping(value="userList.do")
 	 public ModelAndView selectUserListManageListByPagination(@ModelAttribute("loginVO") AdminLoginVO loginVO
 																				  , @ModelAttribute("searchVO") UserPhoneInfoVO searchVO
 																				  , HttpServletRequest request
@@ -114,6 +128,7 @@ public class AgentInfoManageController {
 					//int totCnt = userManagerService.selectAdminUserManageListTotCnt_S(searchVO);
 					paginationInfo.setTotalRecordCount(totCnt);
 					mv.addObject("paginationInfo", paginationInfo);
+					mv.addObject("selectPhoneGubun", detailService.selectCmmnDetailCombo("PHONE_GUBUN") );
 					mv.addObject("totalCnt", totCnt);
 				}catch(Exception e){
 					LOGGER.debug("selectUserListManageListByPagination error:" + e.toString());
@@ -127,15 +142,35 @@ public class AgentInfoManageController {
 				}
 				return mv;
 	 }
-	 
-	 @RequestMapping(value="/backoffice/operManage/agentList")
+	 @RequestMapping(value="userDetail.do")
+	 public ModelAndView selectUserInfoDetail (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+														   ,@RequestBody  UserPhoneInfoVO vo
+														   ,BindingResult bindingResult) throws Exception{
+			ModelAndView model = new ModelAndView("jsonView");
+			try{
+				Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+				if(!isAuthenticated) {
+				model.addObject("status", Globals.STATUS_LOGINFAIL);
+				model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
+				}
+				
+				model.addObject("status", Globals.STATUS_SUCCESS);
+				model.addObject("userInfo", userService.selectUsserPhoneInfoDetail(vo.getPhoneNumber())); 
+				
+			}catch(Exception e){
+			    model.addObject("status", Globals.STATUS_FAIL);
+		  	    model.addObject("message", "ERROR:" + e.toString());
+			}
+			return model;
+	 }
+	 @RequestMapping(value="agentList.do")
 	 public ModelAndView selectAgentListManageListByPagination(@ModelAttribute("loginVO") AdminLoginVO loginVO
 																				  , @ModelAttribute("searchVO") TelephoneInfoVO searchVO
 																				  , HttpServletRequest request
 																				  , BindingResult bindingResult						
 																				  , ModelMap model) throws Exception {
 
-		      ModelAndView  mv = new ModelAndView("/backoffice/operManage/agentList");
+		      ModelAndView  mv = new ModelAndView("/backoffice/operManage/agentInfoList");
 		      try{
 		    	  Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 				   LOGGER.debug("isAuthenticated:" + isAuthenticated);
@@ -170,6 +205,10 @@ public class AgentInfoManageController {
 			       //int totCnt = userManagerService.selectAdminUserManageListTotCnt_S(searchVO);
 			       paginationInfo.setTotalRecordCount(totCnt);
 			       mv.addObject("paginationInfo", paginationInfo);
+			       
+			       mv.addObject("selectCenterCombo", centerService.selectCenterCombo());
+			       mv.addObject("selectGroupCombo", partService.selectPartInfoCombo());
+			       
 			       mv.addObject("totalCnt", totCnt);
 		      }catch(Exception e){
 		    	  LOGGER.debug("selectUserManagerList error:" + e.toString());
@@ -183,7 +222,7 @@ public class AgentInfoManageController {
 		      }
 		      return mv;
 	 }
-	 @RequestMapping(value="/backoffice/operManage/agentDetail")
+	 @RequestMapping(value="agentDetail.do")
 	 public ModelAndView selectAgentInfoDetail (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
 														   ,@RequestBody  TelephoneInfoVO vo
 														   ,BindingResult bindingResult) throws Exception{
@@ -204,7 +243,7 @@ public class AgentInfoManageController {
 			}
 			return model;
 	 }
-	 @RequestMapping(value="/backoffice/operManage/agentUpdate")
+	 @RequestMapping(value="agentUpdate.do")
 	 public ModelAndView agentInfoUpdate (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
 													   ,@RequestBody  TelephoneInfoVO vo
 													   , BindingResult bindingResult) throws Exception{

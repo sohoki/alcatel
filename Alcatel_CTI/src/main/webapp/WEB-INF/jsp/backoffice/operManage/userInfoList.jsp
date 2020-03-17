@@ -52,8 +52,6 @@
 <c:import url="/backoffice/inc/top_inc.do" />
 <input type="hidden" name="pageIndex" id="pageIndex" value="${searchVO.pageIndex }">
 <input type="hidden" name="mode" id="mode" >
-<input type="hidden" name="agentCode" id="agentCode" >
-
 
 <div class="Aconbox">
         <div class="rightT">
@@ -102,31 +100,23 @@
                 <table class="margin-top30 backTable">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="all_check" name="all_check" onClick="fn_allCheck()"></th>
-                            <th><spring:message code="page.agent.Osversion" /></th>
-                            <th><spring:message code="page.agent.TitleNm" /></th>
-                            <th><spring:message code="page.agent.floor" /></th>
-                            <th><spring:message code="page.agent.remark" /></th>
-                            <th><spring:message code="page.agentBasicnumber" /></th>
-                            <th><spring:message code="page.agentNownumber" /></th>
-                            <th><spring:message code="page.agent.state" /></th>
+                            <th><spring:message code="page.user.phoneNumber" /></th>
+                            <th><spring:message code="page.user.phoneGubun" /></th>
+                            <th><spring:message code="page.user.loginId" /></th>
+                            <th><spring:message code="page.user.phoneState" /></th>
                             <th><spring:message code="common.UseYn.title" /></th>
                             <th><spring:message code="button.delete" /></th>
                         </tr>
                     </thead>
                     <tbody>
-                     <c:forEach items="${resultList }" var="agentInfo" varStatus="status">
+                     <c:forEach items="${resultList }" var="userInfo" varStatus="status">
                         <tr>
-                            <td><input type="checkbox" name="agentInput" value="<c:out value="${agentInfo.agentCode}"/>"></td>
-                            <td>${ agentInfo.agentOsversion}</td>
-                            <td><a href="#" onclick="fn_agentPop('Edt','${ agentInfo.agentCode }')"  data-needpopup-show="#agent_pop" class="underline" >${ agentInfo.agentNm }</a></td>
-                            <td>${agentInfo.agentFloor }<spring:message code="page.agent.floorTxt" /></td>
-                            <td style="text-align:left">${agentInfo.agentRemark }</td>
-                            <td>${agentInfo.agentBasicnumber }</td>
-                            <td>${agentInfo.agentNownumber }</td>
-                            <td>${agentInfo.agentState }</td>
-                            <td>${agentInfo.agentUseYn }</td>
-                            <td><a href="javascript:del_check('${ agentInfo.agentCode }','${ agentInfo.agentNm }');" class="grayBtn">
+                            <td><a href="#" onclick="fn_agentPop('Edt','${ userInfo.phoneNumber }')"  data-needpopup-show="#agent_pop" class="underline" >${ userInfo.phoneNumber }</a></td>
+                            <td>${userInfo.phoneGubunTxt }</td>
+                            <td style="text-align:left">${userInfo.loginId }</td>
+                            <td>${userInfo.phoneStateTxt }</td>
+                            <td>${userInfo.UseYn }</td>
+                            <td><a href="javascript:del_check('${ userInfo.agentCode }','${ userInfo.agentNm }');" class="grayBtn">
                                 <spring:message code="button.delete" />
                                 </a>
                             </td>
@@ -147,76 +137,47 @@
     <div id='agent_pop' class="needpopup">  
         <!-- popheader-->                        
         <div class="popHead">
-            <h2>단말기 관리</h2>
+            <h2>사용자 관리</h2>
         </div>
         <!-- pop contents-->   
         <div class="popCon">
             <!--// 팝업 필드박스-->
             <div class="pop_box50">
                 <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.TitleNm" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="agentNm" size="20" maxlength="100" id="agentNm"   />
+                    <p class="pop_tit">*<spring:message code="page.user.phoneNumber" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:input  path="phoneNumber" size="20" maxlength="20" id="phoneNumber"   />
+                    <span id="uniCheck" ></span>
                 </div>                
             </div>
              <div class="pop_box50">
                 <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.Osversion" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="agentOsversion" size="20" maxlength="100" id="agentOsversion"  />
-                </div>                
-            </div>
-            <!--팝업 필드박스 //-->
-            <div class="pop_box100">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.remark" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="agentRemark" size="80" maxlength="120" id="agentRemark"   value="${regist.agentRemark }" />
+                    <p class="pop_tit">*<spring:message code="page.user.phoneGubun" /> <span class="join_id_comment joinSubTxt"></span></p>
+                   <form:select path="phoneGubun" id="phoneGubun" title="전화번호구분" onChange="javascript:fn_FlooerView('P', '')">
+							     <option value=""><spring:message code="combobox.text" /></option>
+		                         <form:options items="${selectPhoneGubun}" itemValue="code" itemLabel="codeNm"/>
+					</form:select>
                 </div>                
             </div>
             <!--// 팝업 필드박스-->
             <div class="pop_box50">
                 <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.center.centerNm" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:select path="centerId" id="centerId" title="지점" onChange="javascript:fn_FlooerView('P', '')">
-							     <option value=""><spring:message code="combobox.text" /></option>
-		                         <form:options items="${selectCenterCombo}" itemValue="centerId" itemLabel="centerNm"/>
-					</form:select>
-					<select id='agentFloor' name='agentFloor' style="display:none;"></select>
-					
+                    <p class="pop_tit">*<spring:message code="page.center.loginId" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:input  path="loginId" size="20" maxlength="20" id="loginId"   />
+					<span id="uniCheckID" ></span>
                 </div>   
             </div>
              <div class="pop_box50">
                 <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.partInfo" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:select path="partId" id="partId" title="소속">
-							     <option value=""><spring:message code="combobox.text" /></option>
-		                         <form:options items="${selectGroupCombo}" itemValue="partId" itemLabel="partNm"/>
-					</form:select>
+                    <p class="pop_tit">*<spring:message code="page.agent.loginPassword" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:input  type="password" path="loginId" size="20" maxlength="20" id="loginId"   />
                 </div>   
-            </div>
-            
-            <div class="pop_box50">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agentBasicnumber" /> <span class="join_id_comment joinSubTxt"></span></p>
-                   <form:input  path="agentBasicnumber" size="10" maxlength="10" id="agentBasicnumber" style="width:150px;" />[찾기]
-                </div>   
-            </div>
-            <div class="pop_box50">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.IP" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="agentIp" size="10"  id="agentIp" />
-                </div>                
-            </div>
-            <div class="pop_box50">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.Mac" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="agentMac" size="10"  id="agentMac" />
-                </div>                
             </div>
              <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="common.UseYn.title" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <input type="radio" name="agentUseYn" id="agentUseYn" value="Y" <c:if test="${regist.agentUseYn == 'Y' }"> checked </c:if> />
+                    <input type="radio" name="phoneUseyn" id="phoneUseyn" value="Y" <c:if test="${regist.phoneUseyn == 'Y' }"> checked </c:if> />
                     <label><spring:message code="button.use" /></label>
-					<input type="radio" name="agentUseYn" id="agentUseYn" value="N" <c:if test="${regist.agentUseYn == 'N' }"> checked </c:if> />
+					<input type="radio" name="phoneUseyn" id="phoneUseyn" value="N" <c:if test="${regist.phoneUseyn == 'N' }"> checked </c:if> />
 					<label><spring:message code="button.nouse" /></label>
                 </div>                
             </div>
@@ -225,7 +186,7 @@
             
         </div>
         <div class="pop_footer">
-            <span id="join_confirm_comment" class="join_pop_main_subTxt">내용을 모두 입력후  클릭해주세요.</span>
+            <span id="join_confirm_comment" class="join_pop_main_subTxt"><spring:message code="page.common.InputMessage" /></span>
             <a href="javascript:fn_CheckForm();" class="redBtn" id="btnUpdate"><spring:message code="button.update" /></a>
         	<div class="clear"></div>
         </div>
@@ -236,21 +197,20 @@
 <script type="text/javascript">
 
    $(document).ready(function() { 
-			if ("${searchVO.searchFloor }" != ""){
-				fn_FlooerView("S", "${searchVO.searchFloor }")
-			}else{
-				$("#searchFloor").hide();
-			}
+	   //시작값
+	   
 	});
    function fn_agentPop(mode, code){
 		  $('#mode').val(mode);
-		  $('#agentCode').val(code);
+		  $('#phoneNumber').val(code);
 		  if (mode == "Edt"){
+			 
+			  
 			  $("#btnUpdate").text('<spring:message code="button.update" />');	
-			  url= "/backoffice/basicManage/agentInfoDetail.do";
+			  url= "/backoffice/operManage/userDetail.do";
 			  var param = {
 		                'mode' : $('#mode').val(),
-		                'agentCode' : $('#agentCode').val()
+		                'phoneNumber' : $('#phoneNumber').val()
 		      };
 			  uniAjax(url, param, 
 	     			function(result) {
@@ -260,17 +220,12 @@
 	  					   }else if (result.status == "SUCCESS"){
 	  						    //여기 부분 수정 어떻게 할지 추후 생각
 	  						    var obj = result.agentInfo;
-	  						    $("#agentNm").val(obj.agentNm);
-	  						    $("#agentOsversion").val(obj.agentOsversion);
-		  						$("#agentRemark").val(obj.agentRemark);
-		  						$("#centerId").val(obj.centerId);
-		  						$("#partId").val(obj.partId);
-		  						$("#agentBasicnumber").val(obj.agentBasicnumber);
-		  						$("#agentIp").val(obj.agentIp);
-		  						$("#agentMac").val(obj.agentMac);
-	 		            	    $('input:radio[name=agentUseYn]:input[value=' + obj.agentUseYn + ']').attr("checked", true);	 
-	 		            	    fn_FlooerView("P", obj.agentFloor );
-	 		            	   
+	  						    $("#phoneNumber").val(obj.phoneNumber);
+	  						    $("#phoneGubun").val(obj.phoneGubun);
+		  						$("#loginId").val(obj.loginId);
+	 		            	    $('input:radio[name=phoneUseyn]:input[value=' + obj.phoneUseyn + ']').attr("checked", true);	 
+	 		            	    $('#phoneNumber').attr("readOnly", true);
+	 		            	    
 	  					   }
 					    },
 					    function(request){
@@ -278,6 +233,8 @@
 					    }    		
 	          );
 		  }else {
+			  $("form[name=regist]").append("<input type='hidden'  id='phoneCheck' name='phoneCheck' />");
+			  $("#uniCheck").html('<a href="javascript:fn_checkId();" class="deepBtn"><spring:message code="page.user.phoneCheck" /></a>');
 			  $("#btnUpdate").text('<spring:message code="button.create" />');
 		  }
    }
@@ -286,40 +243,39 @@
 				  , {agentCode : code}
 		          , "/backoffice/contentManage/AgentInfoList.do");	
    }
-   function fn_FlooerView(searhGubun, floorInfo){
-		if ($("#centerId").val()  != "" || $("#searchCenterid").val()  != ""){
-			var params = (searhGubun =="P") ? { centerId : $("#centerId").val() }: { centerId : $("#searchCenterid").val() };
-			uniAjax("/backoffice/basicManage/centerInfo.do", params, 
-		       			function(result) {
-		  	    	            if (result.status == "SUCCESS"){
-		  	    	            	if (result.regist.centerFloorTxt != "" && result.regist.centerFloorEndTxt != ""){
-		  	    	            		var startFloor = result.regist.centerFloorTxt.replace(/층/gi,"");
-		  	    	            		var endFloor = result.regist.centerFloorEndTxt.replace(/층/gi,"");
-		  	    	            	}else if (result.regist.centerFloorTxt != "" && result.regist.centerFloorEndTxt == ""){
-		  	    	            		var startFloor = result.regist.centerFloorTxt.replace(/층/gi,"");
-		  	    	            		var endFloor = result.regist.centerFloorTxt.replace(/층/gi,"");
-		  	    	            	}
-		  	    	            	if (searhGubun == "P"){
-		  	    	            		fn_optionControl("agentFloor", floorInfo, startFloor, endFloor);
-		  	    	            	}else{
-		  	    	            		fn_optionControl("searchFloor", floorInfo, startFloor, endFloor);
-		  	    	            	} 
-	  	    	            	    
-		  						}else if (result.status == "LOGIN FAIL"){
-		  							location.href="/backoffice/login.do";
-		  						}else{
-		  							alert(result.message);
-		  						}
-		  				    },
-		  				    function(request){
-		  					    alert("Error:" +request.status );	       						
-		  				    }    		
-		    );
-		}
-	}
+  function fn_checkId(){
+	  if ( $("#adminId").val()!= ""   ){	  
+	    	var params = {adminId : $("#adminId").val() };
+	    	uniAjax("${pageContext.request.contextPath}/backoffice/basicManage/IdCheck.do", params, 
+	       			function(result) {
+				    		if (result == "0"){
+								alert('<spring:message code="page.emp.message13" />');
+								$("#idCheck").val("Y");							
+							}else {
+								alert('<spring:message code="page.emp.message14" />');
+								$("#idCheck").val("N");
+							}
+	  				    },
+	  				    function(request){
+	  					    alert("Error:" +request.status );	       						
+	  				    }    		
+	        );
+	    }else {
+	    	alert ('<spring:message code="page.emp.message05" />');
+	    	$("#adminId").focus();
+	    	return;
+	    }
+  }
    function fn_CheckForm(){
-	   if (any_empt_line_id("agentNm", '<spring:message code="page.agent.alert1" />') == false) return;
-	   if (any_empt_line_id("agentRemark", '<spring:message code="page.agent.alert2" />') == false) return;
+	   if (any_empt_line_id("phoneNumber", '<spring:message code="page.user.alert1" />') == false) return;
+	   if (any_empt_line_id("lgoinId", '<spring:message code="page.agent.alert2" />') == false) return;
+	   if ($("#mode").val() == "Ins" ) {
+		    if ($("#phoneCheck").val() != "Y"){
+		    	alert("전화번호 중복 확인이 안되었습니다.");
+				return; 	
+		    }
+		    if (any_empt_line_id("lgoinPassword", '<spring:message code="page.user.alert03" />') == false) return;
+	   }
 	   
 	   var params = {  
 			           agentNm : $("#agentNm").val(),

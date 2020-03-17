@@ -164,30 +164,6 @@
 </form:form>    
 <script type="text/javascript">
         var oEditors = [];
-        /* nhn.husky.EZCreator.createInIFrame({
-            oAppRef: oEditors,
-            elPlaceHolder: "ir1",                        
-            sSkinURI: "/SE/SmartEditor2Skin.html",
-            htParams: { bUseToolbar: true,
-                fOnBeforeUnload: function () { },
-                //boolean 
-                fOnAppLoad: function () { }
-                //예제 코드
-            },
-            fCreator: "createSEditor2"
-        });
-        nhn.husky.EZCreator.createInIFrame({
-            oAppRef: oEditors,
-            elPlaceHolder: "ir2",                        
-            sSkinURI: "/SE/SmartEditor2Skin.html",
-            htParams: { bUseToolbar: true,
-                fOnBeforeUnload: function () { },
-                //boolean 
-                fOnAppLoad: function () { }
-                //예제 코드
-            },
-            fCreator: "createSEditor2"
-        }); */
         nhn.husky.EZCreator.createInIFrame({
             oAppRef: oEditors,
             elPlaceHolder: "ir3",                        
@@ -213,16 +189,11 @@
 	  });	  
 	  function check_form(){
 		  if (any_empt_line_id('centerNm', '<spring:message code="page.center.alert01" />') == false) return;
-          /*  var sHTML = oEditors.getById["ir1"].getIR();
-		  $("#restInfo").val(sHTML);
-		  var sHTML2 = oEditors.getById["ir2"].getIR();
-		  $("#meetingroomInfo").val(sHTML2); */
 		  var sHTML3 = oEditors.getById["ir3"].getIR();
 		  $("#restInfo").val('');
 		  $("#meetingroomInfo").val('');
-		  //alert(sHTML3);
 		  $("#centerInfo").val(sHTML3);
-		  document.regist.encoding = "multipart/form-data";
+		  document.regist.encoding = "multipart/form-data"; 
 		  $("form[name=regist]").attr("action", "/backoffice/basicManage/centerUpdate.do").submit();
 	  }
 	  //센터 삭제 

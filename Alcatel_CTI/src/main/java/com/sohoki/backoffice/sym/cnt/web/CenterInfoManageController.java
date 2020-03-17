@@ -26,8 +26,6 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.fdl.security.userdetails.util.EgovUserDetailsHelper;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
-
-
 import egovframework.let.sym.ccm.cde.service.EgovCcmCmmnDetailCodeManageService;
 import com.sohoki.backoffice.sym.cnt.service.CenterInfo;
 import com.sohoki.backoffice.sym.cnt.service.CenterInfoVO;
@@ -167,7 +165,7 @@ public class CenterInfoManageController {
 			info.setMode(vo.getMode());
 			
 			model.addAttribute("selectFloorCombo", detailService.selectCmmnDetailCombo("CenterFloor") );
-			model.addAttribute("selectFloorEndCombo", detailService.selectCmmnDetailCombo("CenterFloor") );
+			//model.addAttribute("selectFloorEndCombo", detailService.selectCmmnDetailCombo("CenterFloor") );
 			model.addAttribute("selectGroupCombo", partService.selectPartInfoCombo());
 			
 		    model.addAttribute("regist", info);	     	
@@ -202,11 +200,14 @@ public class CenterInfoManageController {
 		    return model;
 		}
 		@RequestMapping (value="centerUpdate.do")
-		public String updateCenterInfoManage(HttpServletRequest request, MultipartRequest mRequest,
-											 @ModelAttribute("AdminLoginVO") AdminLoginVO loginVO,
-											 @ModelAttribute("CenterInfoVO") CenterInfoVO vo					
-											 , BindingResult result
-											 ,ModelMap model) throws Exception{
+		public String updateCenterInfoManage(HttpServletRequest request,  MultipartRequest mRequest,
+														 @ModelAttribute("AdminLoginVO") AdminLoginVO loginVO,
+														 @ModelAttribute("CenterInfoVO") CenterInfoVO vo					
+														 , BindingResult result
+														 ,ModelMap model) throws Exception{
+			
+			
+			LOGGER.debug("01");
 			
 			Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		    if(!isAuthenticated) {

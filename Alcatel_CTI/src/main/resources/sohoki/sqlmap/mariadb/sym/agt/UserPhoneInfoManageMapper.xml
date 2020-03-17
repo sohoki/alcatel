@@ -4,15 +4,17 @@
 
     <select id="selectUsserPhoneInfoDetail"  resultType="UserPhoneInfoVO">   
        SELECT a.PHONE_NUMBER, a.PHONE_GUBUN, a.PHONE_USEYN, 
-              a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID, a.PHONE_STATE 
+              a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID, a.PHONE_STATE ,
+              fn_DetailCodeNm(  a.PHONE_GUBUN) phoneGubunTxt,  fn_DetailCodeNm( a.PHONE_STATE) phoneStateTxt
        FROM tb_userphoneinfo
        WHERE PHONE_NUMBER = #{phoneNumber}
     </select>
-    <select id="selectAgentPageInfoManageListByPagination" resultType="UserPhoneInfoVO">     	      
+    <select id="selectUserPhoneInfoManageListByPagination" resultType="UserPhoneInfoVO">     	      
 		 	SELECT SUM(1) OVER(PARTITION BY NULL) AS TOTAL_RECORD_COUNT,
 		 	       TB.* FROM (
-						    SELECT a.PHONE_NUMBER, a.PHONE_GUBUN, a.PHONE_USEYN, 
-                                   a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID, a.PHONE_STATE
+						    SELECT a.PHONE_NUMBER, fn_DetailCodeNm(  a.PHONE_GUBUN) phoneGubunTxt, a.PHONE_USEYN, 
+                                   a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,  fn_DetailCodeNm( a.PHONE_STATE) phoneStateTxt
+                                   
 							FROM tb_userphoneinfo a
 							WHERE 1=1
 		        <if test="searchKeyword != ''">
@@ -34,7 +36,7 @@
 				<if test="searchPhoneUseyn != ''">
 				     and a.PHONE_USEYN = #{searchPhoneUseyn}
 				</if> 
-				ORDER BY  a.AGENT_CODE  DESC
+				ORDER BY  a.PHONE_NUMBER  ASC
 	        )TB
 	        ORDER BY  TB.PHONE_NUMBER  DESC
 	        limit  #{firstIndex}, #{recordCountPerPage}         		 	    
@@ -62,7 +64,7 @@
 				<if test="searchPhoneState != ''">
 				     and a.PHONE_STATE = #{searchPhoneState}
 				</if> 
-				ORDER BY  a.AGENT_CODE  DESC
+				ORDER BY  a.PHONE_NUMBER  DESC
 	        )TB
 	        ORDER BY  TB.PHONE_NUMBER  DESC
 	        limit  #{firstIndex}, #{recordCountPerPage}         		 	    
@@ -91,9 +93,9 @@
     </select>
     
     <insert id="insertUserPhoneInfo">
-       INSERT INTO tb_userphoneinfo (PHONE_NUMBER, PHONE_GUBUN, PHONE_USEYN, PHONE_STATE
+       INSERT INTO tb_userphoneinfo (PHONE_NUMBER, PHONE_GUBUN, PHONE_USEYN, PHONE_STATE, LOGIN_ID, LOGIN_PASSWORD
                                      FRST_REGIST_PNTTM, FRST_REGISTER_ID, LAST_UPDT_PNTTM, LAST_UPDUSR_ID)
-       VALUES(#{phoneNumber}, #{phoneGubun}, #{phoneUseyn}, #{phoneState}, 
+       VALUES(#{phoneNumber}, #{phoneGubun}, #{phoneUseyn}, #{phoneState}, #{loginId}, #{loginPassword}, 
               now(), #{userId}, now(), #{userId})
     </insert>    
     <update id="updateUserPhoneInfo">
@@ -101,7 +103,9 @@
                                    PHONE_USEYN = #{phoneUseyn},
                                    PHONE_STATE = #{phoneState},
                                    LAST_UPDT_PNTTM = now(),
-                                   LAST_UPDUSR_ID = #{userId}
+                                   LAST_UPDUSR_ID = #{userId},
+                                   LOGIN_ID = #{loginId},
+                                   LOGIN_PASSWORD = #{loginPassword}  
        WHERE PHONE_NUMBER =#{phoneNumber}
     </update>
     <delete id="deleteUserPhoneInfo">

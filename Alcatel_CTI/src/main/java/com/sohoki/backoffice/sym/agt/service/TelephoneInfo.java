@@ -26,11 +26,20 @@ public class TelephoneInfo implements  Serializable {
 	private String agentState = "";
 	private String agentNownumber = "";
 	private String agentBasicnumber = "";
+	private String agentOsversion = "";
 	private int agentFloor = 0;
 	
 
 	
 	
+	public String getAgentOsversion() {
+		return agentOsversion;
+	}
+
+	public void setAgentOsversion(String agentOsversion) {
+		this.agentOsversion = agentOsversion;
+	}
+
 	public String getAgentState() {
 		return agentState;
 	}

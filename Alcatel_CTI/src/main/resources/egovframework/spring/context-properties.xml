@@ -7,6 +7,11 @@
 	        <map>
 	        	<entry key="pageUnit" value="10"/>
 	        	<entry key="pageSize" value="10"/>
+	        	<entry key="posblAtchFileSize" value="5242880"/>
+	        	<entry key="Globals.addedOptions" value="false"/>
+	        	<entry key="pageSize" value="10"/>
+                <entry key="posblAtchFileSize" value="5242880"/>                
+                <entry key="Globals.fileStorePath" value="C:/Users/user/git/alcatel/Alcatel_CTI/src/main/webapp/upload"/>
 	        </map>
 		</property>
 	</bean>	

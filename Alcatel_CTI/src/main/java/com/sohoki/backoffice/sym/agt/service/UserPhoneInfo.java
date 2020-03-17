@@ -16,11 +16,24 @@ public class UserPhoneInfo implements  Serializable {
 	private String mode = "";
 	private String userId = "";
 	private String phoneState = "";
+	private String loginId = "";
+	private String loginPassword = "";
 	
 	
 	
 	
-	
+	public String getLoginId() {
+		return loginId;
+	}
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+	public String getLoginPassword() {
+		return loginPassword;
+	}
+	public void setLoginPassword(String loginPassword) {
+		this.loginPassword = loginPassword;
+	}
 	public String getPhoneState() {
 		return phoneState;
 	}
