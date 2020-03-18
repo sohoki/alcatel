@@ -16,6 +16,8 @@ public interface UserPhoneInfoManageMapper {
 	    
 	    public UserPhoneInfoVO selectUsserPhoneInfoDetail(String phoneNumber);
 	    
+	    public int selectUserNumberIdCheck( UserPhoneInfo vo);
+	    
 	    public int selectUserPhoneInfoManageListByCnt(UserPhoneInfoVO searchVO);
 		
 	    public int insertUserPhoneInfo(UserPhoneInfo vo);

@@ -9,6 +9,11 @@
        FROM tb_userphoneinfo a
        WHERE a.PHONE_NUMBER = #{phoneNumber}
     </select>
+    <select id="selectUserNumberIdCheck" resultType="java.lang.Integer">
+        SELECT ifnull(count(*), 0)
+        FROM tb_userphoneinfo
+        WHERE (PHONE_NUMBER =#{phoneNumber} or LOGIN_ID =#{loginId} )
+    </select>
     <select id="selectUserPhoneInfoManageListByPagination" resultType="UserPhoneInfoVO">     	      
 		 	SELECT SUM(1) OVER(PARTITION BY NULL) AS TOTAL_RECORD_COUNT,
 		 	       TB.* FROM (

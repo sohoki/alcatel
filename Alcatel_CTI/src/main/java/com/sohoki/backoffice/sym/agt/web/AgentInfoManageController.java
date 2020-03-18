@@ -22,6 +22,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
+import com.sohoki.backoffice.util.service.UniUtilInfo;
+
 import com.sohoki.backoffice.sym.cnt.service.CenterInfoService;
 import com.sohoki.backoffice.uat.uia.service.PartInfoManageService;
 import com.sohoki.backoffice.mapper.ErrorInfoManageMapper;
@@ -35,6 +37,7 @@ import egovframework.let.uat.uia.service.AdminInfoVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.fdl.security.userdetails.util.EgovUserDetailsHelper;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+
 
 
 
@@ -155,49 +158,80 @@ public class AgentInfoManageController {
 		 ModelAndView  mv = new ModelAndView("/backoffice/popup/excelUpload");
 		 return mv;
 	 }
+	 @RequestMapping(value = "userInfoDelete.do")
+	 public ModelAndView userInfoDelete(@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+												   ,@RequestBody  UserPhoneInfoVO vo
+												   ,BindingResult bindingResult) throws Exception{
+		 
+		 ModelAndView  model = new ModelAndView("jsonView");
+			
+			
+		    UniUtilInfo utilInfo = new UniUtilInfo();
+			utilInfo.setInTable("tb_userphoneinfo");
+			utilInfo.setInCondition("PHONE_NUMBER=["+vo.getPhoneNumber()+"[");
+			String result = "F";
+			try{
+				
+				
+				Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+			    if(!isAuthenticated) {
+			    		model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
+			    		model.addObject("status", "LOGIN FAIL");
+			    		return model;
+			    }
+			    
+			    int ret = 	utilService.deleteUniStatement(utilInfo);	
+			     
+			    if (ret > 0 ) {		    	  
+			    	  model.addObject("message", egovMessageSource.getMessage("success.common.delete"));
+					  model.addObject("status", "SUCCESS");  
+			    }else {
+			    	  throw new Exception();		    	  
+			    }
+			}catch (Exception e){
+				LOGGER.error("deleteEqupInfoManage  error: "  + e.toString());
+				model.addObject("message", egovMessageSource.getMessage("fail.common.delete"));	
+				model.addObject("status", "FAIL");
+			}
+		 return model;
+		 
+	 }
 	 
 	 @RequestMapping(value = "excelUpload.do", method = RequestMethod.POST)
 	 public ModelAndView excelUploadAjax(MultipartHttpServletRequest request)  throws Exception{
 		 
 		 
 	        MultipartFile excelFile =request.getFile("excelFile");
-	        System.out.println("엑셀 파일 업로드 컨트롤러");
 	        if(excelFile==null || excelFile.isEmpty()){
 	            throw new RuntimeException("엑셀파일을 선택 해 주세요.");
 	        }
 	        //파일 업로드 
-	        
+	        LOGGER.debug("01");
 	        File destFile = new File(propertiesService.getString("Globals.fileStorePath")+excelFile.getOriginalFilename());
+	        
+	        
 	        
 	        try{
 	            excelFile.transferTo(destFile);
 	        }catch( IllegalStateException |  IOException e){
+	        	 LOGGER.debug("ERROR" + e.getMessage() );
 	            throw new RuntimeException(e.getMessage(),e);
 	        }
 	        
-	        //Service 단에서 가져온 코드 
-	        ExcelReadOption excelReadOption = new ExcelReadOption();
-	        excelReadOption.setFilePath(destFile.getAbsolutePath());
-	        excelReadOption.setOutputColumns("A","B","C","D","E");
-	        excelReadOption.setStartRow(2);
+	       
+	        LOGGER.debug("02" + destFile.toString());
+	        String returnMessage =  userService.excelUpload(destFile);
 	        
-	        
-	        List<Map<String, String>>excelContent =ExcelRead.read(excelReadOption);
-	        
-	        for(Map<String, String> article: excelContent){
-	            System.out.println(article.get("A"));
-	            System.out.println(article.get("B"));
-	            System.out.println(article.get("C"));
-	            System.out.println(article.get("D"));
-	            System.out.println(article.get("E"));
-	        }
-	        
+	        destFile.delete();
 	        //userService.excelUpload(destFile); //서비스 부분을 삭제한다.
-	        
+	        //파일 삭제
 	        //FileUtils.forceDelete(destFile.getAbsolutePath());
+	        LOGGER.debug("03 delete" );
+	        ModelAndView view = new ModelAndView("jsonView");
+	        view.addObject("status", Globals.STATUS_SUCCESS);
+	        view.addObject("message", returnMessage.equals("") ? "OK":  returnMessage);
 	        
-	        ModelAndView view = new ModelAndView();
-	        view.setViewName("/user/list");
+	        //view.setViewName("/user/list");
 	        return view;
 	    }
 

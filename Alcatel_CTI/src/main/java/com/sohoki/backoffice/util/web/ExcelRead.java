@@ -48,7 +48,7 @@ public class ExcelRead {
 	        
 	        //이부분이 수정되었다.
 	        for(int i =0; i<sheetNum; i++){
-	            System.out.println("Sheet 이름: "+ wb.getSheetName(i));
+	            //System.out.println("Sheet 이름: "+ wb.getSheetName(i));
 	            Sheet sheet = wb.getSheetAt(i);
 	        
 	            int numOfRows = sheet.getPhysicalNumberOfRows(); //유효한 데이터가 있는 행의 개수를 가져온다.

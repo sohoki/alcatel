@@ -28,6 +28,9 @@
                 <dd><input id="excelFile" type="file" name="excelFile" /></dd>
         </dl>        
     </div>
+    <div>
+       <span id="uploadResult"></span>
+    </div>
             
     <div class="bottom">
         <button type="button" id="addExcelImpoartBtn" class="btn" onclick="check()" ><span>추가</span></button> 
@@ -51,7 +54,22 @@ function check() {
     if (confirm("업로드 하시겠습니까?")) {
         var options = {
             success : function(data) {
-                alert("모든 데이터가 업로드 되었습니다.");
+               if (data.status == "SUCCESS"){
+            	   var message = ""
+            	   if (data.message == "OK"){
+            		   message = "OK"
+            	   }else {
+            		  var errorInfo = data.message.substring(1).split("/");
+            		  for (var i =0; i < errorInfo.length; i++){
+            			  message += message +"<br>";
+            		  }
+            	   }
+            	   $("#uploadResult").html("업로드 결과:" + message);
+            	   $("#uploadResult").click(function(){
+            		 opener.document.location.reload();  
+            		 self.close();
+            	   });
+               }
             },
             type : "POST"
         };

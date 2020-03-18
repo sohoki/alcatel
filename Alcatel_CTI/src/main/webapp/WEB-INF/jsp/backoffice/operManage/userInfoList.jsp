@@ -231,9 +231,9 @@
 		  }
    }
    function del_check(code){	
-    	fn_uniDelJSON("/backoffice/basicManage/agentInfoDelete.do"
-				  , {agentCode : code}
-		          , "/backoffice/contentManage/AgentInfoList.do");	
+    	fn_uniDelJSON("/backoffice/operManage/userInfoDelete.do"
+				  , {phoneNumber : code}
+		          , "/backoffice/operManage/userList.do");	
    }  
    function fn_checkId(){
 	   fn_uniCheck(   {inTable : "tb_userphoneinfo",
