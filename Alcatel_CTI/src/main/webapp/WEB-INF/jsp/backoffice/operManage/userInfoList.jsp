@@ -70,27 +70,16 @@
             <div class="Swrap Asearch">
                 <div class="Atitle"><spring:message code="page.common.pageCnt" arguments="${totalCnt}"/></div>
                 <section class="Bclear">
-                    <form:select path="searchCenterid" id="searchCenterid" title="소속" onChange="javascript:fn_FlooerView('S', '')">
-						     <option value=""><spring:message code="combobox.text" /></option>
-	                         <form:options items="${selectCenterCombo}" itemValue="centerId" itemLabel="centerNm"/>
-					</form:select>
-					<select id="searchFloor" name="searchFloor"></select>
-					 <% if (loginVO.getAdminLevel().equals("ROLE_ADMIN")){ %>
-					<form:select path="searchPartid" id="searchPartid" title="소속">
-							     <option value=""><spring:message code="combobox.text" /></option>
-		                         <form:options items="${selectGroupCombo}" itemValue="partId" itemLabel="partNm"/>
-					</form:select>
-					<% } %>
-						    
+                   	    
                     <select name="searchCondition"  id="searchCondition">
 								<option value=""><spring:message code="combobox.text" /></option>
-								<option value="agentNm" <c:if test="${searchVO.searchCondition == 'agentNm' }"> selected="selected" </c:if>><spring:message code="page.agent.TitleNm" /></option>
-								<option value="agentRemark" <c:if test="${searchVO.searchCondition == 'agentRemark' }"> selected="selected" </c:if>><spring:message code="page.agent.remark" /></option>
+								<option value="phoneNumber" <c:if test="${searchVO.searchCondition == 'phoneNumber' }"> selected="selected" </c:if>><spring:message code="page.user.phoneNumber" /></option>
+								<option value="loginId" <c:if test="${searchVO.searchCondition == 'loginId' }"> selected="selected" </c:if>><spring:message code="page.user.loginId" /></option>
 					</select>
 					<input class="nameB" type="text" name="searchKeyword" id="searchKeyword" value="${searchVO.searchKeyword}">                    
                     <a href="javascript:search_form();"><span class="redBtn"><spring:message code="button.inquire" /></span></a>
                     <div class="rightB">
-                        <a href="javascript:fn_SendMsg('SP_AGENTREBOOT', 'agentCode', 'M')" class="grayBtn"><spring:message code="page.agent.sendBtn1" /></a>
+                         <a href="#" onclick="fn_excelPop()"><span class="deepBtn"><spring:message code="page.commo.excelUpload" /></a>
                         <a href="#" onclick="fn_agentPop('Ins','0')" data-needpopup-show="#agent_pop"><span class="deepBtn"><spring:message code="button.create" /></a>
                     </div>
                 </section>
@@ -115,8 +104,8 @@
                             <td>${userInfo.phoneGubunTxt }</td>
                             <td style="text-align:left">${userInfo.loginId }</td>
                             <td>${userInfo.phoneStateTxt }</td>
-                            <td>${userInfo.UseYn }</td>
-                            <td><a href="javascript:del_check('${ userInfo.agentCode }','${ userInfo.agentNm }');" class="grayBtn">
+                            <td>${userInfo.phoneUseyn }</td>
+                            <td><a href="javascript:del_check(''${ userInfo.phoneNumber }');" class="grayBtn">
                                 <spring:message code="button.delete" />
                                 </a>
                             </td>
@@ -145,14 +134,14 @@
             <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.user.phoneNumber" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="phoneNumber" size="20" maxlength="20" id="phoneNumber"   />
+                    <form:input  path="phoneNumber" size="20" maxlength="20" id="phoneNumber"  style="width:150px;"  />
                     <span id="uniCheck" ></span>
                 </div>                
             </div>
              <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.user.phoneGubun" /> <span class="join_id_comment joinSubTxt"></span></p>
-                   <form:select path="phoneGubun" id="phoneGubun" title="전화번호구분" onChange="javascript:fn_FlooerView('P', '')">
+                   <form:select path="phoneGubun" id="phoneGubun" title="전화번호구분" >
 							     <option value=""><spring:message code="combobox.text" /></option>
 		                         <form:options items="${selectPhoneGubun}" itemValue="code" itemLabel="codeNm"/>
 					</form:select>
@@ -161,23 +150,23 @@
             <!--// 팝업 필드박스-->
             <div class="pop_box50">
                 <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.center.loginId" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <p class="pop_tit">*<spring:message code="page.user.loginId" /> <span class="join_id_comment joinSubTxt"></span></p>
                     <form:input  path="loginId" size="20" maxlength="20" id="loginId"   />
 					<span id="uniCheckID" ></span>
                 </div>   
             </div>
              <div class="pop_box50">
                 <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.loginPassword" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <p class="pop_tit">*<spring:message code="page.user.loginPassword" /> <span class="join_id_comment joinSubTxt"></span></p>
                     <form:input  type="password" path="loginPassword" size="20" maxlength="20" id="loginPassword"   />
                 </div>   
             </div>
              <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="common.UseYn.title" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <input type="radio" name="phoneUseyn" id="phoneUseyn" value="Y" <c:if test="${regist.phoneUseyn == 'Y' }"> checked </c:if> />
+                    <input type="radio" name="phoneUseyn" id="phoneUseyn" value="Y"  />
                     <label><spring:message code="button.use" /></label>
-					<input type="radio" name="phoneUseyn" id="phoneUseyn" value="N" <c:if test="${regist.phoneUseyn == 'N' }"> checked </c:if> />
+					<input type="radio" name="phoneUseyn" id="phoneUseyn" value="N" />
 					<label><spring:message code="button.nouse" /></label>
                 </div>                
             </div>
@@ -200,6 +189,9 @@
 	   //시작값
 	   
 	});
+   function fn_excelPop(){
+	   window.open("/backoffice/operManage/excelUploadPop.do", "zip_code", "width=500, height=400, toolbar=no, menubar=no, scrollbars=no, resizable=auto" );	
+   }
    function fn_agentPop(mode, code){
 		  $('#mode').val(mode);
 		  $('#phoneNumber').val(code);
@@ -219,7 +211,7 @@
 	  						   location.href="/backoffice/login.do";
 	  					   }else if (result.status == "SUCCESS"){
 	  						    //여기 부분 수정 어떻게 할지 추후 생각
-	  						    var obj = result.agentInfo;
+	  						    var obj = result.userInfo;
 	  						    $("#phoneNumber").val(obj.phoneNumber);
 	  						    $("#phoneGubun").val(obj.phoneGubun);
 		  						$("#loginId").val(obj.loginId);
@@ -254,14 +246,14 @@
 
    
    function fn_CheckForm(){
-	   if (any_empt_line_id("phoneNumber", '<spring:message code="page.user.alert1" />') == false) return;
-	   if (any_empt_line_id("lgoinId", '<spring:message code="page.agent.alert2" />') == false) return;
+	   if (any_empt_line_id("phoneNumber", '<spring:message code="page.user.alert01" />') == false) return;
+	   if (any_empt_line_id("loginId", '<spring:message code="page.user.alert02" />') == false) return;
 	   if ($("#mode").val() == "Ins" ) {
 		    if ($("#phoneCheck").val() != "Y"){
 		    	alert("전화번호 중복 확인이 안되었습니다.");
 				return; 	
 		    }
-		    if (any_empt_line_id("lgoinPassword", '<spring:message code="page.user.alert03" />') == false) return;
+		    if (any_empt_line_id("loginPassword", '<spring:message code="page.user.alert03" />') == false) return;
 	   }
 	   
 	   var params = {  
@@ -269,23 +261,23 @@
 			           phoneGubun : $("#phoneGubun").val(),
 			           loginId : $("#loginId").val(),
 			           loginPassword : $("#loginPassword").val(),
-					   agentUseYn :  fn_emptyReplace($('input[name="phoneUseyn"]:checked').val(),"Y"),
+			           phoneUseyn :  fn_emptyReplace($('input[name="phoneUseyn"]:checked').val(),"Y"),
 					   mode : $("#mode").val()
 			        };
 	            uniAjax("/backoffice/operManage/userUpdate.do", params, 
-     			function(result) {
-				    	if (result.status == "SUCCESS"){
-				    		location.reload();
-						}else if (result.status == "LOGIN FAIL"){
-  							location.href="/backoffice/login.do";
-  						}else{
-  							alert(result.message);
-  						}
-				    },
-				    function(request){
-					    alert("Error:" +request.status );	       						
-				    }    		
-      );
+		     			function(result) {
+						    	if (result.status == "SUCCESS"){
+						    		location.reload();
+								}else if (result.status == "LOGIN FAIL"){
+		  							location.href="/backoffice/login.do";
+		  						}else{
+		  							alert(result.message);
+		  						}
+						    },
+						    function(request){
+							    alert("Error:" +request.status );	       						
+						    }    		
+              );
    }
    function linkPage(pageNo) {
 		$(":hidden[name=pageIndex]").val(pageNo);	

@@ -183,7 +183,7 @@ function del_Check(url){
 	}
 }
 function fn_uniCheck( _data, _focusNm, _ckInput, alert_message){
-	var url = "/sohoki/util/UniCheck.do";
+	var url = "/backoffice/util/UniCheck.do";
 	if ($("#"+_focusNm).val()!= ""  ){
 		$.ajax({
 			url: url,
@@ -494,5 +494,20 @@ function ResizeFrame(name){
 		fName.style.height = "300px"; //기본 iframe 높이
 	}
 }
-
-//달력 부분 정리 하기 
+//특정 확장자 체크 하는 스크립트
+function checkFileType(filePath, fileTypes) {
+  var fileFormat = filePath.split(".");
+  var fileTypes = fileTypes.split("/");
+  var fileCheck = false;
+  for (var i =0; i < fileTypes.length; i++){
+	  console.log("fileTypes:" + fileTypes[i]);
+  	if (fileFormat.indexOf(fileTypes[i] ) > -1) {
+  		fileCheck = true;
+  		break;
+  		
+  	}else{
+  		
+  	}
+  }
+  return fileCheck;
+}

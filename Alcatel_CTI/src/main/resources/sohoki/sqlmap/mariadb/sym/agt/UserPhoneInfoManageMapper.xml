@@ -3,16 +3,16 @@
 <mapper namespace="com.sohoki.backoffice.mapper.UserPhoneInfoManageMapper">
 
     <select id="selectUsserPhoneInfoDetail"  resultType="UserPhoneInfoVO">   
-       SELECT a.PHONE_NUMBER, a.PHONE_GUBUN, a.PHONE_USEYN, 
+       SELECT a.PHONE_NUMBER, a.PHONE_GUBUN, a.PHONE_USEYN,  LOGIN_ID, LOGIN_PASSWORD,
               a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID, a.PHONE_STATE ,
               fn_DetailCodeNm(  a.PHONE_GUBUN) phoneGubunTxt,  fn_DetailCodeNm( a.PHONE_STATE) phoneStateTxt
-       FROM tb_userphoneinfo
-       WHERE PHONE_NUMBER = #{phoneNumber}
+       FROM tb_userphoneinfo a
+       WHERE a.PHONE_NUMBER = #{phoneNumber}
     </select>
     <select id="selectUserPhoneInfoManageListByPagination" resultType="UserPhoneInfoVO">     	      
 		 	SELECT SUM(1) OVER(PARTITION BY NULL) AS TOTAL_RECORD_COUNT,
 		 	       TB.* FROM (
-						    SELECT a.PHONE_NUMBER, fn_DetailCodeNm(  a.PHONE_GUBUN) phoneGubunTxt, a.PHONE_USEYN, 
+						    SELECT a.PHONE_NUMBER, fn_DetailCodeNm(  a.PHONE_GUBUN) phoneGubunTxt, a.PHONE_USEYN,  LOGIN_ID, LOGIN_PASSWORD,
                                    a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,  fn_DetailCodeNm( a.PHONE_STATE) phoneStateTxt
                                    
 							FROM tb_userphoneinfo a
@@ -93,7 +93,7 @@
     </select>
     
     <insert id="insertUserPhoneInfo">
-       INSERT INTO tb_userphoneinfo (PHONE_NUMBER, PHONE_GUBUN, PHONE_USEYN, PHONE_STATE, LOGIN_ID, LOGIN_PASSWORD
+       INSERT INTO tb_userphoneinfo (PHONE_NUMBER, PHONE_GUBUN, PHONE_USEYN, PHONE_STATE, LOGIN_ID, LOGIN_PASSWORD,
                                      FRST_REGIST_PNTTM, FRST_REGISTER_ID, LAST_UPDT_PNTTM, LAST_UPDUSR_ID)
        VALUES(#{phoneNumber}, #{phoneGubun}, #{phoneUseyn}, #{phoneState}, #{loginId}, #{loginPassword}, 
               now(), #{userId}, now(), #{userId})
