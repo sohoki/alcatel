@@ -138,7 +138,7 @@ public class TransInfoManageController {
 												, HttpServletRequest request
 												, BindingResult bindingResult) throws Exception {
 		     
-		    ModelAndView model = new ModelAndView("/backoffice/operManage/xmlView");
+		    ModelAndView model = new ModelAndView("/backoffice/operManage/tranView");
 		    Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		    try{
 		    	if(!isAuthenticated) {
@@ -167,7 +167,7 @@ public class TransInfoManageController {
 												, BindingResult bindingResult			
 												, BindingResult result) throws Exception {
 		
-		  ModelAndView model = new ModelAndView("/backoffice/operManage/xmlDetail");
+		  ModelAndView model = new ModelAndView("/backoffice/operManage/tranDetail");
 		  Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 	      if(!isAuthenticated) {
 	    		model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
@@ -212,8 +212,8 @@ public class TransInfoManageController {
 			ret = tranService.updateTraninfoManage(vo) ;
 			if (vo.getMode().equals("Ins")){
 				UniUtilInfo util = new UniUtilInfo();
-				util.setInCheckName("XML_SEQ");
-				util.setInTable("TB_SENDMESSAGETYPR");
+				util.setInCheckName("TRAN_SEQ");
+				util.setInTable("tb_sendmessageinfo");
 			    String tranSeq =  utilService.selectMaxValue(util);
 			    vo.setTranSeq(tranSeq);
 				meesage = "sucess.common.insert";

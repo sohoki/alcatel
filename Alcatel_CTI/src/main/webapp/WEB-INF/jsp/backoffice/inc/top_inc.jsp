@@ -51,7 +51,7 @@ if(loginVO == null ){
                                 <li><a href="/backoffice/basicManage/partList.do"><spring:message code="menu.menu03_2" /></a></li>
                                 <li><a href="/backoffice/basicManage/centerList.do"><spring:message code="menu.menu03_3" /></a></li>  
                                 <li><a href="/backoffice/basicManage/codeList.do"><spring:message code="menu.menu03_4" /></a></li>  
-                                <li><a href="/backoffice/operManage/xmlList.do"><spring:message code="menu.menu03_5" /></a></li>  
+                                <li><a href="/backoffice/operManage/tranList.do"><spring:message code="menu.menu03_5" /></a></li>  
                             </ul>
                         </li>
                     </ul>

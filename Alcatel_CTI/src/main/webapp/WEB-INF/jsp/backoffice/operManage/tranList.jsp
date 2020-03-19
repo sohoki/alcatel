@@ -25,7 +25,7 @@
 <form:form name="regist" commandName="regist" method="post" action="/backoffice/operManage/xmlList.do">	    	   
 	<input type="hidden" name="pageIndex" id="pageIndex" value="${searchVO.pageIndex }">
 	<input type="hidden" name="mode" id="mode" >
-	<input type="hidden" name="xmlSeq" id="xmlSeq" >	    
+	<input type="hidden" name="tranSeq" id="tranSeq" >	    
 	<c:import url="/backoffice/inc/top_inc.do" />
 	<div class="Aconbox">
         <div class="rightT">
@@ -50,13 +50,13 @@
 					</form:select>	
 					<select name="searchCondition"  id="searchCondition">
 						<option value><spring:message code="combobox.text" /></option>
-						<option value="xmlProcessName" <c:if test="${searchVO.searchCondition == 'xmlProcessName' }"> selected="selected" </c:if>><spring:message code="page.xml.processId" /></option>
-						<option value="processRemark" <c:if test="${searchVO.searchCondition == 'processRemark' }"> selected="selected" </c:if>><spring:message code="page.xml.processRemark" /></option>
+						<option value="tranProcessName" <c:if test="${searchVO.searchCondition == 'tranProcessName' }"> selected="selected" </c:if>><spring:message code="page.tran.processId" /></option>
+						<option value="processRemark" <c:if test="${searchVO.searchCondition == 'processRemark' }"> selected="selected" </c:if>><spring:message code="page.tran.processRemark" /></option>
 					</select>
 					<input class="nameB" type="text" name="searchKeyword" id="searchKeyword" value="${searchVO.searchKeyword}">                    
                     <a href="javascript:search_form();"><span class="redBtn"><spring:message code="button.inquire" /></span></a>
                     <div class="rightB">
-                        <a href="javascript:view_Xml('Ins','0')" ><span class="deepBtn"><spring:message code="button.create" /></span></a>
+                        <a href="javascript:fn_View('Ins','0')" ><span class="deepBtn"><spring:message code="button.create" /></span></a>
                     </div>
                 </section>
             </div>
@@ -66,38 +66,40 @@
 					<thead>
 						<tr>							
 							<th><spring:message code="common.Number.title" /></th>
-							<th><spring:message code="page.xml.sendGubun" /></th>
-							<th><spring:message code="page.xml.processId" /></th>
-							<th><spring:message code="page.xml.processJob" /></th>
-							<th><spring:message code="page.xml.ViewSendJson" /></th>									
-							<th><spring:message code="page.xml.ViewRecJson" /></th>
+							<th><spring:message code="page.tran.workGubun" /></th>
+							<th><spring:message code="page.tran.sendGubun" /></th>
+							<th><spring:message code="page.tran.processId" /></th>
+							<th><spring:message code="page.tran.processJob" /></th>
+							<th><spring:message code="page.tran.ViewSendJson" /></th>									
+							<th><spring:message code="page.tran.ViewRecJson" /></th>
 							<th><spring:message code="button.confirm" /></th>	
 							<th><spring:message code="button.delete" /></th>	
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${resultList }" var="xmlinfo" varStatus="status">
+						<c:forEach items="${resultList }" var="traninfo" varStatus="status">
 						<tr>
 							<td><c:out value="${ totalCnt - (((searchVO.pageIndex - 1) * searchVO.pageSize) + status.count) + 1}"/></td>
-							<td style="text-align:left"><A href="javascript:view_Xml( 'Viw', '${xmlinfo.xmlSeq  }' )">  ${xmlinfo.codeNm  }</A></td>
-							<td style="text-align:left"><A href="javascript:view_Xml( 'Viw', '${xmlinfo.xmlSeq  }' )"  title="<c:out value="${  xmlinfo.xmlProcessName }" /> ">  <c:out value="${ fn:substring( xmlinfo.xmlProcessName, 0, 20) }" /> </A></td>
-							<td style="text-align:left"><c:out value="${ fn:substring( xmlinfo.processRemark, 0, 15) }" /> </td>
+							<td style="text-align:left"><A href="javascript:fn_View( 'Viw', '${traninfo.tranSeq  }' )">  ${traninfo.codeNm  }</A></td>
+							<td style="text-align:left"><A href="javascript:fn_View( 'Viw', '${traninfo.tranSeq  }' )">  ${traninfo.sendGubunTxt  }</A></td>
+							<td style="text-align:left"><A href="javascript:fn_View( 'Viw', '${traninfo.tranSeq  }' )"  title="<c:out value="${  traninfo.tranProcessName }" /> ">  <c:out value="${ fn:substring( traninfo.tranProcessName, 0, 20) }" /> </A></td>
+							<td style="text-align:left"><c:out value="${ fn:substring( traninfo.processRemark, 0, 15) }" /> </td>
 							<td class="md_btn">
-							<a href="#" onclick="javascript:open_JsonView('I','${xmlinfo.xmlSeq}')" data-needpopup-show="#groupPop" class="brownBtn">미리보기</a></td>							
+							<a href="#" onclick="javascript:open_JsonView('I','${traninfo.tranSeq}')" data-needpopup-show="#groupPop" class="brownBtn">미리보기</a></td>							
 							<td class="md_btn">
-							<a href="#" onclick="javascript:open_JsonView('O','${xmlinfo.xmlSeq}')" data-needpopup-show="#groupPop" class="brownBtn" >미리보기</a></td>
+							<a href="#" onclick="javascript:open_JsonView('O','${traninfo.tranSeq}')" data-needpopup-show="#groupPop" class="brownBtn" >미리보기</a></td>
 							<td>
 							<c:choose>
-							   <c:when test="${xmlinfo.testOk eq 'Y' }"><spring:message code="button.confirm" /></c:when>
+							   <c:when test="${traninfo.testOk eq 'Y' }"><spring:message code="button.confirm" /></c:when>
 							   <c:otherwise><spring:message code="button.undefine" /></c:otherwise>
 							</c:choose>		
 							</td>
-							<td class="md_btn"><a href="javascript:fn_del('${xmlinfo.xmlSeq  }' )"" class="delkey"><spring:message code="button.delete" /></a></td>
+							<td class="md_btn"><a href="javascript:fn_del('${traninfo.tranSeq  }' )"" class="delkey"><spring:message code="button.delete" /></a></td>
 						</tr>			
 						</c:forEach>
 						<c:if test="${fn:length(resultList) == 0 }">
 						<tr>
-						  <td colspan="8"><spring:message code="page.xml.noRecorder" /></td>
+						  <td colspan="9"><spring:message code="page.tran.noRecorder" /></td>
 						</tr>
 						</c:if>
 					</tbody>
@@ -138,30 +140,30 @@
 </div>
 <script  type="text/javascript" src="/js/needpopup.min.js" ></script> 	
 <script type="text/javascript">
-     function view_Xml(code, code1){
-    	  $('#mode').val(code);
- 		  $('#xmlSeq').val(code1);
- 		  $("form[name=regist]").attr("action", "/backoffice/operManage/xmlView.do").submit();			  
+     function fn_View(mode, tranSeq){
+    	  $('#mode').val(mode);
+ 		  $('#tranSeq').val(tranSeq);
+ 		  $("form[name=regist]").attr("action", "/backoffice/operManage/tranView.do").submit();			  
  		  		    	   
      }
-     function fn_del(xmlSeq){
+     function fn_del(tranSeq){
     		fn_uniDel("/sohoki/util/UnideleteParam.do"
-  				  , {tableId: "tb_sendmessagetypr", conField: "XML_SEQ", value : xmlSeq }
+  				  , {tableId: "tb_sendmessageinfo", conField: "TRAN_SEQ", value : tranSeq }
   		          , "/backoffice/operManage/xmlList.do");	
      }
      //검색 
      function search_form(){
     	   $("#pageIndex").val("1");
-    	   $("form[name=regist]").attr("action", "/backoffice/operManage/xmlList.do").submit();
+    	   $("form[name=regist]").attr("action", "/backoffice/operManage/tranList.do").submit();
      }   
   	 function linkPage(pageNo) {
  		$(":hidden[name=pageIndex]").val(pageNo);		
- 		$("form[name=regist]").attr("action", "/backoffice/operManage/xmlList.do").submit();
+ 		$("form[name=regist]").attr("action", "/backoffice/operManage/tranList.do").submit();
  	 }	
      function open_JsonView(code, code1){
   	      
- 		  var url = code == "I" ? "/backoffice/operManage/jsonAuthView.do?xmlSeq="+code1 : "/backoffice/operManage/jsonAuthReq.do?xmlSeq="+code1;
- 		  var title = code == "I" ? '<spring:message code="page.xml.ViewSendJson" />' : '<spring:message code="page.xml.ViewRecJson" />';
+ 		  var url = code == "I" ? "/backoffice/operManage/jsonAuthView.do?tranSeq="+code1 : "/backoffice/operManage/jsonAuthReq.do?tranSeq="+code1;
+ 		  var title = code == "I" ? '<spring:message code="page.tran.ViewSendJson" />' : '<spring:message code="page.tran.ViewRecJson" />';
  		 alert(code +":" + url);
  		  uniAjax(url, null, 
 	     			function(result) {

@@ -21,8 +21,8 @@
 <body>
 <div id="wrapper">	
 <noscript>자바스크립트를 지원하지 않는 브라우저에서는 일부 기능을 사용하실 수 없습니다.</noscript>
-<form:form name="regist" commandName="regist" method="post" action="/backoffice/sub/operManage/xmlUpdate.do">
-	<form:hidden path="xmlSeq" id="xmlSeq" />		
+<form:form name="regist" commandName="regist" method="post" action="/backoffice/sub/operManage/tranUpdate.do">
+	<form:hidden path="tranSeq" id="tranSeq" />		
 	<input type="hidden" id="mode" name="mode" value="${ registView.mode}">
 	<input type="hidden" id="pageUnit" name="pageUnit" value="${ registView.pageUnit}">
 	<input type="hidden" id="pageIndex" name="pageIndex" value="${ registView.pageIndex}">
@@ -47,70 +47,81 @@
                 <div class="view_contents">
                 <table>
 					<tbody>
-						<tr id="tr_XmlView">
-						   <th><spring:message code="page.xml.MessageCk" /> </th>
+						<tr id="tr_TranView">
+						   <th><spring:message code="page.tran.MessageCk" /> </th>
 						   <td colspan="3" sytle="text-align:right;">
-						   <a href="javascript:open_JsonView('I','${regist.xmlSeq  }' )" class="deepBtn">
-						   <spring:message code="page.xml.ViewSendJson" />
+						   <a href="javascript:open_JsonView('I','${regist.tranSeq  }' )" class="deepBtn">
+						   <spring:message code="page.tran.ViewSendJson" />
 						   </a>
-						   <a href="javascript:open_JsonView('O','${regist.xmlSeq  }' )" class="deepBtn">
-						   <spring:message code="page.xml.ViewRecJson" />
+						   <a href="javascript:open_JsonView('O','${regist.tranSeq  }' )" class="deepBtn">
+						   <spring:message code="page.tran.ViewRecJson" />
 						   </a>
 						   <!-- 전문 보기 -->
 						   <span id="sp_MessageView"></span>
 						   </td>
 						</tr>
 						<tr>
-							<th><spring:message code="page.xml.processId" /></th>
-							<td style="text-align:left"><span class="lable"><c:out value="${regist.xmlProcessName}" /></span>
+							<th><spring:message code="page.tran.processId" /></th>
+							<td style="text-align:left"><span class="lable"><c:out value="${regist.tranProcessName}" /></span>
 							<span class="type">
-							<form:input path="xmlProcessName" id="xmlProcessName" title="전문설명" size="25" value="${regist.xmlProcessName }"/>
+							<form:input path="tranProcessName" id="tranProcessName" title="전문설명" size="25" value="${regist.tranProcessName }"/>
 							 <a href="javascript:processCheck();" class="grayBtn" id="btn_UniCheck"><spring:message code="common.unicheck" /></a>
 							</span>
 							</td>
-							<th><spring:message code="page.xml.processJob" /></th>		
+							<th><spring:message code="page.tran.sendGubun" /></th>		
 							<td style="text-align:left">
-							<span class="lable"><c:out value="${regist.processRemark}" /></span>
+							<span class="lable"><c:out value="${regist.sendGubunTxt}" /></span>
 							<span class="type">
-							<form:input path="processRemark" id="processRemark" title="전문설명" size="25" value="${regist.processRemark }"/>
+							<form:select path="sendGubun" id="sendGubun" title="전문구분">
+							        <option value><spring:message code="combobox.text" /></option>
+			                        <form:options items="${selectSendgubun}" itemValue="code" itemLabel="codeNm"/>
+							</form:select>
 							</span>
 							</td>				
 						</tr>
-						
 						<tr>
-							<th><spring:message code="page.xml.inParam" /></th>
-							<td style="text-align:left">
-							<span class="lable"><c:out value="${regist.xmlInputParam}" /></span>
+						    <th><spring:message code="page.tran.processJob" /></th>		
+							<td style="text-align:left" colspan="3">
+							<span class="lable"><c:out value="${regist.processRemark}" /></span>
 							<span class="type">
-							<textarea name="xmlInputParam" id="xmlInputParam" style="width:250px; height:50px;">${regist.xmlInputParam }</textarea>
+							<form:input path="processRemark" id="processRemark" title="전문설명"  style="width:550px;"  value="${regist.processRemark }"/>
+							</span>
+							</td>	
+						</tr>
+						<tr>
+							<th><spring:message code="page.tran.inParam" /></th>
+							<td style="text-align:left">
+							<span class="lable"><c:out value="${regist.tranInputParam}" /></span>
+							<span class="type">
+							<textarea name="tranInputParam" id="tranInputParam" style="width:250px; height:50px;">${regist.tranInputParam }</textarea>
 							</span>
 							</td>
-							<th><spring:message code="page.xml.otParam" /></th>		
+							<th><spring:message code="page.tran.otParam" /></th>		
 							<td style="text-align:left">
-							<span class="lable"><c:out value="${regist.xmlOutputParam}" /></span>
+							<span class="lable"><c:out value="${regist.tranOutputParam}" /></span>
 							<span class="type">
-							<textarea name="xmlOutputParam" id="xmlOutputParam" style="width:250px; height:50px;">${regist.xmlOutputParam }</textarea>
+							<textarea name="tranOutputParam" id="tranOutputParam" style="width:250px; height:50px;">${regist.tranOutputParam }</textarea>
 							</span>
 							</td>				
 						</tr>	
 						<tr>
-							<th><spring:message code="page.xml.inParamExample" /></th>
+							<th><spring:message code="page.tran.inParamExample" /></th>
 							<td style="text-align:left">
-							<span class="lable"><c:out value="${regist.xmlInputParamSample}" /></span>
+							<span class="lable"><c:out value="${regist.tranInputParamSample}" /></span>
 							<span class="type">
-							<textarea name="xmlInputParamSample" id="xmlInputParamSample" style="width:250px; height:50px;">${regist.xmlInputParamSample }</textarea>
+							<textarea name="tranInputParamSample" id="tranInputParamSample" style="width:250px; height:50px;">${regist.tranInputParamSample }</textarea>
 							</span>
 							</td>
-							<th><spring:message code="page.xml.inParamExp" /></th>		
+							<th><spring:message code="page.tran.inParamExp" /></th>		
 							<td style="text-align:left">
-							<span class="lable"><c:out value="${regist.xmlExplain}" /></span>
+							<span class="lable"><c:out value="${regist.tranExplain}" /></span>
 							<span class="type">
-							<textarea name="xmlExplain" id="xmlExplain" style="width:250px; height:50px;">${regist.xmlExplain }</textarea>
+							<textarea name="tranExplain" id="tranExplain" style="width:250px; height:50px;">${regist.tranExplain }</textarea>
 							</span>
 							</td>				
 						</tr>	
 						<tr>
-							<th><spring:message code="page.xml.sendGubun" /></th>
+							<th><spring:message code="page.tran.sendGubun" /></th>
 							<td style="text-align:left">
 							<span class="lable"><c:out value="${regist.codeNm}" /></span>
 							<span class="type">
@@ -120,7 +131,7 @@
 							</form:select>
 							</span>
 							</td>
-							<th><spring:message code="page.xml.result" /></th>		
+							<th><spring:message code="page.tran.result" /></th>		
 							<td style="text-align:left">
 							<span class="lable"><c:out value="${regist.resultCodeExample}" /></span>
 							<span class="type">
@@ -129,14 +140,14 @@
 							</td>				
 						</tr>
 						<tr>
-							<th><spring:message code="page.xml.ListCheck" /></th>
+							<th><spring:message code="page.tran.ListCheck" /></th>
 							<td style="text-align:left">
 							<span class="lable"><c:out value="${regist.etc1}" /></span>
 							<span class="type">
 							<form:input path="etc1" id="etc1" title="전문설명" size="15" value="${regist.etc1 }"/>
 							</span>
 							</td>
-							<th><spring:message code="page.xml.confirm" /></th>		
+							<th><spring:message code="page.tran.confirm" /></th>		
 							<td style="text-align:left">
 							<span class="lable">
 							<c:choose>
@@ -171,16 +182,16 @@
     	   fn_Edit();
 	   });
        function pageList(){
-    	   $("form[name=regist]").attr("action", "/backoffice/operManage/xmlList.do").submit();
+    	   $("form[name=regist]").attr("action", "/backoffice/operManage/tranList.do").submit();
        }
        function dn_delCheck(){
     	   if ($("#btnDel").text() == "<spring:message code='button.delete' />"){
 	   			$("#mode").val("Edt");
 	   			fn_Edit();
 	   		}else{
-	   			fn_uniDelJSON("/backoffice/operManage/xmlDel.do"
-	   					  , {xmlSeq : $("#xmlSeq").val()}
-	   			          , "/backoffice/operManage/xmlList.do");
+	   			fn_uniDelJSON("/backoffice/operManage/tranDel.do"
+	   					  , {tranSeq : $("#tranSeq").val()}
+	   			          , "/backoffice/operManage/tranlList.do");
 	   		}
        }
        function fn_Edit(){
@@ -189,23 +200,23 @@
     	
    		if ($("#btnUpdate").text() == "<spring:message code='button.create' />" && ( $("#mode").val() == "Edt" || $("#mode").val() == "Ins"   )){
    			   
-   		       if (any_empt_line_id("xmlProcessName", '<spring:message code="page.xml.alert01" />') == false) return;
-   		       if (any_empt_line_id("xmlInputParam", '<spring:message code="page.xml.alert02" />') == false) return;
-   		       if (any_empt_line_id("xmlOutputParam", '<spring:message code="page.xml.alert03" />') == false) return;
+   		       if (any_empt_line_id("tranProcessName", '<spring:message code="page.tran.alert01" />') == false) return;
+   		       if (any_empt_line_id("tranInputParam", '<spring:message code="page.tran.alert02" />') == false) return;
+   		       if (any_empt_line_id("tranOutputParam", '<spring:message code="page.tran.alert03" />') == false) return;
    		       
    			   var params = $("#regist").serializeObject(); 
-   			   uniAjax("/backoffice/operManage/xmlUpdate.do", params, 
+   			   uniAjax("/backoffice/operManage/tranUpdate.do", params, 
    		     			function(result) {
    				               alert(result.message);
    						       if (result.status == "LOGIN FAIL"){
    		  							location.href="/backoffice/login.do";
    		  					   }else if (result.status == "SUCCESS"){
    		  						    //여기 부분 수정 어떻게 할지 추후 생각
-   		  						    if (result.regist.xmlSeq != ""){
-   		  						    	//alert("result.regist.xmlSeq:" + result.regist.xmlSeq);
-	   		  						    $("#xmlSeq").val(result.regist.xmlSeq);
+   		  						    if (result.regist.tranSeq != ""){
+   		  						    	//alert("result.regist.tranSeq:" + result.regist.tranSeq);
+	   		  						    $("#tranSeq").val(result.regist.tranSeq);
 		   								$("#mode").val("Viw");
-		   								$("form[name=regist]").attr("action", "/backoffice/operManage/xmlView.do").submit();
+		   								$("form[name=regist]").attr("action", "/backoffice/operManage/tranView.do").submit();
    		  						    }
    		  					   }
    						    },
@@ -219,7 +230,7 @@
    		if ($("#mode").val() == "Edt" || $("#mode").val() == "Viw" ){
    			$(".lable").show();
    			$(".type").hide();
-   			$("#tr_XmlView").show();
+   			$("#tr_TranView").show();
    			$("#btnUpdate").text("<spring:message code='button.update' />");
    			$("#btnDel").text("<spring:message code='button.delete' />");
    			$("#mode").val("Pre");
@@ -227,7 +238,7 @@
    		}else if ($("#mode").val() == "Ins") {
    			$(".lable").hide();
    			$(".type").show();
-   			$("#tr_XmlView").hide();
+   			$("#tr_TranView").hide();
    			$("#btnUpdate").text("<spring:message code='button.create' />");
    			$("#btnDel").hide();
    			$("#btn_UniCheck").show();
@@ -235,14 +246,14 @@
    			$("#btn_UniCheck").hide();
    			$(".lable").hide();
    			$(".type").show();
-   			$("#tr_XmlView").hide();
+   			$("#tr_TranView").hide();
    			$("#btnUpdate").text("<spring:message code='button.create' />");
    			$("#btnDel").text("<spring:message code='button.reset' />");
    			$("#mode").val("Edt");
    		}
    	}
     function open_JsonView(code, code1){
-   	      var url = code == "I" ? "/backoffice/operManage/jsonAuthView.do?xmlSeq="+code1 : "/backoffice/operManage/jsonAuthReq.do?xmlSeq="+code1;
+   	      var url = code == "I" ? "/backoffice/operManage/jsonAuthView.do?tranSeq="+code1 : "/backoffice/operManage/jsonAuthReq.do?tranSeq="+code1;
   		  uniAjax(url, null, 
 	     			function(result) {
 			               
@@ -262,10 +273,10 @@
     }
     //전문 체크
     function processCheck(){
- 	   fn_uniCheck(   {inTable : "TB_SENDMESSAGETYPR",
- 		               inCheckName : "XML_PROCESS_NAME",
- 		               inCondition : "XML_PROCESS_NAME=["+$("#xmlProcessName").val()+"["
- 		              }, "xmlProcessName", "idCheck", "<spring:message code='page.xml.confirm' />"
+ 	   fn_uniCheck(   {inTable : "tb_sendmessageinfo",
+ 		               inCheckName : "TRAN_PROCESS_NAME",
+ 		               inCondition : "TRAN_PROCESS_NAME=["+$("#tranProcessName").val()+"["
+ 		              }, "tranProcessName", "idCheck", "<spring:message code='page.tran.confirm' />"
  		            );
     }
     </script>
