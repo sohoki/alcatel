@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sohoki.backoffice.mapper.TranInfoManagerMapper">	
+    <select id="selectTranInfoManageListByPagination"  resultType="TransInfoVO">	
+		 	SELECT  
+		 	SUM(1) OVER(PARTITION BY NULL) AS TOTAL_RECORD_COUNT,
+		 	TB.* FROM (
+		    SELECT
+					     a.TRAN_SEQ as "tranSeq", 
+			             fn_DetailCodeNm(a.WORK_GUBUN)  as "workGubunTxt",
+			             fn_DetailCodeNm(a.SEND_GUBUN)  as "sendGubunTxt",
+			             a.TRAN_PROCESS_NAME  as "tranProcessName",
+			             a.PROCESS_REMARK as "processRemark",			             
+			             a.TRAN_INPUTPARAM  as "tranInputParam",
+			             a.TRAN_OTPUTPARAM  as "tranOutputParam",	
+			             a.TEST_OK  as "testOk",	
+			             b.CODE_NM as "codeNm"		            
+		    FROM    tb_sendmessageinfo a, lettccmmndetailcode b
+		    WHERE a.WORK_GUBUN =  b.CODE		        
+		        <if test="searchKeyword != ''">
+						<choose>
+							<when test="searchCondition == 'tranProcessName'">
+								and TRAN_PROCESS_NAME LIKE CONCAT('%',#{searchKeyword},'%') 
+							</when>
+							<otherwise>
+								and PROCESS_REMARK LIKE CONCAT('%',#{searchKeyword},'%')  
+							</otherwise>
+						</choose>
+				</if>
+				<if test="seachWorkGubun != ''">
+				   and A.WORK_GUBUN = #{seachWorkGubun}
+				</if>			     
+		        ORDER BY a.TRAN_SEQ  DESC
+	        ) TB 
+	         ORDER BY TB.tranSeq DESC
+	        limit #{firstIndex}, #{recordCountPerPage}         		 	    
+     </select>
+  
+    <select id="selectTranInfoManageDetail"  resultType="TransInfoVO">
+           SELECT  a.TRAN_SEQ as tranSeq , a.WORK_GUBUN as workGubun, a.TRAN_PROCESS_NAME as tranProcessName, a.PROCESS_REMARK as processRemark, 
+                        a.TRAN_INPUTPARAM as tranInputParam, a.TRAN_OTPUTPARAM as tranOutputParam, 
+                        a.RESULT_CODE_EXAMPLE as resultCodeExample, a.ETC1 as etc1, a.ETC2 as etc2, a.ETC3 as etc3,
+						a.TEST_OK as testOk, a.TRAN_INPUTPARAMSAMPLE as tranInputParamSample, a.TRAN_EXPLAIN as tranExplain,
+						b.CODE_NM as codeNm
+		    FROM tb_sendmessageinfo a, lettccmmndetailcode b
+		    WHERE a.WORK_GUBUN = b.CODE and a.TRAN_SEQ = #{tranSeq}		  
+    </select>
+    
+    <select id="selectTranProcessCombo" resultType="TransInfoVO">
+            SELECT  a.TRAN_PROCESS_NAME as tranProcessName, a.PROCESS_REMARK as processRemark
+		    FROM tb_sendmessageinfo a		    
+    </select>
+    <select id="selectTranProcessCount"   resultType="java.lang.Integer">
+       SELECT ifnull(COUNT(*),0) FROM tb_sendmessageinfo
+       WHERE        TRAN_PROCESS_NAME = #{tranProcessName}    
+    </select>
+    <select id="selectTrannfoManageListTotCnt_S"  resultType="java.lang.Integer">        
+       SELECT ifnull(COUNT(*),0) 
+       FROM    tb_sendmessageinfo a, lettccmmndetailcode b
+	   WHERE a.WORK_GUBUN =  b.CODE       
+              <if test="searchKeyword != ''">
+						<choose>
+							<when test="searchCondition == 'tranProcessName'">
+								and TRAN_PROCESS_NAME LIKE CONCAT('%',#{searchKeyword},'%') 
+							</when>
+							<otherwise>
+								and PROCESS_REMARK LIKE CONCAT('%',#{searchKeyword},'%')  
+							</otherwise>
+						</choose>
+				</if>	
+				<if test="seachWorkGubun != ''">
+				   and A.WORK_GUBUN = #{seachWorkGubun}
+				</if>		  
+    </select>
+     <insert id="insertTranInfoManage" >
+        
+             INSERT INTO tb_sendmessageinfo ( WORK_GUBUN, SEND_GUBUN,  TRAN_PROCESS_NAME, PROCESS_REMARK, TRAN_INPUTPARAM,
+                                              TRAN_OTPUTPARAM, RESULT_CODE_EXAMPLE, ETC1, ETC2, ETC3, 
+                                              TEST_OK, TRAN_INPUTPARAMSAMPLE, TRAN_EXPLAIN, 
+                                              FRST_REGIST_PNTTM, FRST_REGISTER_ID)
+             VALUES ( #{workGubun,jdbcType=VARCHAR}, #{sendGubun,jdbcType=VARCHAR},   #{tranProcessName,jdbcType=VARCHAR} , #{processRemark,jdbcType=VARCHAR}, 
+                      #{tranInputParam,jdbcType=VARCHAR}, #{tranOutputParam,jdbcType=VARCHAR}, #{resultCodeExample}, #{etc1,jdbcType=VARCHAR} , 
+                      #{etc2,jdbcType=VARCHAR}, #{etc3,jdbcType=VARCHAR}, 
+                      #{testOk},  #{tranInputParamSample,jdbcType=VARCHAR},   #{tranExplain,jdbcType=VARCHAR}, 
+                      now(), #{userId, jdbcType=VARCHAR}
+             )                          
+     </insert>
+     <update id="updateTraninfoManage" >
+       UPDATE  tb_sendmessageinfo SET    WORK_GUBUN = #{workGubun} ,
+                                                    SEND_GUBUN = #{sendGubun} ,
+					                                TRAN_PROCESS_NAME = #{tranProcessName,jdbcType=VARCHAR} ,
+					                                PROCESS_REMARK = #{processRemark,jdbcType=VARCHAR} ,
+					                                TRAN_INPUTPARAM = #{tranInputParam,jdbcType=VARCHAR} ,
+					                                TRAN_OTPUTPARAM = #{tranOutputParam,jdbcType=VARCHAR} ,
+					                                RESULT_CODE_EXAMPLE = #{resultCodeExample} ,
+					                                ETC1 = #{etc1,jdbcType=VARCHAR} ,
+					                                ETC2 = #{etc2,jdbcType=VARCHAR} ,
+					                                ETC3 = #{etc3,jdbcType=VARCHAR} ,
+					                                TEST_OK = #{testOk,jdbcType=VARCHAR} ,
+					                                TRAN_INPUTPARAMSAMPLE = #{tranInputParamSample} ,
+					                                TRAN_EXPLAIN = #{tranExplain,jdbcType=VARCHAR}                      
+      WHERE TRAN_SEQ = #{tranSeq}           
+     </update>
+     
+</mapper>

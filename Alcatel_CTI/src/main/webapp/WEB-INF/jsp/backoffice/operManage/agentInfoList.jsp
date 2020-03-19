@@ -324,7 +324,7 @@
    function del_check(code){	
     	fn_uniDelJSON("/backoffice/operManage/agentInfoDelete.do"
 				  , {agentCode : code}
-		          , "/backoffice/operManage/AgentInfoList.do");	
+		          , "/backoffice/operManage/agentList.do.do");	
    }
    function fn_FlooerView(searhGubun, floorInfo){
 		if ($("#centerId").val()  != "" || $("#searchCenterid").val()  != ""){
