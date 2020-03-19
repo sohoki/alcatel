@@ -168,7 +168,7 @@
             <div class="footerBtn">
 	            
 	            <a href="javascript:fn_Edit();" class="redBtn" id="btnUpdate"><spring:message code="button.update" /></a>
-	            <a href="javascript:dn_delCheck();" class="redBtn" id="btnDel"><spring:message code="button.delete" /></a>
+	            <a href="javascript:fn_delCheck();" class="redBtn" id="btnDel"><spring:message code="button.delete" /></a>
 	            <a href="javascript:pageList()" class="deepBtn"><spring:message code="button.list" /></a>
 	        </div>
         </div>
@@ -178,20 +178,19 @@
 </div>
 <script type="text/javascript">
        $(document).ready(function () {
-    	   
     	   fn_Edit();
 	   });
        function pageList(){
     	   $("form[name=regist]").attr("action", "/backoffice/operManage/tranList.do").submit();
        }
-       function dn_delCheck(){
-    	   if ($("#btnDel").text() == "<spring:message code='button.delete' />"){
-	   			$("#mode").val("Edt");
+       function fn_delCheck(){
+    	   if ($("#btnDel").text() == "<spring:message code='button.reset' />"){
+    		   //$("#mode").val("Edt");
 	   			fn_Edit();
 	   		}else{
 	   			fn_uniDelJSON("/backoffice/operManage/tranDel.do"
 	   					  , {tranSeq : $("#tranSeq").val()}
-	   			          , "/backoffice/operManage/tranlList.do");
+	   			          , "/backoffice/operManage/tranList.do");
 	   		}
        }
        function fn_Edit(){
@@ -240,6 +239,8 @@
    			$(".type").show();
    			$("#tr_TranView").hide();
    			$("#btnUpdate").text("<spring:message code='button.create' />");
+   			$("#btnUpdate").removeAttr("href").attr("class", "reviseBtn");
+   			
    			$("#btnDel").hide();
    			$("#btn_UniCheck").show();
    		} else {
@@ -273,11 +274,12 @@
     }
     //전문 체크
     function processCheck(){
- 	   fn_uniCheck(   {inTable : "tb_sendmessageinfo",
+    	fn_uniCheckBtn(   {inTable : "tb_sendmessageinfo",
  		               inCheckName : "TRAN_PROCESS_NAME",
  		               inCondition : "TRAN_PROCESS_NAME=["+$("#tranProcessName").val()+"["
- 		              }, "tranProcessName", "idCheck", "<spring:message code='page.tran.confirm' />"
+ 		              }, "tranProcessName", "idCheck", "<spring:message code='page.tran.confirm' />", "btnUpdate", "javascript:fn_Edit()"
  		            );
+ 	    
     }
     </script>
 </body>

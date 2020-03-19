@@ -38,6 +38,7 @@ import egovframework.let.sym.ccm.cde.service.EgovCcmCmmnDetailCodeManageService;
 import com.sohoki.backoffice.sts.tran.service.TransInfo;
 import com.sohoki.backoffice.sts.tran.service.TransInfoVO;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfo;
+import com.sohoki.backoffice.sym.agt.service.UserPhoneInfoVO;
 
 @RestController
 @RequestMapping("/backoffice/operManage")
@@ -132,6 +133,44 @@ public class TransInfoManageController {
 	      
 	      return model;
 	}
+	@RequestMapping(value = "tranDel.do")
+	 public ModelAndView tranInfoDelete(@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+												   ,@RequestBody  TransInfoVO vo
+												   ,BindingResult bindingResult) throws Exception{
+		 
+		 ModelAndView  model = new ModelAndView("jsonView");
+			
+			
+		    UniUtilInfo utilInfo = new UniUtilInfo();
+			utilInfo.setInTable("tb_sendmessageinfo");
+			utilInfo.setInCondition("TRAN_SEQ=["+vo.getTranSeq()+"[");
+			String result = "F";
+			try{
+				
+				
+				Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+			    if(!isAuthenticated) {
+			    		model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
+			    		model.addObject("status", "LOGIN FAIL");
+			    		return model;
+			    }
+			    
+			    int ret = 	utilService.deleteUniStatement(utilInfo);	
+			     
+			    if (ret > 0 ) {		    	  
+			    	  model.addObject("message", egovMessageSource.getMessage("success.common.delete"));
+					  model.addObject("status", "SUCCESS");  
+			    }else {
+			    	  throw new Exception();		    	  
+			    }
+			}catch (Exception e){
+				LOGGER.error("tranInfoDelete  error: "  + e.toString());
+				model.addObject("message", egovMessageSource.getMessage("fail.common.delete"));	
+				model.addObject("status", "FAIL");
+			}
+		 return model;
+		 
+	 }
 	@RequestMapping("tranView.do")
 	public ModelAndView selectViewTran(@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
 												, @ModelAttribute("XmlInfoVO") TransInfoVO vo

@@ -193,6 +193,7 @@ function fn_uniCheck( _data, _focusNm, _ckInput, alert_message){
 			     if (data == "O"){
 			    	 alert("사용 하실수 있는 코드입니다.");
 			    	 $("#"+_ckInput).val("Y");
+			    	 
 			     }else {
 			    	 alert("사용 하실수 없는 코드입니다.");
 			    	 $("#"+_ckInput).val("N");
@@ -205,6 +206,35 @@ function fn_uniCheck( _data, _focusNm, _ckInput, alert_message){
 	}else {
 		alert(alert_message);
 		$("#"+_focusNm).focus();
+	}
+}
+function fn_uniCheckBtn( _data, _focusNm, _ckInput, alert_message, inputBtn, callFunction){
+	var url = "/backoffice/util/UniCheck.do";
+	if ($("#"+_focusNm).val()!= ""  ){
+		$.ajax({
+			url: url,
+			type : "POST",
+			data : _data,
+			success :function (data, textStatus, jqXHR){
+			     if (data == "O"){
+			    	 alert("사용 하실수 있는 코드입니다.");
+			    	 $("#"+_ckInput).val("Y");
+			    	 $("#"+inputBtn).attr("href", callFunction).attr("class","redBtn");
+			    	
+			     }else {
+			    	 alert("사용 하실수 없는 코드입니다.");
+			    	 $("#"+_ckInput).val("N");
+			    	 $("#"+inputBtn).removeAttr("href").attr("class", "reviseBtn");
+			     }
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				alert(textStatus + ":" + errorThrown);
+			}
+		});
+	}else {
+		alert(alert_message);
+		$("#"+_focusNm).focus();
+		$("#btnUpdate").removeAttr("href").attr("class", "reviseBtn");
 	}
 }
 function fn_searchList(_url, _data){
