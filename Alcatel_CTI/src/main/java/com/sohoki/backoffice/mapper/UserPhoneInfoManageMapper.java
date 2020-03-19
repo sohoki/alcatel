@@ -14,6 +14,8 @@ public interface UserPhoneInfoManageMapper {
 	    
 	    public List<UserPhoneInfoVO> selectUserPhoneInfoManageListByCombo(UserPhoneInfoVO searchVO);
 	    
+	    public List<UserPhoneInfoVO>  selectAgentCombophoneNumber(UserPhoneInfoVO searchVO);
+	    
 	    public UserPhoneInfoVO selectUsserPhoneInfoDetail(String phoneNumber);
 	    
 	    public int selectUserNumberIdCheck( UserPhoneInfo vo);

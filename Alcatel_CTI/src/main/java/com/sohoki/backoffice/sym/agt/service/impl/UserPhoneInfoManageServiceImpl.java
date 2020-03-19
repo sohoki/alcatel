@@ -15,6 +15,7 @@ import com.sohoki.backoffice.util.web.ExcelRead;
 import com.sohoki.backoffice.util.web.ExcelReadOption;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 import com.sohoki.backoffice.mapper.UserPhoneInfoManageMapper;
 
 @Service("UserPhoneInfoManageService")
@@ -115,6 +116,13 @@ public class UserPhoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 	      
 			 
 		return errorTelNumber;
+	}
+
+	@Override
+	public List<UserPhoneInfoVO> selectAgentCombophoneNumber(
+			UserPhoneInfoVO searchVO) throws Exception {
+		// TODO Auto-generated method stub
+		return phoneInfo.selectAgentCombophoneNumber(searchVO);
 	};
 	
 	

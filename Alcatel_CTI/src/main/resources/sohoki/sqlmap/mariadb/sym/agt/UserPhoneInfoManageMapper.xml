@@ -9,6 +9,17 @@
        FROM tb_userphoneinfo a
        WHERE a.PHONE_NUMBER = #{phoneNumber}
     </select>
+    <select id="selectAgentCombophoneNumber"  resultType="UserPhoneInfoVO">   
+       SELECT PHONE_NUMBER, LOGIN_ID
+       FROM tb_userphoneinfo
+       WHERE 1=1
+                <if test="searchCondition != 'Edt'">
+                AND PHONE_NUMBER not in (SELECT AGENT_BASICNUMBER  from tb_telephoneinfo WHERE AGENT_BASICNUMBER is not null )
+                </if>
+                AND  PHONE_NUMBER LIKE CONCAT('%',#{searchKeyword},'%') 
+                AND  PHONE_GUBUN = 'PHONE_GUBUN_2'
+       ORDER BY PHONE_NUMBER ASC
+    </select>
     <select id="selectUserNumberIdCheck" resultType="java.lang.Integer">
         SELECT ifnull(count(*), 0)
         FROM tb_userphoneinfo

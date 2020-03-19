@@ -11,7 +11,7 @@ public class TelephoneInfo implements  Serializable {
 	private String agentRemark = "";
 	private String agentIp = "";
 	private String agentMac = "";
-	private String agentUseYn = "";
+	private String agentUseyn = "";
 	private String frstRegistPnttm = "";
 	private String frstRegistId = "";
 	private String lastUpdtPnttm = "";
@@ -32,6 +32,14 @@ public class TelephoneInfo implements  Serializable {
 
 	
 	
+	public String getAgentUseyn() {
+		return agentUseyn;
+	}
+
+	public void setAgentUseyn(String agentUseyn) {
+		this.agentUseyn = agentUseyn;
+	}
+
 	public String getAgentOsversion() {
 		return agentOsversion;
 	}
@@ -102,14 +110,6 @@ public class TelephoneInfo implements  Serializable {
 
 	public void setAgentMac(String agentMac) {
 		this.agentMac = agentMac;
-	}
-
-	public String getAgentUseYn() {
-		return agentUseYn;
-	}
-
-	public void setAgentUseYn(String agentUseYn) {
-		this.agentUseYn = agentUseYn;
 	}
 
 	public String getFrstRegistPnttm() {

@@ -61,8 +61,6 @@ public class TelephoneInfoVO extends TelephoneInfo implements Serializable {
     private String searchAgentState = "";
     
     
-    
-    
 	public String getSearchAgentState() {
 		return searchAgentState;
 	}

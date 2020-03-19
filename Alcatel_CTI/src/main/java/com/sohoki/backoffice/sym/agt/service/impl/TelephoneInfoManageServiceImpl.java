@@ -11,6 +11,7 @@ import com.sohoki.backoffice.sym.agt.service.TelephoneInfoManageService;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfoVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 
 import com.sohoki.backoffice.mapper.TelephoneInfoManageMapper;
 
@@ -21,6 +22,11 @@ public class TelephoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 	@Resource(name="TelephoneInfoManageMapper")
 	private TelephoneInfoManageMapper agentMapper;
 
+	
+    @Resource(name = "egovAgentIdGnrService")
+    private EgovIdGnrService idgenService;
+
+    
 	@Override
 	public List<TelephoneInfoVO> selectAgentPageInfoManageListByPagination(TelephoneInfoVO searchVO) throws Exception {
 		// TODO Auto-generated method stub
@@ -53,6 +59,7 @@ public class TelephoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 		// TODO Auto-generated method stub
 		int ret = 0;
 		if (vo.getMode().equals("Ins")){
+			vo.setAgentCode(idgenService.getNextStringId());
 			ret = agentMapper.insertAgentInfoManage(vo);
 		}else {
 			ret = agentMapper.updateAgentPageInfoManage(vo);

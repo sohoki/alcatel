@@ -12,6 +12,8 @@ public interface UserPhoneInfoManageService {
     
     UserPhoneInfoVO selectUsserPhoneInfoDetail(String phoneNumber) throws Exception;
     
+    List<UserPhoneInfoVO> selectAgentCombophoneNumber(UserPhoneInfoVO searchVO) throws Exception;
+    
     String excelUpload(File excelFile) throws Exception;
     
     int selectUserPhoneInfoManageListByCnt(UserPhoneInfoVO searchVO) throws Exception;

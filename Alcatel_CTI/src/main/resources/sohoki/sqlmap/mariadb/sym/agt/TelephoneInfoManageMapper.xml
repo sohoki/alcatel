@@ -60,7 +60,7 @@
    <select id="selectAgentPageInfoManageDetail" resultType="TelephoneInfoVO">
      SELECT a.AGENT_CODE, a.AGENT_NM, a.AGENT_REMARK, a.AGENT_IP, a.AGENT_MAC,
             a.AGENT_USEYN, a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,
-			a.AGENT_FLOOR, a.AGENT_STATE , a.AGENT_BASICNUMBER, a.AGENT_NOWNUMBER, a.AGENT_OSVERSION
+			a.AGENT_FLOOR, a.AGENT_STATE , a.AGENT_BASICNUMBER, a.AGENT_NOWNUMBER, a.AGENT_OSVERSION, 
 			c.CENTER_NM, d.part_nm , a.CENTER_ID, a.part_id
      FROM tb_telephoneinfo a, tb_centerinfo c,  tb_partinfo d
      WHERE a.center_id = c.center_id
@@ -123,7 +123,7 @@
                                 FRST_REGIST_PNTTM, FRST_REGISTER_ID, LAST_UPDT_PNTTM, LAST_UPDUSR_ID,
                                 CENTER_ID, PART_ID, AGENT_FLOOR, AGENT_BASICNUMBER, AGENT_OSVERSION )
       VALUES (#{agentCode}, #{agentNm}, #{agentRemark,jdbcType=VARCHAR}, #{agentIp,jdbcType=VARCHAR}, #{agentMac,jdbcType=VARCHAR }, 
-              #{agentUseYn,jdbcType=VARCHAR },  now(), #{userId,jdbcType=VARCHAR}, now(), #{userId,jdbcType=VARCHAR},
+              #{agentUseyn,jdbcType=VARCHAR },  now(), #{userId,jdbcType=VARCHAR}, now(), #{userId,jdbcType=VARCHAR},
               #{centerId ,jdbcType=VARCHAR}, #{partId, jdbcType=VARCHAR}, #{agentFloor, jdbcType=INTEGER },
               #{agentBasicnumber , jdbcType=VARCHAR}, #{agentOsversion , jdbcType=VARCHAR}
               )
@@ -144,7 +144,7 @@
    <update id="updateAgentPageInfoManage">
       UPDATE tb_telephoneinfo SET AGENT_NM = #{agentNm}
                              ,  AGENT_REMARK = #{agentRemark,jdbcType=VARCHAR }
-                             ,  AGENT_USEYN =  #{agentUseYn,jdbcType=VARCHAR }
+                             ,  AGENT_USEYN =  #{agentUseyn,jdbcType=VARCHAR }
                              ,  LAST_UPDT_PNTTM = now()
                              ,  LAST_UPDUSR_ID = #{userId,jdbcType=VARCHAR}
                              , CENTER_ID = #{centerId ,jdbcType=VARCHAR}

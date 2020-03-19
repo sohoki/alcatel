@@ -158,6 +158,22 @@ public class AgentInfoManageController {
 		 ModelAndView  mv = new ModelAndView("/backoffice/popup/excelUpload");
 		 return mv;
 	 }
+	 @RequestMapping(value = "userPhoneSearch.do")
+	 public ModelAndView userPhoneSearch(@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+												   ,@RequestBody  UserPhoneInfoVO vo
+												   ,BindingResult bindingResult) throws Exception{
+		 
+		 ModelAndView  model = new ModelAndView("jsonView");
+		 try{
+			 model.addObject("status", Globals.STATUS_SUCCESS);
+			 model.addObject("phoneNumber", userService.selectAgentCombophoneNumber(vo) );
+			 
+		 }catch(Exception e){
+			 model.addObject("status", Globals.STATUS_FAIL);
+			 model.addObject("message", e.toString() );
+		 }
+		 return model;
+	 }
 	 @RequestMapping(value = "userInfoDelete.do")
 	 public ModelAndView userInfoDelete(@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
 												   ,@RequestBody  UserPhoneInfoVO vo
@@ -206,10 +222,7 @@ public class AgentInfoManageController {
 	            throw new RuntimeException("엑셀파일을 선택 해 주세요.");
 	        }
 	        //파일 업로드 
-	        LOGGER.debug("01");
-	        File destFile = new File(propertiesService.getString("Globals.fileStorePath")+excelFile.getOriginalFilename());
-	        
-	        
+	       File destFile = new File(propertiesService.getString("Globals.fileStorePath")+excelFile.getOriginalFilename());
 	        
 	        try{
 	            excelFile.transferTo(destFile);
@@ -219,14 +232,13 @@ public class AgentInfoManageController {
 	        }
 	        
 	       
-	        LOGGER.debug("02" + destFile.toString());
 	        String returnMessage =  userService.excelUpload(destFile);
 	        
 	        destFile.delete();
 	        //userService.excelUpload(destFile); //서비스 부분을 삭제한다.
 	        //파일 삭제
 	        //FileUtils.forceDelete(destFile.getAbsolutePath());
-	        LOGGER.debug("03 delete" );
+	        
 	        ModelAndView view = new ModelAndView("jsonView");
 	        view.addObject("status", Globals.STATUS_SUCCESS);
 	        view.addObject("message", returnMessage.equals("") ? "OK":  returnMessage);
@@ -369,7 +381,7 @@ public class AgentInfoManageController {
 			}
 			return model;
 	 }
-	 @RequestMapping(value="agentUpdate.do")
+	 @RequestMapping(value="agentInfoUpdate.do")
 	 public ModelAndView agentInfoUpdate (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
 													   ,@RequestBody  TelephoneInfoVO vo
 													   , BindingResult bindingResult) throws Exception{
@@ -378,6 +390,12 @@ public class AgentInfoManageController {
 			String meesage = "";
 			
 			try{
+				Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+				if(!isAuthenticated) {
+				model.addObject("status", Globals.STATUS_LOGINFAIL);
+				model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
+				}
+				vo.setUserId(EgovUserDetailsHelper.getAuthenticatedUser().toString() );
 				
 				int ret = telephoneService.updateAgentPageInfoManage(vo);
 				if (vo.getMode().equals("Ins")){
@@ -403,5 +421,43 @@ public class AgentInfoManageController {
 				model.addObject("message", egovMessageSource.getMessage("fail.common.insert"));	
 			}	
 			return model;
+	 }
+	 @RequestMapping(value = "agentInfoDelete.do")
+	 public ModelAndView agentInfoDelete(@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+												   ,@RequestBody  TelephoneInfoVO vo
+												   ,BindingResult bindingResult) throws Exception{
+		 
+		 ModelAndView  model = new ModelAndView("jsonView");
+			
+			
+		    UniUtilInfo utilInfo = new UniUtilInfo();
+			utilInfo.setInTable("tb_telephoneinfo");
+			utilInfo.setInCondition("AGENT_CODE=["+vo.getAgentCode()+"[");
+			String result = "F";
+			try{
+				
+				
+				Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+			    if(!isAuthenticated) {
+			    		model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
+			    		model.addObject("status", "LOGIN FAIL");
+			    		return model;
+			    }
+			    
+			    int ret = 	utilService.deleteUniStatement(utilInfo);	
+			     
+			    if (ret > 0 ) {		    	  
+			    	  model.addObject("message", egovMessageSource.getMessage("success.common.delete"));
+					  model.addObject("status", "SUCCESS");  
+			    }else {
+			    	  throw new Exception();		    	  
+			    }
+			}catch (Exception e){
+				LOGGER.error("deleteEqupInfoManage  error: "  + e.toString());
+				model.addObject("message", egovMessageSource.getMessage("fail.common.delete"));	
+				model.addObject("status", "FAIL");
+			}
+		 return model;
+		 
 	 }
 }

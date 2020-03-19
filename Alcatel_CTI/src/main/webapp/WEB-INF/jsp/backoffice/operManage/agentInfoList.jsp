@@ -125,7 +125,7 @@
                             <td>${agentInfo.agentBasicnumber }</td>
                             <td>${agentInfo.agentNownumber }</td>
                             <td>${agentInfo.agentState }</td>
-                            <td>${agentInfo.agentUseYn }</td>
+                            <td>${agentInfo.agentUseyn }</td>
                             <td><a href="javascript:del_check('${ agentInfo.agentCode }','${ agentInfo.agentNm }');" class="grayBtn">
                                 <spring:message code="button.delete" />
                                 </a>
@@ -175,11 +175,11 @@
             <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.center.centerNm" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:select path="centerId" id="centerId" title="지점" onChange="javascript:fn_FlooerView('P', '')">
+                    <form:select path="centerId" id="centerId" title="지점" onChange="javascript:fn_FlooerView('P', '')" style="width:200px;">
 							     <option value=""><spring:message code="combobox.text" /></option>
 		                         <form:options items="${selectCenterCombo}" itemValue="centerId" itemLabel="centerNm"/>
 					</form:select>
-					<select id='agentFloor' name='agentFloor' style="display:none;"></select>
+					<select id='agentFloor' name='agentFloor' style="display:none;width:120px;"></select>
 					
                 </div>   
             </div>
@@ -196,7 +196,9 @@
             <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.agentBasicnumber" /> <span class="join_id_comment joinSubTxt"></span></p>
-                   <form:input  path="agentBasicnumber" size="10" maxlength="10" id="agentBasicnumber" style="width:150px;" />[찾기]
+                    <input type="text" id="searchAgentNumber"  size="10" maxlength="10" style="width:150px;" >
+                    <a href="#" onClick="fn_SearchNumber('Ins')"> [찾기]</a>
+                    <select id="agentBasicnumber" style="width:120px;"></select>
                 </div>   
             </div>
             <div class="pop_box50">
@@ -214,9 +216,9 @@
              <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="common.UseYn.title" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <input type="radio" name="agentUseYn" id="agentUseYn" value="Y" <c:if test="${regist.agentUseYn == 'Y' }"> checked </c:if> />
+                    <input type="radio" name="agentUseyn" id="agentUseyn" value="Y" />
                     <label><spring:message code="button.use" /></label>
-					<input type="radio" name="agentUseYn" id="agentUseYn" value="N" <c:if test="${regist.agentUseYn == 'N' }"> checked </c:if> />
+					<input type="radio" name="agentUseyn" id="agentUseyn" value="N" />
 					<label><spring:message code="button.nouse" /></label>
                 </div>                
             </div>
@@ -242,12 +244,43 @@
 				$("#searchFloor").hide();
 			}
 	});
+   function fn_SearchNumber(searchCondition ){
+	   if (any_empt_line_id("searchAgentNumber", '<spring:message code="page.agent.alert3" />') == false) return;
+	   
+	   var url = "/backoffice/operManage/userPhoneSearch.do";
+	   
+	   uniAjax(url, { searchKeyword : $("#searchAgentNumber").val() , searchCondition : searchCondition }, 
+    			function(result) {
+				       if (result.status == "LOGIN FAIL"){
+				    	   alert(result.meesage);
+ 						   location.href="/backoffice/login.do";
+ 					   }else if (result.status == "SUCCESS"){
+ 						    //여기 부분 수정 어떻게 할지 추후 생각
+ 						    $("#agentBasicnumber").attr("display", "");
+						    $("#agentBasicnumber").empty();
+						    
+						    var phoneCheckNumber = result.phoneNumber;
+						    if (phoneCheckNumber.length > 0 ){
+						    	for(var i =0; i < phoneCheckNumber.length; i++){
+						    		var obj = phoneCheckNumber[i];
+						    		 $("#agentBasicnumber").append("<option value='"+obj.phoneNumber +"'>"+obj.phoneNumber +"|"+obj.loginId +"</option> ");
+						    	}
+						    }
+		            	   
+ 					   }
+				    },
+				    function(request){
+					    alert("Error:" +request.status );	       						
+				    }    		
+         );
+	   $("#searchAgentNumber").val("");
+   }
    function fn_agentPop(mode, code){
 		  $('#mode').val(mode);
 		  $('#agentCode').val(code);
 		  if (mode == "Edt"){
 			  $("#btnUpdate").text('<spring:message code="button.update" />');	
-			  url= "/backoffice/basicManage/agentInfoDetail.do";
+			  url= "/backoffice/operManage/agentDetail.do";
 			  var param = {
 		                'mode' : $('#mode').val(),
 		                'agentCode' : $('#agentCode').val()
@@ -260,17 +293,22 @@
 	  					   }else if (result.status == "SUCCESS"){
 	  						    //여기 부분 수정 어떻게 할지 추후 생각
 	  						    var obj = result.agentInfo;
-	  						    $("#agentNm").val(obj.agentNm);
-	  						    $("#agentOsversion").val(obj.agentOsversion);
-		  						$("#agentRemark").val(obj.agentRemark);
-		  						$("#centerId").val(obj.centerId);
-		  						$("#partId").val(obj.partId);
-		  						$("#agentBasicnumber").val(obj.agentBasicnumber);
-		  						$("#agentIp").val(obj.agentIp);
-		  						$("#agentMac").val(obj.agentMac);
-	 		            	    $('input:radio[name=agentUseYn]:input[value=' + obj.agentUseYn + ']').attr("checked", true);	 
-	 		            	    fn_FlooerView("P", obj.agentFloor );
+	  						    
+	  						   $("#agentNm").val(obj.agentNm);
+	  						   $("#agentOsversion").val(obj.agentOsversion);
+		  					   $("#agentRemark").val(obj.agentRemark);
+		  					   $("#centerId").val(obj.centerId);
+		  					   $("#partId").val(obj.partId);
+		  					   $("#agentIp").val(obj.agentIp);
+		  					   $("#agentMac").val(obj.agentMac);
+		  					   $("#searchAgentNumber").val(obj.agentBasicnumber);
+		  					   $('input:radio[name=agentUseyn]:input[value=' + obj.agentUseyn + ']').attr("checked", true);	 
+		  					   fn_SearchNumber("Edt");
+		  					   fn_FlooerView("P", obj.agentFloor);
+		  					   //$("#agentIp").val(obj.agentIp);
 	 		            	   
+	  					   }else {
+	  						 alert("Error:" +result.message );	       	
 	  					   }
 					    },
 					    function(request){
@@ -278,13 +316,15 @@
 					    }    		
 	          );
 		  }else {
+			  $("#agentBasicnumber").attr("display", "none");
+			  $("#agentBasicnumber").empty();
 			  $("#btnUpdate").text('<spring:message code="button.create" />');
 		  }
    }
    function del_check(code){	
-    	fn_uniDelJSON("/backoffice/basicManage/agentInfoDelete.do"
+    	fn_uniDelJSON("/backoffice/operManage/agentInfoDelete.do"
 				  , {agentCode : code}
-		          , "/backoffice/contentManage/AgentInfoList.do");	
+		          , "/backoffice/operManage/AgentInfoList.do");	
    }
    function fn_FlooerView(searhGubun, floorInfo){
 		if ($("#centerId").val()  != "" || $("#searchCenterid").val()  != ""){
@@ -320,22 +360,24 @@
    function fn_CheckForm(){
 	   if (any_empt_line_id("agentNm", '<spring:message code="page.agent.alert1" />') == false) return;
 	   if (any_empt_line_id("agentRemark", '<spring:message code="page.agent.alert2" />') == false) return;
+	   if (any_empt_line_id("agentIp", '<spring:message code="page.agent.alert4" />') == false) return;
+	   if (any_empt_line_id("agentMac", '<spring:message code="page.agent.alert5" />') == false) return;
 	   
 	   var params = {  
 			           agentNm : $("#agentNm").val(),
 			           agentOsversion : $("#agentOsversion").val(),
 					   agentRemark : $("#agentRemark").val(),
 					   centerId : $("#centerId").val(),
-					   partId : $("#partId").val(),
+					   partId : fn_emptyReplace($("#partId").val() ,"0") ,
 					   agentBasicnumber : $("#agentBasicnumber").val(),
 					   agentIp : $("#agentIp").val(),
 					   agentMac : $("#agentMac").val(),
-					   agentUseYn :  fn_emptyReplace($('input[name="agentUseYn"]:checked').val(),"Y"),
+					   agentUseyn :  fn_emptyReplace($('input[name="agentUseyn"]:checked').val(),"Y"),
 					   mode : $("#mode").val(),
 					   agentFloor : $("#agentFloor").val(),
 					   agentCode : $("#agentCode").val()
 			        };
-	            uniAjax("/backoffice/basicManage/agentInfoUpdate.do", params, 
+	            uniAjax("/backoffice/operManage/agentInfoUpdate.do", params, 
      			function(result) {
 				    	if (result.status == "SUCCESS"){
 				    		location.reload();
@@ -353,18 +395,18 @@
    function linkPage(pageNo) {
 		$(":hidden[name=pageIndex]").val(pageNo);	
 		$('#displaySeq').val("0");
-		$("form[name=regist]").attr("action","/backoffice/basicManage/AgentInfoList.do").submit();
+		$("form[name=regist]").attr("action","/backoffice/operManage/AgentInfoList.do").submit();
    }
    function fn_viewAgent(agentCode){
 		  $('#mode').val("Edt");
 		  $('#agentCode').val(agentCode);
 		  $('#displaySeq').val("0");
-		  $("form[name=regist]").attr("action", "/backoffice/basicManage/agentInfoView.do").submit();
+		  $("form[name=regist]").attr("action", "/backoffice/operManage/agentInfoView.do").submit();
    }
    function search_form(){	
 		  $(":hidden[name=pageIndex]").val("1");	
 		  $('#displaySeq').val("0");
-		  $("form[name=regist]").attr("action", "/backoffice/basicManage/AgentInfoList.do").submit();		  
+		  $("form[name=regist]").attr("action", "/backoffice/operManage/AgentInfoList.do").submit();		  
    }
 </script>
 </body>
