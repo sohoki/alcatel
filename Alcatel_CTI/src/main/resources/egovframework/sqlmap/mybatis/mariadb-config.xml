@@ -20,6 +20,8 @@
 	    <package name="com.sohoki.backoffice.util.service"/>
 	    <package name="com.sohoki.backoffice.sts.error.service"/>
 	    <package name="com.sohoki.backoffice.sts.cnt.service"/>
+	    <package name="com.sohoki.backoffice.sts.tran.service"/>
+	    
 	    <package name="com.sohoki.backoffice.uat.uia.service"/>
 	    <package name="com.sohoki.backoffice.sym.cnt.service"/>
 	    <package name="com.sohoki.backoffice.sym.agt.service"/>
@@ -44,33 +46,9 @@
 		<mapper resource="sohoki/sqlmap/mariadb/sym/agt/UserPhoneInfoManageMapper.xml"/>
 		
 		<mapper resource="sohoki/sqlmap/mariadb/sts/cnt/ContentFileManagerMapper.xml"/>
-		
-		<!-- <mapper resource="aten/sqlmap/mysql/sym/cnt/CenterInfoManagerMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sym/rpt/ReportPageInfoManageMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sym/agt/AgentInfoManageMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sym/agt/OrderInfoManageMapper.xml"/>
-		
-		<mapper resource="aten/sqlmap/mysql/sts/xml/XmlInfoManagerMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sts/xml/SendMsgInfoManagerMapper.xml"/>
-		
-		<mapper resource="aten/sqlmap/mysql/sts/sch/SchduleInfoManageMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sts/sch/ContentScheduleManagerMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sts/sch/AgentGroupInfoManagerMapper.xml"/>
+		<mapper resource="sohoki/sqlmap/mariadb/sts/tran/TranInfoManageMapper.xml"/>
 		
 		
-		<mapper resource="aten/sqlmap/mysql/sts/msg/SendMessageManageMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sts/err/ErrorInfoManageMapper.xml"/>
-		
-		<mapper resource="aten/sqlmap/mysql/sts/dis/DetailPageInfoManageMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sts/dis/DisplayPageInfoManageMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sts/cnt/ContentFileManagerMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sts/agentState/AgentStateManageMapper.xml"/>
-		
-		<mapper resource="aten/sqlmap/mysql/sts/uia/PartInfoManageMapper.xml"/>
-		<mapper resource="aten/sqlmap/mysql/sts/uia/UniUtilManageMapper.xml"/>
-		
-		<mapper resource="aten/sqlmap/mysql/etc/rest/RestNoticeInfoManageMapper.xml"/> 
-		<mapper resource="aten/sqlmap/mysql/etc/rest/RestInfoManageMapper.xml"/> -->
 								
 	</mappers>
 </configuration>
