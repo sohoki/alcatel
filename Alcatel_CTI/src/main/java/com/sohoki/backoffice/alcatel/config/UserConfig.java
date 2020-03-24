@@ -40,7 +40,7 @@ public class UserConfig {
      */
     private final String deskPhone;
 
-    private UserConfig(String login, String name, String password, String number, String deskPhone) {
+    public UserConfig(String login, String name, String password, String number, String deskPhone) {
         this.login = login;
         this.name = name;
         this.password = password;
@@ -55,6 +55,7 @@ public class UserConfig {
         LOGGER.debug("Create user: {}", userConfig);
         return userConfig;
     }
+   
     
     public String getLogin() {
         return login;

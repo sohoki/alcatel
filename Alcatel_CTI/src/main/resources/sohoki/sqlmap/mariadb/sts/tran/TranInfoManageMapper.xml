@@ -46,6 +46,16 @@
 		    WHERE a.WORK_GUBUN = b.CODE and a.TRAN_SEQ = #{tranSeq}		  
     </select>
     
+    <select id="selectTranProcessInfo"  resultType="TransInfoVO">
+           SELECT  a.TRAN_SEQ as tranSeq , a.WORK_GUBUN as workGubun, a.TRAN_PROCESS_NAME as tranProcessName, a.PROCESS_REMARK as processRemark, 
+                        a.TRAN_INPUTPARAM as tranInputParam, a.TRAN_OTPUTPARAM as tranOutputParam, 
+                        a.RESULT_CODE_EXAMPLE as resultCodeExample, a.ETC1 as etc1, a.ETC2 as etc2, a.ETC3 as etc3,
+						a.TEST_OK as testOk, a.TRAN_INPUTPARAMSAMPLE as tranInputParamSample, a.TRAN_EXPLAIN as tranExplain,
+						b.CODE_NM as codeNm, fn_DetailCodeNm(a.SEND_GUBUN)  as "sendGubunTxt"
+		    FROM tb_sendmessageinfo a, lettccmmndetailcode b
+		    WHERE a.WORK_GUBUN = b.CODE and a.TRAN_PROCESS_NAME = #{tranProcessName}		  
+    </select>
+    
     <select id="selectTranProcessCombo" resultType="TransInfoVO">
             SELECT  a.TRAN_PROCESS_NAME as tranProcessName, a.PROCESS_REMARK as processRemark
 		    FROM tb_sendmessageinfo a		    

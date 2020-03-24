@@ -3,7 +3,14 @@ package com.sohoki.backoffice.alcatel.config;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.sohoki.backoffice.alcatel.core.exception.OTRestClientException;
+
+import egovframework.rte.fdl.property.EgovPropertyService;
 
 public enum ApiConfig {
 	INSTANCE; // This is a singleton.
@@ -25,13 +32,26 @@ public enum ApiConfig {
     private String apiLogFile;
 
 
+    
+    @Resource(name = "fileProperties")
+	private Properties fileProperties;
+
+
+
+    
     private ApiConfig() {
         try {
-            Properties apiProperties = ConfigReader.load("client-rest.properties");
-            this.apiVersion = apiProperties.getProperty("api.version");
+           // Properties apiProperties = ConfigReader.load("client-rest.properties");
+            /*this.apiVersion =  apiProperties.getProperty("api.version");
             this.rootPath = buildRootPath(apiProperties.getProperty("roxe.host"), apiProperties.getProperty("api.path"));
-            this.apiLogFile = apiProperties.getProperty("api.log.file");
-        } catch (OTRestClientException e) {
+            this.apiLogFile = apiProperties.getProperty("api.log.file");*/
+        	
+        	this.apiVersion = fileProperties.getProperty("api.version");// .getString("api.version")
+        	this.rootPath = buildRootPath(fileProperties.getProperty("roxe.host"), fileProperties.getProperty("api.path"));
+        	this.apiLogFile = fileProperties.getProperty("api.log.file");
+        } catch (Exception e) {
+        	
+        	
             this.apiVersion = null;
             this.rootPath = null;
             this.apiLogFile = null;

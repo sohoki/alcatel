@@ -53,6 +53,13 @@ public class TransInfoManageServiceImpl extends EgovAbstractServiceImpl implemen
 		int ret = (VO.getMode().equals("Ins")) ? tranMapper.insertTranInfoManage(VO) : tranMapper.updateTraninfoManage(VO) ;
 		return ret;
 	}
+
+	@Override
+	public TransInfoVO selectTranProcessInfo(String tranProcessName)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return tranMapper.selectTranProcessInfo(tranProcessName);
+	}
 	
 	
 }

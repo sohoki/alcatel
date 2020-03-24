@@ -38,6 +38,7 @@ import egovframework.let.sym.ccm.cde.service.EgovCcmCmmnDetailCodeManageService;
 import com.sohoki.backoffice.sts.tran.service.TransInfo;
 import com.sohoki.backoffice.sts.tran.service.TransInfoVO;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfo;
+import com.sohoki.backoffice.sym.agt.service.TelephoneInfoVO;
 import com.sohoki.backoffice.sym.agt.service.UserPhoneInfoVO;
 
 @RestController
@@ -391,285 +392,27 @@ public class TransInfoManageController {
 			  JSONArray dataInfoArray = (JSONArray) jsonObject.get("command_data");			 
 			  JSONObject dataObject = (JSONObject) dataInfoArray.get(0);	
 			  
-			  TelephoneInfo  agentInfo = new TelephoneInfo();
+			  TelephoneInfoVO  agentInfo = new TelephoneInfoVO();
 			  /*SendMsgInfo sminfo = new SendMsgInfo();*/
 			  
-			  /*if (commandType.equals("SP_AGENTSTATE")){
+			  //commandType input type 값 split 으로 정리 해서 넘기기
+			  
+			  /*
+			  TransInfoVO info = tranService.selectTranProcessInfo(commandType);
+			  String[] inputParams = info.getTranInputParam().split(",");
+			  for (String strTemp : inputParams){
+				  dataObject.get(strTemp ).toString()
+			  }
+			  */
+			  if (commandType.equals("SP_LOGIN")){
 				  
 				  
-				  agentInfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  agentInfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  AgentStateService.updateAgentStateCnt(dataObject.get("AGENT_CODE").toString());
-				  
-				  sminfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  sminfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  String sendInfo = "";
-				  String sendGubun = "";
-				  AgentInfoVO info = agentService.selectAgentUrlCheck(agentInfo);
-				  if (info.getAgentContentgubun().equals("AGENT_CONTENT_1")){
-					  sendInfo = info.getUpdateChange().equals("N") ? "Y" : "N";
-					  sendGubun = "URL_CNT";
-				  }else {
-					  sendInfo = (agentGroup.selectAgentSchCount(dataObject.get("AGENT_CODE").toString()) > 0)  ? "Y" : "N";
-					  sendGubun = "SCH_CNT";
-				  }
-				  String orderCnt = (sendMsgService.selectAgentOrderCount(sminfo) > 0) ? "Y":"N";
-				  String msgCnt = (schService.selectScheduleSendInfoCnt(dataObject.get("AGENT_CODE").toString()) > 0 ) ? "Y":"N";
+				  agentInfo.setAgentCode(dataObject.get("USER_ID").toString());
+			
 				  //단말기 구분을 통해 값 변경 전달 
-				  resultTxt = "{'command_type':'"+commandType+"','result':[{'"+sendGubun+"' : '"+sendInfo+"','ORD_CNT' : '"+orderCnt+"','MSG_CNT' : '"+msgCnt+"'}]}";
+				  //resultTxt = "{'command_type':'"+commandType+"','result':[{'"+sendGubun+"' : '"+sendInfo+"','ORD_CNT' : '"+orderCnt+"','MSG_CNT' : '"+msgCnt+"'}]}";
 				  
-			  }else if (commandType.equals("SP_AGENTURL")){
-				  agentInfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  agentInfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  AgentInfoVO info = agentService.selectAgentUrlCheck(agentInfo);
-				  
-				  String url = "/backoffice/basicManage/AgentInfoPreview.do?agentCode="+ info.getAgentCode();
-				  
-				  
-				  //url변경 관련 멧세지 넣기 
-				  sminfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  sminfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  sminfo.setSendResult("N");
-				  sminfo.setXmlProcessName(commandType);
-				  sendMsgService.insertSendMsgInfoManage(sminfo);
-				  String msgSeq = String.valueOf(sendMsgService.selectMaxSeq());
-				  
-				  resultTxt = "{'command_type':'"+commandType+"','result':[{'URL' : '"+url+"','MSG_SEQ' : '"+msgSeq+"'}]}";
-				  
-			  }else if (commandType.equals("SP_AGENTURLUPDATE")){
-				  agentInfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  agentInfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  agentInfo.setUpdateChange(dataObject.get("URL_CHK").toString());
-				  //변경 사항 등록
-				  int ret =  agentService.updateAgentUrlRec(agentInfo);
-				  
-				  //변경 사항 등록
-				  sminfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  sminfo.setSendResult(dataObject.get("URL_CHK").toString());
-				  sminfo.setXmlProcessName(commandType);
-				  sminfo.setErrorMessage(dataObject.get("CHANGE_URL").toString());
-				  sminfo.setMsgSeq(dataObject.get("MSG_SEQ").toString());
-				  sendMsgService.updateSendMsgInfoManage(sminfo);
-				  
-				  
-				  String result = (ret > 0) ? "O" : "F"; 
-				  //url변경 관련 멧세지 넣기 
-				  
-				  resultTxt = "{'command_type':'"+commandType+"','result':'"+result+"'}";
-				  
-			  }else if (commandType.equals("SP_AGENTCONTENTLST")){
-				  agentInfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  agentInfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  
-				  List<AgentGroupInfoVO> resultContent =  agentGroup.selectDisplayPageInfoContentList(dataObject.get("AGENT_CODE").toString());
-					
-				  JSONObject obj = new JSONObject();
-				  obj.put("command_type", commandType);
-				  JSONArray dataArray = new JSONArray();
-				  AgentGroupInfo info = new AgentGroupInfo();			
-				  for (int i = 0; i < resultContent.size(); i++){
-					JSONObject sObject = new JSONObject();//배열 내에 들어갈 json
-					sObject.put("GROUP_SEQ", resultContent.get(i).getGroupSeq());
-					sObject.put("CONSCH_CODE", resultContent.get(i).getConschCode());
-					sObject.put("DISPLAY_TITLE", URLDecoder.decode(resultContent.get(i).getDisplayTitle(), "UTF-8"));
-					sObject.put("DISPLAY_WIDTH", resultContent.get(i).getDisplayWidth());
-					sObject.put("DISPLAY_HEIGHT", resultContent.get(i).getDisplayHeight());
-					sObject.put("DISPALY_TOTALTIME", resultContent.get(i).getDisplayTotalTime());
-					sObject.put("DISPLAY_NEXTSEQ", resultContent.get(i).getDisplayNextseq());
-					sObject.put("DISPLAY_LOCALFILE", resultContent.get(i).getDisplayLocalfile());
-					dataArray.add(sObject);
-					
-					info.setGroupSeq(resultContent.get(i).getGroupSeq());
-					info.setSendResult("O");
-					agentGroup.updateAgentSendUpdate(info);
-				  }			 	
-				  info = null;
-				  obj.put("CONINFO", dataArray);				 
-				  resultTxt = obj.toJSONString();
-				  obj.clear();   
-				  
-			  }else if (commandType.equals("SP_AGENTCONTENTPAGELSTUPDATECHECK")){
-				  
-				  sminfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  sminfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  sminfo.setSendResult(dataObject.get("RECEIVED_RESULT").toString());
-				  sminfo.setXmlProcessName(commandType);
-				  sendMsgService.insertSendMsgInfoManage(sminfo);
-				  
-				  
-				  
-				  AgentGroupInfo info = new AgentGroupInfo();
-				  info.setReceivedResult(dataObject.get("RECEIVED_RESULT").toString());
-				  info.setGroupSeq(Integer.valueOf(dataObject.get("GROUP_SEQ").toString()));
-				  int ret = agentGroup.updateAgentReceivedUpdate(info);
-				  info = null;
-				  String result = (ret > 0) ? "O" : "F"; 
-				  //url변경 관련 멧세지 넣기 
-				  
-				  resultTxt = "{'command_type':'"+commandType+"','result':'"+result+"'}";
-				  
-			  }else if (commandType.equals("SP_AGENTCONTENTFILELST")){
-				  AgentGroupInfo info = new AgentGroupInfo();
-				  info.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  info.setGroupSeq( Integer.valueOf(dataObject.get("GROUP_SEQ").toString()));
-				  
-				  List<AgentGroupInfoVO> resultContent =  agentGroup.selectDisplayFileInfoContentList(info);
-					
-				  JSONObject obj = new JSONObject();
-				  obj.put("command_type", commandType);
-				  JSONArray dataArray = new JSONArray();
-						
-				  for (int i = 0; i < resultContent.size(); i++){
-					JSONObject sObject = new JSONObject();//배열 내에 들어갈 json
-					sObject.put("GROUP_SEQ", resultContent.get(i).getGroupSeq());
-					sObject.put("CONSCH_CODE", resultContent.get(i).getConschCode());
-					sObject.put("DISPLAY_SEQ", resultContent.get(i).getDisplaySeq());
-					sObject.put("REPORT_URL", resultContent.get(i).getReportUrl());
-					sObject.put("ATCH_FILE_ID", resultContent.get(i).getAtchFileId());
-					sObject.put("STRE_FILE_NM", resultContent.get(i).getStreFileNm());
-					sObject.put("FILE_EXTSN", resultContent.get(i).getFileExtsn());
-					sObject.put("FILE_SIZE", resultContent.get(i).getFileSize());
-					dataArray.add(sObject);
-					
-				  }			 	
-				  info = null;
-				  obj.put("CONINFO", dataArray);				 
-				  resultTxt = obj.toJSONString();
-				  obj.clear();   
-				  
-			  }else if (commandType.equals("SP_AGENTCONTENTFILELSTUPDATECHECK")){
-				  
-				  sminfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  sminfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  sminfo.setSendResult(dataObject.get("FILE_RESULT").toString());
-				  sminfo.setXmlProcessName(commandType);
-				  sendMsgService.insertSendMsgInfoManage(sminfo);
-				  
-				  
-				  
-				  AgentGroupInfo info = new AgentGroupInfo();
-				  info.setReceivedFileResult(dataObject.get("FILE_RESULT").toString());
-				  info.setGroupSeq(Integer.valueOf(dataObject.get("GROUP_SEQ").toString()));
-				  int ret = agentGroup.updateAgentFileUpdate(info);
-				  info = null;
-				  String result = (ret > 0) ? "O" : "F"; 
-				  //url변경 관련 멧세지 넣기 
-				  
-				  resultTxt = "{'command_type':'"+commandType+"','result':'"+result+"'}";
-				  
-			  }else if (commandType.equals("SP_AGENTORDERLST")){
-				  sminfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  sminfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  
-				  List<SendMsgInfoVO> resultLst = sendMsgService.selectAgentOrderLst(sminfo);
-					
-					JSONObject obj = new JSONObject();
-				    obj.put("command_type", commandType);
-				    JSONArray dataArray = new JSONArray();
-				  			
-				   for (int i = 0; i < resultLst.size(); i++){
-					    JSONObject sObject = new JSONObject();//배열 내에 들어갈 json
-						sObject.put(  "MSG_SEQ", resultLst.get(i).getMsgSeq());
-						sObject.put(  "XML_PROCESS_NAME", resultLst.get(i).getXmlProcessName());
-						sObject.put(  "SEND_REGDATE", resultLst.get(i).getSendRegdate());						
-						dataArray.add(sObject);
-				   }			 	  
-				   obj.put("CONINFO", dataArray);				 
-				   resultTxt = obj.toJSONString();
-				   obj.clear();				   
-				  
-			  }else if (commandType.equals("SP_AGENTORDERRESULT")){
-				  sminfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  sminfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  
-				  String result = dataObject.get("ERROR_MESSAGE").toString().equals("OK") ? "O" : "F";
-				  sminfo.setSendResult(result);
-				  sminfo.setXmlProcessName(commandType);
-				  sminfo.setErrorMessage(dataObject.get("ERROR_MESSAGE").toString());
-				  sminfo.setMsgSeq(dataObject.get("MSG_SEQ").toString());
-				  int ret = sendMsgService.updateSendMsgInfoManage(sminfo);
-				  result = (ret > 0)? "O" :"F";
-				  resultTxt = "{'command_type':'"+commandType+"','result':'"+result+"'}";
-				  
-			  }else if (commandType.equals("SP_AGENTORD")){
-				  //명령어 전송
-				  agentInfo.setAgentCode(dataObject.get("DASAN_ID").toString());
-				  agentInfo.setAgentMac(dataObject.get("DASAN_MAC").toString());
-				  
-				  AgentInfoVO info = agentService.selectAgentUrlCheck(agentInfo);
-				  
-				  
-				  JSONObject jsonRes = new JSONObject();
-				  OrderInfo orderInfo = orderService.selectAgentOrderList(info.getAgentCode());
-				  
-				  
-				  resultTxt = "{'command_type':'"+commandType+"','result':{'ORD_SEQ': '"+orderInfo.getOrderSeq() +"','ORD_INFO',:'"+orderInfo.getAgentOrder()+"'}}";
-				  
-			  }else if (commandType.equals("SP_AGENTREBOOT")){
-  					
-				sminfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				sminfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				sminfo.setXmlProcessName(commandType);
-				sminfo.setSendResult("N");
-				
-				int ret =  sendMsgService.insertSendMsgInfoManage(sminfo);
-				
-				if ( ret > 0){
-					int max_seq = sendMsgService.selectMaxSeq();
-					resultTxt = "{'command_type':'"+commandType+"','result':'"+Integer.toString(max_seq)+"'}";
-				}else {
-					resultTxt = "{'command_type':'"+commandType+"','result':'F'}";
-				}	
-			  }else if (commandType.equals("SP_AGENTMESSAGEINFO")){
-				  
-				  
-				  sminfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  sminfo.setAgentMac(dataObject.get("AGENT_MAC").toString());
-				  // 메세지 전문 확인 후 메세지 TB_MESSAGEHISTORY 에 등록후 리스트 보여 주기 		
-				  List<SchduleInfo> messageInfo = schService.selectScheduleSendInfo(dataObject.get("AGENT_CODE").toString());
-				  
-				  
-				 
-				  
-				  JSONObject obj = new JSONObject();
-				  obj.put("command_type", commandType);
-				  JSONArray dataArray = new JSONArray();
-				  for  (int i = 0; i < messageInfo.size(); i++){
-					  JSONObject sObject = new JSONObject();//배열 내에 들어갈 json
-					  //SEND_MESSAGE, SEND_MESSAGESTARTDAY, SEND_MESSAGEENDDAY, SEND_MESSAGESTARTTIME, SEND_MESSAGEENDTIME, SEND_FONTTYPE
-					  sObject.put(  "SCH_CODE", messageInfo.get(i).getSchCode());
-					  sObject.put(  "SEND_MESSAGE", URLDecoder.decode(messageInfo.get(i).getSchMessage(), "UTF-8") );
-					  sObject.put(  "SEND_MESSAGESTARTDAY", messageInfo.get(i).getSchStartDay());
-					  sObject.put(  "SEND_MESSAGEENDDAY", messageInfo.get(i).getSchEndDay());
-					  sObject.put(  "SEND_MESSAGESTARTTIME", messageInfo.get(i).getSchStartTime());
-					  sObject.put(  "SEND_MESSAGEENDTIME", messageInfo.get(i).getSchEndTime());
-					  sObject.put(  "SEND_FONTTYPE", messageInfo.get(i).getSchFonttype());
-					  dataArray.add(sObject);
-				  }
-				  
-				  obj.put("MESSAGEINFO", dataArray);				 
-				  resultTxt = obj.toJSONString();
-				  obj.clear();
-				  
-			  }else if (commandType.equals("SP_AGENTMESSAGEUPDATE")){
-				  
-				  SendMessageInfoVO sendInfo = new SendMessageInfoVO();
-				  sendInfo.setAgentCode(dataObject.get("AGENT_CODE").toString());
-				  sendInfo.setSchCode(dataObject.get("SCH_CODE").toString());
-				  
-                  if (dataObject.get("ERROR_MESSAGE").toString().equals("OK")){
-                	  sendInfo.setMsgRecCheck("Y");
-				  }else {
-					  sendInfo.setMsgRecCheck("N");
-				  }
-                  int ret = sendService.updateSendMessageAgent(sendInfo);
-                  //업데이트 확인 
-                  if (ret > 0){
-						resultTxt = "{'command_type':'"+commandType+"','result':'O'}";
-				  }else {
-						resultTxt = "{'command_type':'"+commandType+"','result':'F'}";
-				  }
-			  }*/
+			  }
 			  
 		}catch (ParseException e) {
 			// TODO Auto-generated catch block

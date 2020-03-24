@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sohoki.backoffice.sts.tran.service.TransInfo;
 import com.sohoki.backoffice.sts.tran.service.TransInfoVO;
+
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("TranInfoManagerMapper")
@@ -13,6 +14,8 @@ public interface TranInfoManagerMapper {
 	public List<TransInfoVO> selectTranInfoManageListByPagination (TransInfoVO searchVO);
 	
 	public TransInfoVO  selectTranInfoManageDetail(String tranSeq);
+	
+	public TransInfoVO selectTranProcessInfo(String tranProcessName);
 	
 	public int selectTranProcessCount(String tranProcessName);
 	

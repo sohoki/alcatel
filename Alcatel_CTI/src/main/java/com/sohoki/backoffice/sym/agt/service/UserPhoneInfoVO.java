@@ -1,6 +1,7 @@
 package com.sohoki.backoffice.sym.agt.service;
 
 import java.io.Serializable;
+
 import com.sohoki.backoffice.sym.agt.service.UserPhoneInfo;
 
 
@@ -133,8 +134,6 @@ public class UserPhoneInfoVO extends UserPhoneInfo implements Serializable{
 	public void setRecordCountPerPage(int recordCountPerPage) {
 		this.recordCountPerPage = recordCountPerPage;
 	}
-    
-    
-    
+	
     
 }
