@@ -33,7 +33,7 @@ public enum ApiConfig {
 
 
     
-    @Resource(name = "fileProperties")
+    @Autowired
 	private Properties fileProperties;
 
 
@@ -45,13 +45,18 @@ public enum ApiConfig {
             /*this.apiVersion =  apiProperties.getProperty("api.version");
             this.rootPath = buildRootPath(apiProperties.getProperty("roxe.host"), apiProperties.getProperty("api.path"));
             this.apiLogFile = apiProperties.getProperty("api.log.file");*/
+        
+        	//this.apiVersion = fileProperties.getProperty("api.version");// .getString("api.version")
+        	this.apiVersion = "1.0"; 
+        	//this.rootPath = buildRootPath(fileProperties.getProperty("roxe.host"), fileProperties.getProperty("api.path"));
+        	this.rootPath = buildRootPath( "otwog.hankooktech.com",  "/api/rest");
         	
-        	this.apiVersion = fileProperties.getProperty("api.version");// .getString("api.version")
-        	this.rootPath = buildRootPath(fileProperties.getProperty("roxe.host"), fileProperties.getProperty("api.path"));
-        	this.apiLogFile = fileProperties.getProperty("api.log.file");
+        	//this.apiLogFile = fileProperties.getProperty("api.log.file");
+        	this.apiLogFile = "C:/Users/user/git/alcatel/Alcatel_CTI/src/main/webapp/log";
+        	
         } catch (Exception e) {
         	
-        	
+        	System.out.println( "error:" + e.toString());
             this.apiVersion = null;
             this.rootPath = null;
             this.apiLogFile = null;

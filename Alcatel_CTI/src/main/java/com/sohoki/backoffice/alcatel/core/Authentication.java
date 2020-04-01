@@ -40,17 +40,16 @@ public class Authentication {
      */
     public final void authenticate(UserConfig userConfig) throws OTRestClientException {
 
-        Versions versions = getAvailableApiVersions(ApiConfig.INSTANCE.getRootPath());
-
- //       Response response = initiateAuthentication(getAuthenticatePublicURL(versions));
-
-        Response response = performBasicAuthentication(getAuthenticatePublicURL(versions), userConfig.getLogin(), userConfig.getPassword());
+    	Versions versions = getAvailableApiVersions(ApiConfig.INSTANCE.getRootPath());
+    	LOGGER.debug("getLogin  getPassword = {} , {}  ", userConfig.getLogin(), userConfig.getPassword());
+    	
+    	
+    	Response response = performBasicAuthentication(getAuthenticatePublicURL(versions), userConfig.getLogin(), userConfig.getPassword());
         Map<String,NewCookie> cookies = response.getCookies();
         this.cookie = cookies.get(USER_COOKIE_NAME);
         LOGGER.debug("cookies = {}", cookies);
-
- //       response = authenticateWithAlcUserId(response.getLocation());
         JsonNode jsonNode = response.readEntity(JsonNode.class);
+        
         this.sessionPublicUrl = jsonNode.get("publicUrl").getTextValue();
         LOGGER.debug("sessionPublicUrl = {}", sessionPublicUrl);
     }
@@ -73,20 +72,20 @@ public class Authentication {
     }
 
     private Response performBasicAuthentication(String location, String login, String password) throws OTRestClientException {
+        
+    	//LOGGER.debug("location = {}", location);
 
         WebTarget webTarget = JerseyClient.INSTANCE.getClient().target(location);
         Response response = webTarget.request().get();
-        LOGGER.debug("performBasicAuthentication response = {}", response);
-
-        if (Status.UNAUTHORIZED.getStatusCode() != response.getStatus())  {
+        
+        if (Status.UNAUTHORIZED.getStatusCode() != response.getStatus() )  {
             throw new OTRestClientException(getErrorMessage(response, "not expected"));
         }
 
         webTarget = JerseyClient.INSTANCE.getClient().target(location);
         HttpAuthenticationFeature httpBasicAuthFilter = HttpAuthenticationFeature.basic(login, password);
         response = webTarget.register(httpBasicAuthFilter).request().accept(MediaType.APPLICATION_JSON_TYPE).get();
-        LOGGER.debug("performBasicAuthentication response = {}", response);
-
+        LOGGER.debug("performBasicAuthentication response = {} {}", response, location);
         if (Status.UNAUTHORIZED.getStatusCode() == response.getStatus())  {
             throw new OTRestClientException(getErrorMessage(response, "wrong user login or password"));
         }

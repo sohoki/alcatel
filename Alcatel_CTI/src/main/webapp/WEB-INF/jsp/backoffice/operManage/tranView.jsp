@@ -81,10 +81,17 @@
 						</tr>
 						<tr>
 						    <th><spring:message code="page.tran.processJob" /></th>		
-							<td style="text-align:left" colspan="3">
+							<td style="text-align:left">
 							<span class="lable"><c:out value="${regist.processRemark}" /></span>
 							<span class="type">
 							<form:input path="processRemark" id="processRemark" title="전문설명"  style="width:550px;"  value="${regist.processRemark }"/>
+							</span>
+							</td>	
+							<th><spring:message code="page.tran.sendUrl" /></th>		
+							<td style="text-align:left">
+							<span class="lable"><c:out value="${regist.etc2}" /></span>
+							<span class="type">
+							<form:input path="etc2" id="etc2" title="전문설명" size="25" value="${regist.etc2 }"/>
 							</span>
 							</td>	
 						</tr>

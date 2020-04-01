@@ -18,10 +18,16 @@ public class UserPhoneInfo implements  Serializable {
 	private String phoneState = "";
 	private String loginId = "";
 	private String loginPassword = "";
+	private String userName = "";
 	
 	
 	
-	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	public String getLoginId() {
 		return loginId;
 	}

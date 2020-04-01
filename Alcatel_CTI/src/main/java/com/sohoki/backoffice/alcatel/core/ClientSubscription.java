@@ -44,8 +44,7 @@ public class ClientSubscription {
      * @param service to subscribe to
      */
     public void subscribe(String service) throws OTRestClientException {
-
-        subscription = eventSubscription.subscribe(service, SUBSCRIPTION_TIMEOUT, userLogin);
+        subscription = eventSubscription.subscribe(service, SUBSCRIPTION_TIMEOUT, userLogin);        
     }
 
     /**

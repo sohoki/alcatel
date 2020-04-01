@@ -164,11 +164,29 @@
                     <form:input  path="agentOsversion" size="20" maxlength="100" id="agentOsversion"  />
                 </div>                
             </div>
+            <div class="pop_box50">
+                <div class="padding15">
+                    <p class="pop_tit">*<spring:message code="page.agent.loginId" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:input  path="loginId" size="20" maxlength="100" id="loginId"    />
+                </div>                
+            </div>
+             <div class="pop_box50">
+                <div class="padding15">
+                    <p class="pop_tit">*<spring:message code="page.agent.loginPwd" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:input  path="loginPwd" size="20"  type="password" maxlength="100" id="loginPwd"  />
+                </div>                
+            </div>
             <!--팝업 필드박스 //-->
-            <div class="pop_box100">
+            <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.agent.remark" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="agentRemark" size="80" maxlength="120" id="agentRemark"   value="${regist.agentRemark }" />
+                    <form:input  path="agentRemark" size="30" maxlength="120" id="agentRemark"   value="${regist.agentRemark }" />
+                </div>                
+            </div>
+            <div class="pop_box50">
+                <div class="padding15">
+                    <p class="pop_tit">*<spring:message code="page.agent.SeatId" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:input  path="seatId" size="20"  maxlength="100" id="seatId"  />
                 </div>                
             </div>
             <!--// 팝업 필드박스-->
@@ -196,9 +214,11 @@
             <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.agentBasicnumber" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <input type="text" id="searchAgentNumber"  size="10" maxlength="10" style="width:150px;" >
-                    <a href="#" onClick="fn_SearchNumber('Ins')"> [찾기]</a>
-                    <select id="agentBasicnumber" style="width:120px;"></select>
+                    <input type="text" id="agentBasicnumber"  size="10" maxlength="10" style="width:150px;" >
+                    <!-- <a href="#" onClick="fn_SearchNumber('Ins')"> [찾기]</a>
+                    <select id="agentBasicnumber" style="width:120px;"></select> -->
+                    
+                    
                 </div>   
             </div>
             <div class="pop_box50">
@@ -244,7 +264,7 @@
 				$("#searchFloor").hide();
 			}
 	});
-   function fn_SearchNumber(searchCondition ){
+   /* function fn_SearchNumber(searchCondition ){
 	   if (any_empt_line_id("searchAgentNumber", '<spring:message code="page.agent.alert3" />') == false) return;
 	   
 	   var url = "/backoffice/operManage/userPhoneSearch.do";
@@ -274,7 +294,7 @@
 				    }    		
          );
 	   $("#searchAgentNumber").val("");
-   }
+   } */
    function fn_agentPop(mode, code){
 		  $('#mode').val(mode);
 		  $('#agentCode').val(code);
@@ -301,9 +321,14 @@
 		  					   $("#partId").val(obj.partId);
 		  					   $("#agentIp").val(obj.agentIp);
 		  					   $("#agentMac").val(obj.agentMac);
-		  					   $("#searchAgentNumber").val(obj.agentBasicnumber);
+		  					   
+		  					   $("#loginId").val(obj.loginId);
+		  					   $("#loginPwd").val(obj.loginPwd);
+		  					   $("#seatId").val(obj.seatId);
+		  					 
+		  					   $("#agentBasicnumber").val(obj.agentBasicnumber);
 		  					   $('input:radio[name=agentUseyn]:input[value=' + obj.agentUseyn + ']').attr("checked", true);	 
-		  					   fn_SearchNumber("Edt");
+		  					   //fn_SearchNumber("Edt");
 		  					   fn_FlooerView("P", obj.agentFloor);
 		  					   //$("#agentIp").val(obj.agentIp);
 	 		            	   
@@ -316,8 +341,8 @@
 					    }    		
 	          );
 		  }else {
-			  $("#agentBasicnumber").attr("display", "none");
-			  $("#agentBasicnumber").empty();
+			//  $("#agentBasicnumber").attr("display", "none");
+			//  $("#agentBasicnumber").empty();
 			  $("#btnUpdate").text('<spring:message code="button.create" />');
 		  }
    }
@@ -374,7 +399,10 @@
 					   agentMac : $("#agentMac").val(),
 					   agentUseyn :  fn_emptyReplace($('input[name="agentUseyn"]:checked').val(),"Y"),
 					   mode : $("#mode").val(),
+					   loginId : $("#loginId").val(),
+					   loginPwd : $("#loginPwd").val(),
 					   agentFloor : $("#agentFloor").val(),
+					   seatId : $("#seatId").val(),
 					   agentCode : $("#agentCode").val()
 			        };
 	            uniAjax("/backoffice/operManage/agentInfoUpdate.do", params, 

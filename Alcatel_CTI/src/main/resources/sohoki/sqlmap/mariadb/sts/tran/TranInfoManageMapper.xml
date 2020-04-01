@@ -41,7 +41,7 @@
                         a.TRAN_INPUTPARAM as tranInputParam, a.TRAN_OTPUTPARAM as tranOutputParam, 
                         a.RESULT_CODE_EXAMPLE as resultCodeExample, a.ETC1 as etc1, a.ETC2 as etc2, a.ETC3 as etc3,
 						a.TEST_OK as testOk, a.TRAN_INPUTPARAMSAMPLE as tranInputParamSample, a.TRAN_EXPLAIN as tranExplain,
-						b.CODE_NM as codeNm, fn_DetailCodeNm(a.SEND_GUBUN)  as "sendGubunTxt"
+						b.CODE_NM as codeNm, fn_DetailCodeNm(a.SEND_GUBUN)  as "sendGubunTxt" , a.SEND_GUBUN
 		    FROM tb_sendmessageinfo a, lettccmmndetailcode b
 		    WHERE a.WORK_GUBUN = b.CODE and a.TRAN_SEQ = #{tranSeq}		  
     </select>
@@ -51,7 +51,7 @@
                         a.TRAN_INPUTPARAM as tranInputParam, a.TRAN_OTPUTPARAM as tranOutputParam, 
                         a.RESULT_CODE_EXAMPLE as resultCodeExample, a.ETC1 as etc1, a.ETC2 as etc2, a.ETC3 as etc3,
 						a.TEST_OK as testOk, a.TRAN_INPUTPARAMSAMPLE as tranInputParamSample, a.TRAN_EXPLAIN as tranExplain,
-						b.CODE_NM as codeNm, fn_DetailCodeNm(a.SEND_GUBUN)  as "sendGubunTxt"
+						b.CODE_NM as codeNm, fn_DetailCodeNm(a.SEND_GUBUN)  as "sendGubunTxt" , a.SEND_GUBUN
 		    FROM tb_sendmessageinfo a, lettccmmndetailcode b
 		    WHERE a.WORK_GUBUN = b.CODE and a.TRAN_PROCESS_NAME = #{tranProcessName}		  
     </select>

@@ -8,7 +8,7 @@
 						    SELECT a.AGENT_CODE, a.AGENT_NM, a.AGENT_REMARK, a.AGENT_IP, a.AGENT_MAC,
 						           a.AGENT_USEYN, a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,
 								   a.AGENT_FLOOR, a.AGENT_STATE , a.AGENT_BASICNUMBER, a.AGENT_NOWNUMBER, a.AGENT_OSVERSION,
-								   c.CENTER_NM,  a.CENTER_ID, a.part_id
+								   c.CENTER_NM,  a.CENTER_ID, a.part_id, a.SEAT_ID
 							FROM tb_telephoneinfo a, tb_centerinfo c
 							WHERE a.CENTER_ID = c.CENTER_ID
 		        <if test="searchKeyword != ''">
@@ -61,11 +61,23 @@
      SELECT a.AGENT_CODE, a.AGENT_NM, a.AGENT_REMARK, a.AGENT_IP, a.AGENT_MAC,
             a.AGENT_USEYN, a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,
 			a.AGENT_FLOOR, a.AGENT_STATE , a.AGENT_BASICNUMBER, a.AGENT_NOWNUMBER, a.AGENT_OSVERSION, 
-			c.CENTER_NM, d.part_nm , a.CENTER_ID, a.part_id
+			c.CENTER_NM, d.part_nm , a.CENTER_ID, a.part_id,
+			a.LOGIN_ID, a.LOGIN_PWD, a.SEAT_ID
      FROM tb_telephoneinfo a, tb_centerinfo c,  tb_partinfo d
      WHERE a.center_id = c.center_id
            AND a.part_id = d.part_id
            AND a.AGENT_CODE = #{agentCode}
+   </select>
+   <select id="selectAgentPageInfoManageDetailSeatId" resultType="TelephoneInfoVO">
+     SELECT a.AGENT_CODE, a.AGENT_NM, a.AGENT_REMARK, a.AGENT_IP, a.AGENT_MAC,
+            a.AGENT_USEYN, a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,
+			a.AGENT_FLOOR, a.AGENT_STATE , a.AGENT_BASICNUMBER, a.AGENT_NOWNUMBER, a.AGENT_OSVERSION, 
+			c.CENTER_NM, d.part_nm , a.CENTER_ID, a.part_id,
+			a.LOGIN_ID, a.LOGIN_PWD, a.SEAT_ID
+     FROM tb_telephoneinfo a, tb_centerinfo c,  tb_partinfo d
+     WHERE a.center_id = c.center_id
+           AND a.part_id = d.part_id
+           AND a.SEAT_ID = #{seatId}
    </select>
    <select id="selectAgentPageInfoManageListTotCnt_S" resultType="java.lang.Integer">
         SELECT  ifnull(count(*),0)      
@@ -121,11 +133,12 @@
    <insert id="insertAgentInfoManage">
       INSERT INTO tb_telephoneinfo( AGENT_CODE, AGENT_NM, AGENT_REMARK, AGENT_IP, AGENT_MAC, AGENT_USEYN, 
                                 FRST_REGIST_PNTTM, FRST_REGISTER_ID, LAST_UPDT_PNTTM, LAST_UPDUSR_ID,
-                                CENTER_ID, PART_ID, AGENT_FLOOR, AGENT_BASICNUMBER, AGENT_OSVERSION )
+                                CENTER_ID, PART_ID, AGENT_FLOOR, AGENT_BASICNUMBER, AGENT_OSVERSION, LOGIN_ID, LOGIN_PWD, SEAT_ID )
       VALUES (#{agentCode}, #{agentNm}, #{agentRemark,jdbcType=VARCHAR}, #{agentIp,jdbcType=VARCHAR}, #{agentMac,jdbcType=VARCHAR }, 
               #{agentUseyn,jdbcType=VARCHAR },  now(), #{userId,jdbcType=VARCHAR}, now(), #{userId,jdbcType=VARCHAR},
               #{centerId ,jdbcType=VARCHAR}, #{partId, jdbcType=VARCHAR}, #{agentFloor, jdbcType=INTEGER },
-              #{agentBasicnumber , jdbcType=VARCHAR}, #{agentOsversion , jdbcType=VARCHAR}
+              #{agentBasicnumber , jdbcType=VARCHAR}, #{agentOsversion , jdbcType=VARCHAR},
+              #{loginId , jdbcType=VARCHAR}, #{loginPwd , jdbcType=VARCHAR},  #{seatId , jdbcType=VARCHAR}
               )
    </insert>
    <update id="updateAgentIpMac">
@@ -135,12 +148,14 @@
    </update>
    <update id="updateAgentChangeNumber">
      UPDATE tb_telephoneinfo SET UPDATE_DATE = now(), AGENT_NOWNUMBER = #{agentNownumber}
+                                          , AUTH_COOKIE = #{authCookie}, AGENT_STATE = #{agentState}
      WHERE AGENT_CODE = #{agentCode}
    </update>
    <update id="updateAgentStateChange">
      UPDATE tb_telephoneinfo SET UPDATE_DATE = now(), AGENT_STATE = #{agentState}
      WHERE AGENT_CODE = #{agentCode}
    </update>
+    
    <update id="updateAgentPageInfoManage">
       UPDATE tb_telephoneinfo SET AGENT_NM = #{agentNm}
                              ,  AGENT_REMARK = #{agentRemark,jdbcType=VARCHAR }
@@ -151,6 +166,9 @@
                              , PART_ID = #{partId, jdbcType=VARCHAR}
                              , AGENT_BASICNUMBER = #{agentBasicnumber, jdbcType=VARCHAR}
                              , AGENT_FLOOR = #{agentFloor, jdbcType=INTEGER }
+                             , LOGIN_ID =  #{loginId , jdbcType=VARCHAR}
+                             , LOGIN_PWD =  #{loginPwd , jdbcType=VARCHAR}
+                             , SEAT_ID =  #{seatId , jdbcType=VARCHAR}
       WHERE AGENT_CODE = #{agentCode}
    </update>
    <delete id="deleteAgentPageInfoManage">

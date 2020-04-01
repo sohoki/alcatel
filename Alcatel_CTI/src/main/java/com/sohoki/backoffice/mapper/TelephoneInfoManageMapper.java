@@ -13,6 +13,9 @@ public interface TelephoneInfoManageMapper {
 	    
 	    public TelephoneInfoVO selectAgentPageInfoManageDetail(String  agentCode );
 	    
+	    public TelephoneInfoVO selectAgentPageInfoManageDetailSeatId(String  seatId );
+	    
+	    
 	    public int selectAgentPageInfoManageListTotCnt_S(TelephoneInfoVO searchVO);
 	    
 	    public int selectAgentExist (String agentCode);

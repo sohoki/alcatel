@@ -35,11 +35,17 @@ public class ClientSession {
      * Once authenticated a user has to open a session (it uses a cookie as identifier).
      */
     public void open() throws OTRestClientException {
-
-        LOGGER.debug("Open sessions User {}", userLogin);
-        sessionInfo = sessions.openSession(sessionPublicURL, cookie);
-        LOGGER.debug("SessionInfo = {}", sessionInfo);
-        sessionOpened = true;
+       
+        LOGGER.debug("Open sessions User sessionPublicURL {}, {}", userLogin, sessionPublicURL);
+        try{
+        	//sessionInfo = sessions.openSession(sessionPublicURL, cookie);
+        	sessionInfo = sessions.openSession("http://otwog.hankooktech.com"+ sessionPublicURL , cookie);
+            LOGGER.debug("SessionInfo = {}", sessionInfo);
+            sessionOpened = true;
+        }catch(Exception e){
+        	LOGGER.debug("Error:" + e.toString());
+        }
+        
     }
 
     /**
@@ -66,8 +72,11 @@ public class ClientSession {
 
         if (sessionOpened) {
             LOGGER.debug("Close sessions User {}", userLogin);
-            sessions.closeSession(sessionPublicURL, cookie);
+            //sessions.closeSession(sessionPublicURL, cookie);
+            sessionInfo = sessions.openSession("http://otwog.hankooktech.com"+ sessionPublicURL , cookie);
             sessionOpened = false;
+        }else{
+        	 LOGGER.debug("Close sessions not user");
         }
     }
 

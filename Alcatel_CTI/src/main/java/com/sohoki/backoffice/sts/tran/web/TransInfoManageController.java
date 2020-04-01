@@ -1,7 +1,14 @@
 package com.sohoki.backoffice.sts.tran.web;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
+import com.sohoki.backoffice.alcatel.service.alcatelServiceInfo;
 import com.sohoki.backoffice.mapper.ErrorInfoManageMapper;
 import com.sohoki.backoffice.sts.tran.service.TransInfoManageService;
 import com.sohoki.backoffice.util.service.UniUtilInfo;
@@ -63,13 +71,14 @@ public class TransInfoManageController {
     /*
 	@Resource(name="SchduleInfoManageService")
 	private SchduleInfoManageService schService;
-	
-	@Resource(name="SendMsgInfoManageService")
-	private SendMsgInfoManageService sendMsgService;
 	*/
-
+	@Resource(name="alcatelServiceInfo")
+	private alcatelServiceInfo alcatelService;
 	
 
+	
+    @Resource(name = "fileProperties")
+	private Properties fileProperties;
 	
 	@Autowired
     protected EgovPropertyService propertiesService;
@@ -408,10 +417,22 @@ public class TransInfoManageController {
 				  
 				  
 				  agentInfo.setAgentCode(dataObject.get("USER_ID").toString());
-			
+				  agentInfo.setAgentCode(dataObject.get("SEAT_ID").toString());
+				  LOGGER.debug("SP_LOGIN");
+				  
+				  Boolean result  = alcatelService.userAuthentication(dataObject.get("USER_ID").toString(), dataObject.get("SEAT_ID").toString());
+			      String message =  ( result == true) ? "OK": "FALSE";
+				  resultTxt = "{'command_type':'"+commandType+"','result:': '" + message +"'}"; 
 				  //단말기 구분을 통해 값 변경 전달 
 				  //resultTxt = "{'command_type':'"+commandType+"','result':[{'"+sendGubun+"' : '"+sendInfo+"','ORD_CNT' : '"+orderCnt+"','MSG_CNT' : '"+msgCnt+"'}]}";
 				  
+			  }else if (commandType.equals("SP_LOGOUT")){
+				  agentInfo.setAgentCode(dataObject.get("USER_ID").toString());
+				  agentInfo.setAgentCode(dataObject.get("SEAT_ID").toString());
+				  
+				  Boolean result  = alcatelService.userSessionOut(dataObject.get("SEAT_ID").toString());
+			      String message =  ( result == true) ? "OK": "FALSE";
+				  resultTxt = "{'command_type':'"+commandType+"','result:': '" + message +"'}"; 
 			  }
 			  
 		}catch (ParseException e) {
@@ -419,5 +440,38 @@ public class TransInfoManageController {
 			e.printStackTrace();
 		}	
 		return resultTxt;
+    }
+    private String sendJson(String sendGubun, String jsonInfo , String sendUrl )throws Exception{
+    	String returnJson = "";
+    	try{
+    		
+    		URL url = new URL( sendUrl);
+    		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    		con.setRequestMethod(sendGubun);
+    		con.setRequestProperty("Content-Type","application/json;utf-8");
+    		con.setRequestProperty("Accept", "application/json");
+    		con.setRequestProperty("Accept", "*/*");
+    		//post 전송 
+    		con.setDoOutput(true);
+    		try(OutputStream os = con.getOutputStream()){
+    			byte[] input = jsonInfo.getBytes("utf-8");
+    			os.write(input, 0, input.length);
+    			os.close();
+    		}
+    		try(BufferedReader br =new  BufferedReader(
+    			new InputStreamReader(con.getInputStream(), "utf-8") )){
+    			StringBuilder response = new StringBuilder();
+    			while ((returnJson = br.readLine()) != null){
+    				response.append(returnJson.trim());
+    			}
+    			br.close();
+    		}
+    		
+    		con.disconnect();
+    	}catch(Exception e){
+    		LOGGER.debug("");
+    	}
+    	return returnJson;
+    	
     }
 }

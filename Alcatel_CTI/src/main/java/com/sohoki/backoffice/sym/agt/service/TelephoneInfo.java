@@ -29,9 +29,47 @@ public class TelephoneInfo implements  Serializable {
 	private String agentOsversion = "";
 	private int agentFloor = 0;
 	
+    private String loginId = "";
+    private String loginPwd = "";
+	
+    private String authCookie = "";
+    private String seatId = "";
+    
+    
+    
+	
+	public String getSeatId() {
+		return seatId;
+	}
 
-	
-	
+	public void setSeatId(String seatId) {
+		this.seatId = seatId;
+	}
+
+	public String getAuthCookie() {
+		return authCookie;
+	}
+
+	public void setAuthCookie(String authCookie) {
+		this.authCookie = authCookie;
+	}
+
+	public String getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+
+	public String getLoginPwd() {
+		return loginPwd;
+	}
+
+	public void setLoginPwd(String loginPwd) {
+		this.loginPwd = loginPwd;
+	}
+
 	public String getAgentUseyn() {
 		return agentUseyn;
 	}

@@ -27,6 +27,8 @@ public class EventSubscription {
     public EventSubscription(Cookie cookie, ClientSession sessionUser) {
         this.cookie = cookie;
         this.subscriptionPath = sessionUser.getServicePath(Services.SUBSCRIPTIONS.getService());
+        //추가 수정 필요
+        //this.subscriptionPath = sessionUser.getServicePath("http://otwog.hankooktech.com"+Services.SUBSCRIPTIONS.getService());
         LOGGER.debug("subscriptionPath = {}", subscriptionPath);
     }
 

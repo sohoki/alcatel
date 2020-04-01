@@ -5,7 +5,8 @@
     <select id="selectUsserPhoneInfoDetail"  resultType="UserPhoneInfoVO">   
        SELECT a.PHONE_NUMBER, a.PHONE_GUBUN, a.PHONE_USEYN,  LOGIN_ID, LOGIN_PASSWORD,
               a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID, a.PHONE_STATE ,
-              fn_DetailCodeNm(  a.PHONE_GUBUN) phoneGubunTxt,  fn_DetailCodeNm( a.PHONE_STATE) phoneStateTxt
+              fn_DetailCodeNm(  a.PHONE_GUBUN) phoneGubunTxt,  fn_DetailCodeNm( a.PHONE_STATE) phoneStateTxt,
+              a.USER_NAME
        FROM tb_userphoneinfo a
        WHERE a.PHONE_NUMBER = #{phoneNumber}
     </select>
@@ -29,8 +30,8 @@
 		 	SELECT SUM(1) OVER(PARTITION BY NULL) AS TOTAL_RECORD_COUNT,
 		 	       TB.* FROM (
 						    SELECT a.PHONE_NUMBER, fn_DetailCodeNm(  a.PHONE_GUBUN) phoneGubunTxt, a.PHONE_USEYN,  LOGIN_ID, LOGIN_PASSWORD,
-                                   a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,  fn_DetailCodeNm( a.PHONE_STATE) phoneStateTxt
-                                   
+                                   a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,  fn_DetailCodeNm( a.PHONE_STATE) phoneStateTxt,
+                                   a.USER_NAME
 							FROM tb_userphoneinfo a
 							WHERE 1=1
 		        <if test="searchKeyword != ''">
@@ -109,9 +110,9 @@
     </select>
     
     <insert id="insertUserPhoneInfo">
-       INSERT INTO tb_userphoneinfo (PHONE_NUMBER, PHONE_GUBUN, PHONE_USEYN, PHONE_STATE, LOGIN_ID, LOGIN_PASSWORD,
+       INSERT INTO tb_userphoneinfo (PHONE_NUMBER, PHONE_GUBUN, PHONE_USEYN, PHONE_STATE, LOGIN_ID, LOGIN_PASSWORD, USER_NAME
                                      FRST_REGIST_PNTTM, FRST_REGISTER_ID, LAST_UPDT_PNTTM, LAST_UPDUSR_ID)
-       VALUES(#{phoneNumber}, #{phoneGubun}, #{phoneUseyn}, #{phoneState}, #{loginId}, #{loginPassword}, 
+       VALUES(#{phoneNumber}, #{phoneGubun}, #{phoneUseyn}, #{phoneState}, #{loginId}, #{loginPassword}, #{userName}, 
               now(), #{userId}, now(), #{userId})
     </insert>    
     <update id="updateUserPhoneInfo">
@@ -120,7 +121,8 @@
                                    PHONE_STATE = #{phoneState},
                                    LAST_UPDT_PNTTM = now(),
                                    LAST_UPDUSR_ID = #{userId},
-                                   LOGIN_ID = #{loginId}
+                                   LOGIN_ID = #{loginId},
+                                   USER_NAME = #{userName}
                                    <if test="loginPassword != ''">
                                    ,LOGIN_PASSWORD = #{loginPassword}  
                                    </if>
