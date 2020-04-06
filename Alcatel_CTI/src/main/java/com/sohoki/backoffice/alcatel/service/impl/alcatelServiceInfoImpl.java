@@ -97,7 +97,7 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 
 	
 	@Override
-	public Boolean userAuthentication(String userId, String seatId ) throws Exception {
+	public Boolean userAuthentication(String userId, String seatId , String telProcessGubun ) throws Exception {
 		// TODO Auto-generated method stub
 		
 		ClientSession userSession = null;
@@ -114,24 +114,33 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 			
 			UserPhoneInfoVO userInfo = phoneInfo.selectUsserPhoneInfoDetail(userId);
 			
-			//로그인 아이디, 패스워드, 전화번호, 디바이스 아이디
+			// 관리자 로그인 아이디, 패스워드, 전화번호, 디바이스 아이디
+			UserConfig userConfig  = new UserConfig(fileProperties.getProperty("roxe.adminId")  , null , fileProperties.getProperty("roxe.adminPwd")  , userInfo.getPhoneNumber(), null ); 
 			
-			  
-			UserConfig userConfig  = new UserConfig( telInfoVO.getLoginId(),  userInfo.getUserName(),   telInfoVO.getLoginPwd(), userInfo.getPhoneNumber(), telInfoVO.getAgentBasicnumber() ); 
-			
+			//인증
 			Authentication userAuthentication = new Authentication();
-			LOGGER.debug("1------:" + telInfoVO.getLoginId() + ":" +  telInfoVO.getLoginPwd());
 			userAuthentication.authenticate(userConfig);            // User 1 session manager
-			 LOGGER.debug("2--------------------------------------------------------------------------------------------------------------------");
-            userSession = new ClientSession(userConfig.getLogin(), userAuthentication);
-            LOGGER.debug("3--------------------------------------------------------------------------------------------------------------------");
+			//세션 정리
+			userSession = new ClientSession(userConfig.getLogin(), userAuthentication);
             userSession.open(); // a session is needed for the user to be able to initiate a make-call
-            LOGGER.debug("4--------------------------------------------------------------------------------------------------------------------");
+            //전화기 처리 관련 내용 정리
+            
+            
+            
+            
+            
+            
+            /*LOGGER.debug("4--------------------------------------------------------------------------------------------------------------------");
             // User 1 subscribes to telephonic events
             userSubscription = new ClientSubscription(userConfig.getLogin(), userAuthentication.getCookie(), userSession);
             LOGGER.debug("5--------------------------:" + EventPackages.TELEPHONY.getPackage());
             userSubscription.subscribe(EventPackages.TELEPHONY.getPackage());
             LOGGER.debug("6--------------------------------------------------------------------------------------------------------------------");
+            */
+            
+            //object put 전송으로 mac 삭제
+            
+            
             /*1
             Future<String> callRefFuture = userSubscription.waitForCallRefInOnCallCreated();
             LOGGER.debug("7--------------------------------------------------------------------------------------------------------------------");
@@ -149,7 +158,6 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
             
             
             //변경값 넣기 
-            LOGGER.debug("cookie:" + userAuthentication.getCookie());
             TelephoneInfoVO info = new TelephoneInfoVO();
             info.setAgentNownumber(userInfo.getPhoneNumber());
             info.setAgentState("PHONE_STATE_2");
@@ -210,7 +218,7 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 	        openSession(spCookie);
 
 	        // III) subscribe to some events, and wait for a call-ref:
-
+     
 	        Subscription subscription = subscribe(telInfoVO.getLoginId(), spCookie);
 	        
 	        unsubscribe(telInfoVO.getLoginId(), spCookie, subscription.subscriptionId);
@@ -290,7 +298,7 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 		return null;
 	}
 	private Subscription subscribe(String login, Cookie cookie) {
-
+       
         System.out.println("Subscribe for " + login);
         
         // subscribing to "telephony" package
@@ -300,9 +308,26 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
                 + ",\"filter\":" + filter
                 + ",\"version\":\"" + version + '\"'
                 + '}';
-
+       
         return webTarget.path("subscriptions").request().cookie(cookie).post(Entity.json(subscriptionRequest), Subscription.class);
+        //return webTarget.path(arg0)
     }
+	//전화기 사용자 인증 
+	private Subscription sendJson(String login, Cookie cookie, String seatNm, String sendGubun) throws Exception {
+		
+		TelephoneInfoVO telInfoVO = telManageInfo.selectAgentPageInfoManageDetail(seatNm);
+		UserPhoneInfoVO userInfo = phoneInfo.selectUsserPhoneInfoDetail(login);
+		String pathUrl = "1.0/pbxs/"+  telInfoVO.getNodeInfo() +"/instances/Subscriber/"+ userInfo.getPhoneNumber() +  "/Tsc_IP_subscriber/"+ userInfo.getPhoneNumber();
+		String jsonR = sendGubun.equals("OT")  ? "" :  telInfoVO.getAgentMac() ;
+		String sendJson =  "{ \"attributes\" : [ { \"name\": \"Ethernet_Address\", \"value\": [\""+  jsonR + "\"] } ] } "; 
+	    if (sendGubun.equals("INFO")){
+	    	return webTarget.path(pathUrl).request().cookie(cookie).post(Entity.json(sendJson), Subscription.class);
+	    }else {
+	    	return webTarget.path(pathUrl).request().cookie(cookie).put(Entity.json(sendJson), Subscription.class);
+	    }
+		
+	}
+	//작업 해제
 	private void unsubscribe(final String login, final Cookie cookie, String subscriptionId) {
 
         System.out.println("Unsubscribe for " + login);

@@ -418,9 +418,10 @@ public class TransInfoManageController {
 				  
 				  agentInfo.setAgentCode(dataObject.get("USER_ID").toString());
 				  agentInfo.setAgentCode(dataObject.get("SEAT_ID").toString());
+				  agentInfo.setAgentCode(dataObject.get("TEL_GUBUN").toString());
 				  LOGGER.debug("SP_LOGIN");
 				  
-				  Boolean result  = alcatelService.userAuthentication(dataObject.get("USER_ID").toString(), dataObject.get("SEAT_ID").toString());
+				  Boolean result  = alcatelService.userAuthentication(dataObject.get("USER_ID").toString(), dataObject.get("SEAT_ID").toString(), dataObject.get("TEL_GUBUN").toString());
 			      String message =  ( result == true) ? "OK": "FALSE";
 				  resultTxt = "{'command_type':'"+commandType+"','result:': '" + message +"'}"; 
 				  //단말기 구분을 통해 값 변경 전달 

@@ -8,7 +8,7 @@
 						    SELECT a.AGENT_CODE, a.AGENT_NM, a.AGENT_REMARK, a.AGENT_IP, a.AGENT_MAC,
 						           a.AGENT_USEYN, a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,
 								   a.AGENT_FLOOR, a.AGENT_STATE , a.AGENT_BASICNUMBER, a.AGENT_NOWNUMBER, a.AGENT_OSVERSION,
-								   c.CENTER_NM,  a.CENTER_ID, a.part_id, a.SEAT_ID
+								   c.CENTER_NM,  a.CENTER_ID, a.part_id, a.SEAT_ID, a.NODE_INFO
 							FROM tb_telephoneinfo a, tb_centerinfo c
 							WHERE a.CENTER_ID = c.CENTER_ID
 		        <if test="searchKeyword != ''">
@@ -62,7 +62,7 @@
             a.AGENT_USEYN, a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,
 			a.AGENT_FLOOR, a.AGENT_STATE , a.AGENT_BASICNUMBER, a.AGENT_NOWNUMBER, a.AGENT_OSVERSION, 
 			c.CENTER_NM, d.part_nm , a.CENTER_ID, a.part_id,
-			a.LOGIN_ID, a.LOGIN_PWD, a.SEAT_ID
+			a.LOGIN_ID, a.LOGIN_PWD, a.SEAT_ID, a.NODE_INFO
      FROM tb_telephoneinfo a, tb_centerinfo c,  tb_partinfo d
      WHERE a.center_id = c.center_id
            AND a.part_id = d.part_id
@@ -73,7 +73,7 @@
             a.AGENT_USEYN, a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,
 			a.AGENT_FLOOR, a.AGENT_STATE , a.AGENT_BASICNUMBER, a.AGENT_NOWNUMBER, a.AGENT_OSVERSION, 
 			c.CENTER_NM, d.part_nm , a.CENTER_ID, a.part_id,
-			a.LOGIN_ID, a.LOGIN_PWD, a.SEAT_ID
+			a.LOGIN_ID, a.LOGIN_PWD, a.SEAT_ID, a.NODE_INFO
      FROM tb_telephoneinfo a, tb_centerinfo c,  tb_partinfo d
      WHERE a.center_id = c.center_id
            AND a.part_id = d.part_id
@@ -133,12 +133,12 @@
    <insert id="insertAgentInfoManage">
       INSERT INTO tb_telephoneinfo( AGENT_CODE, AGENT_NM, AGENT_REMARK, AGENT_IP, AGENT_MAC, AGENT_USEYN, 
                                 FRST_REGIST_PNTTM, FRST_REGISTER_ID, LAST_UPDT_PNTTM, LAST_UPDUSR_ID,
-                                CENTER_ID, PART_ID, AGENT_FLOOR, AGENT_BASICNUMBER, AGENT_OSVERSION, LOGIN_ID, LOGIN_PWD, SEAT_ID )
+                                CENTER_ID, PART_ID, AGENT_FLOOR, AGENT_BASICNUMBER, AGENT_OSVERSION, LOGIN_ID, LOGIN_PWD, SEAT_ID, NODE_INFO )
       VALUES (#{agentCode}, #{agentNm}, #{agentRemark,jdbcType=VARCHAR}, #{agentIp,jdbcType=VARCHAR}, #{agentMac,jdbcType=VARCHAR }, 
               #{agentUseyn,jdbcType=VARCHAR },  now(), #{userId,jdbcType=VARCHAR}, now(), #{userId,jdbcType=VARCHAR},
               #{centerId ,jdbcType=VARCHAR}, #{partId, jdbcType=VARCHAR}, #{agentFloor, jdbcType=INTEGER },
               #{agentBasicnumber , jdbcType=VARCHAR}, #{agentOsversion , jdbcType=VARCHAR},
-              #{loginId , jdbcType=VARCHAR}, #{loginPwd , jdbcType=VARCHAR},  #{seatId , jdbcType=VARCHAR}
+              #{loginId , jdbcType=VARCHAR}, #{loginPwd , jdbcType=VARCHAR},  #{seatId , jdbcType=VARCHAR},  #{nodeInfo , jdbcType=VARCHAR}
               )
    </insert>
    <update id="updateAgentIpMac">
@@ -169,6 +169,7 @@
                              , LOGIN_ID =  #{loginId , jdbcType=VARCHAR}
                              , LOGIN_PWD =  #{loginPwd , jdbcType=VARCHAR}
                              , SEAT_ID =  #{seatId , jdbcType=VARCHAR}
+                             , NODE_INFO =  #{nodeInfo , jdbcType=VARCHAR}
       WHERE AGENT_CODE = #{agentCode}
    </update>
    <delete id="deleteAgentPageInfoManage">

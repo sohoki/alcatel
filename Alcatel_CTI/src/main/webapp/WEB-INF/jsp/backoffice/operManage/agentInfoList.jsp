@@ -92,7 +92,7 @@
 					<input class="nameB" type="text" name="searchKeyword" id="searchKeyword" value="${searchVO.searchKeyword}">                    
                     <a href="javascript:search_form();"><span class="redBtn"><spring:message code="button.inquire" /></span></a>
                     <div class="rightB">
-                        <a href="javascript:fn_SendMsg('SP_AGENTREBOOT', 'agentCode', 'M')" class="grayBtn"><spring:message code="page.agent.sendBtn1" /></a>
+                        <a href="#" onclick="fn_excelPop()"><span class="deepBtn"><spring:message code="page.commo.excelUpload" /></a>
                         <a href="#" onclick="fn_agentPop('Ins','0')" data-needpopup-show="#agent_pop"><span class="deepBtn"><spring:message code="button.create" /></a>
                     </div>
                 </section>
@@ -104,10 +104,10 @@
                         <tr>
                             <th><input type="checkbox" id="all_check" name="all_check" onClick="fn_allCheck()"></th>
                             <th><spring:message code="page.agent.Osversion" /></th>
+                            <th><spring:message code="page.agent.Mac" /></th>
                             <th><spring:message code="page.agent.TitleNm" /></th>
+                            <th><spring:message code="page.agent.CenterInfo" /></th>
                             <th><spring:message code="page.agent.floor" /></th>
-                            <th><spring:message code="page.agent.remark" /></th>
-                            <th><spring:message code="page.agentBasicnumber" /></th>
                             <th><spring:message code="page.agentNownumber" /></th>
                             <th><spring:message code="page.agent.state" /></th>
                             <th><spring:message code="common.UseYn.title" /></th>
@@ -119,10 +119,10 @@
                         <tr>
                             <td><input type="checkbox" name="agentInput" value="<c:out value="${agentInfo.agentCode}"/>"></td>
                             <td>${ agentInfo.agentOsversion}</td>
+                            <td><a href="#" onclick="fn_agentPop('Edt','${ agentInfo.agentCode }')"  data-needpopup-show="#agent_pop" class="underline" >${ agentInfo.agentMac }</a></td>
                             <td><a href="#" onclick="fn_agentPop('Edt','${ agentInfo.agentCode }')"  data-needpopup-show="#agent_pop" class="underline" >${ agentInfo.agentNm }</a></td>
+                            <td style="text-align:left">${agentInfo.centerNm }</td>
                             <td>${agentInfo.agentFloor }<spring:message code="page.agent.floorTxt" /></td>
-                            <td style="text-align:left">${agentInfo.agentRemark }</td>
-                            <td>${agentInfo.agentBasicnumber }</td>
                             <td>${agentInfo.agentNownumber }</td>
                             <td>${agentInfo.agentState }</td>
                             <td>${agentInfo.agentUseyn }</td>
@@ -164,7 +164,7 @@
                     <form:input  path="agentOsversion" size="20" maxlength="100" id="agentOsversion"  />
                 </div>                
             </div>
-            <div class="pop_box50">
+           <%--  <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.agent.loginId" /> <span class="join_id_comment joinSubTxt"></span></p>
                     <form:input  path="loginId" size="20" maxlength="100" id="loginId"    />
@@ -175,22 +175,28 @@
                     <p class="pop_tit">*<spring:message code="page.agent.loginPwd" /> <span class="join_id_comment joinSubTxt"></span></p>
                     <form:input  path="loginPwd" size="20"  type="password" maxlength="100" id="loginPwd"  />
                 </div>                
-            </div>
+            </div> --%>
             <!--팝업 필드박스 //-->
-            <div class="pop_box50">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.remark" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="agentRemark" size="30" maxlength="120" id="agentRemark"   value="${regist.agentRemark }" />
-                </div>                
-            </div>
             <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.agent.SeatId" /> <span class="join_id_comment joinSubTxt"></span></p>
                     <form:input  path="seatId" size="20"  maxlength="100" id="seatId"  />
                 </div>                
             </div>
-            <!--// 팝업 필드박스-->
             <div class="pop_box50">
+               <div class="padding15">
+                    <p class="pop_tit">*<spring:message code="page.center.centerNm" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:select path="centerId" id="centerId" title="지점" onChange="javascript:fn_FlooerView('P', '')" style="width:200px;">
+							     <option value=""><spring:message code="combobox.text" /></option>
+		                         <form:options items="${selectCenterCombo}" itemValue="centerId" itemLabel="centerNm"/>
+					</form:select>
+					<select id='agentFloor' name='agentFloor' style="display:none;width:120px;"></select>
+					
+                </div>            
+            </div>
+            
+            <!--// 팝업 필드박스-->
+            <%-- <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.center.centerNm" /> <span class="join_id_comment joinSubTxt"></span></p>
                     <form:select path="centerId" id="centerId" title="지점" onChange="javascript:fn_FlooerView('P', '')" style="width:200px;">
@@ -200,7 +206,7 @@
 					<select id='agentFloor' name='agentFloor' style="display:none;width:120px;"></select>
 					
                 </div>   
-            </div>
+            </div> --%>
              <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.agent.partInfo" /> <span class="join_id_comment joinSubTxt"></span></p>
@@ -210,8 +216,14 @@
 					</form:select>
                 </div>   
             </div>
-            
             <div class="pop_box50">
+                <div class="padding15">
+                    <p class="pop_tit">*<spring:message code="page.agent.Mac" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:input  path="agentMac" size="10"  id="agentMac" />
+                </div>                
+            </div>
+            
+           <%--  <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.agentBasicnumber" /> <span class="join_id_comment joinSubTxt"></span></p>
                     <input type="text" id="agentBasicnumber"  size="10" maxlength="10" style="width:150px;" >
@@ -226,13 +238,8 @@
                     <p class="pop_tit">*<spring:message code="page.agent.IP" /> <span class="join_id_comment joinSubTxt"></span></p>
                     <form:input  path="agentIp" size="10"  id="agentIp" />
                 </div>                
-            </div>
-            <div class="pop_box50">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.Mac" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="agentMac" size="10"  id="agentMac" />
-                </div>                
-            </div>
+            </div> --%>
+            
              <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="common.UseYn.title" /> <span class="join_id_comment joinSubTxt"></span></p>
@@ -240,6 +247,12 @@
                     <label><spring:message code="button.use" /></label>
 					<input type="radio" name="agentUseyn" id="agentUseyn" value="N" />
 					<label><spring:message code="button.nouse" /></label>
+                </div>                
+            </div>
+            <div class="pop_box50">
+                <div class="padding15">
+                    <p class="pop_tit">*<spring:message code="page.agent.NodeInfo" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:input  path="nodeInfo" size="10"  id="nodeInfo" />
                 </div>                
             </div>
              
@@ -264,37 +277,9 @@
 				$("#searchFloor").hide();
 			}
 	});
-   /* function fn_SearchNumber(searchCondition ){
-	   if (any_empt_line_id("searchAgentNumber", '<spring:message code="page.agent.alert3" />') == false) return;
-	   
-	   var url = "/backoffice/operManage/userPhoneSearch.do";
-	   
-	   uniAjax(url, { searchKeyword : $("#searchAgentNumber").val() , searchCondition : searchCondition }, 
-    			function(result) {
-				       if (result.status == "LOGIN FAIL"){
-				    	   alert(result.meesage);
- 						   location.href="/backoffice/login.do";
- 					   }else if (result.status == "SUCCESS"){
- 						    //여기 부분 수정 어떻게 할지 추후 생각
- 						    $("#agentBasicnumber").attr("display", "");
-						    $("#agentBasicnumber").empty();
-						    
-						    var phoneCheckNumber = result.phoneNumber;
-						    if (phoneCheckNumber.length > 0 ){
-						    	for(var i =0; i < phoneCheckNumber.length; i++){
-						    		var obj = phoneCheckNumber[i];
-						    		 $("#agentBasicnumber").append("<option value='"+obj.phoneNumber +"'>"+obj.phoneNumber +"|"+obj.loginId +"</option> ");
-						    	}
-						    }
-		            	   
- 					   }
-				    },
-				    function(request){
-					    alert("Error:" +request.status );	       						
-				    }    		
-         );
-	   $("#searchAgentNumber").val("");
-   } */
+   function fn_excelPop(){
+	   window.open("/backoffice/operManage/excelUploadPop.do?gubun=Agent", "zip_code", "width=500, height=400, toolbar=no, menubar=no, scrollbars=no, resizable=auto" );	
+   }
    function fn_agentPop(mode, code){
 		  $('#mode').val(mode);
 		  $('#agentCode').val(code);
@@ -327,6 +312,7 @@
 		  					   $("#seatId").val(obj.seatId);
 		  					 
 		  					   $("#agentBasicnumber").val(obj.agentBasicnumber);
+		  					   $("#nodeInfo").val(obj.nodeInfo);
 		  					   $('input:radio[name=agentUseyn]:input[value=' + obj.agentUseyn + ']').attr("checked", true);	 
 		  					   //fn_SearchNumber("Edt");
 		  					   fn_FlooerView("P", obj.agentFloor);
@@ -384,14 +370,11 @@
 	}
    function fn_CheckForm(){
 	   if (any_empt_line_id("agentNm", '<spring:message code="page.agent.alert1" />') == false) return;
-	   if (any_empt_line_id("agentRemark", '<spring:message code="page.agent.alert2" />') == false) return;
-	   if (any_empt_line_id("agentIp", '<spring:message code="page.agent.alert4" />') == false) return;
 	   if (any_empt_line_id("agentMac", '<spring:message code="page.agent.alert5" />') == false) return;
 	   
 	   var params = {  
 			           agentNm : $("#agentNm").val(),
 			           agentOsversion : $("#agentOsversion").val(),
-					   agentRemark : $("#agentRemark").val(),
 					   centerId : $("#centerId").val(),
 					   partId : fn_emptyReplace($("#partId").val() ,"0") ,
 					   agentBasicnumber : $("#agentBasicnumber").val(),
@@ -403,7 +386,8 @@
 					   loginPwd : $("#loginPwd").val(),
 					   agentFloor : $("#agentFloor").val(),
 					   seatId : $("#seatId").val(),
-					   agentCode : $("#agentCode").val()
+					   agentCode : $("#agentCode").val(),
+					   nodeInfo : $("#nodeInfo").val()
 			        };
 	            uniAjax("/backoffice/operManage/agentInfoUpdate.do", params, 
      			function(result) {

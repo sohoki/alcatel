@@ -154,8 +154,11 @@ public class AgentInfoManageController {
 	 }
 	 
 	 @RequestMapping(value = "excelUploadPop.do")
-	 public ModelAndView excelPop()throws Exception{
+	 public ModelAndView excelPop( HttpServletRequest request  )throws Exception{
+		 
+		 String excelGubun = request.getParameter("gubun") == null ? "" : request.getParameter("gubun") ;
 		 ModelAndView  mv = new ModelAndView("/backoffice/popup/excelUpload");
+		 mv.addObject("uploadGubun", excelGubun);
 		 return mv;
 	 }
 	 @RequestMapping(value = "userPhoneSearch.do")
@@ -231,8 +234,8 @@ public class AgentInfoManageController {
 	            throw new RuntimeException(e.getMessage(),e);
 	        }
 	        
-	       
-	        String returnMessage =  userService.excelUpload(destFile);
+	        String returnMessage = null;
+	        //String returnMessage =  userService.excelUpload(destFile);
 	        
 	        destFile.delete();
 	        //userService.excelUpload(destFile); //서비스 부분을 삭제한다.
@@ -245,7 +248,7 @@ public class AgentInfoManageController {
 	        
 	        //view.setViewName("/user/list");
 	        return view;
-	    }
+	 }
 
 
 	 @RequestMapping(value="userDetail.do")

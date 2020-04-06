@@ -34,10 +34,18 @@ public class TelephoneInfo implements  Serializable {
 	
     private String authCookie = "";
     private String seatId = "";
-    
+    private String nodeInfo = "";
     
     
 	
+	public String getNodeInfo() {
+		return nodeInfo;
+	}
+
+	public void setNodeInfo(String nodeInfo) {
+		this.nodeInfo = nodeInfo;
+	}
+
 	public String getSeatId() {
 		return seatId;
 	}

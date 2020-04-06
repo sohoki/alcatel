@@ -19,7 +19,10 @@
     <script src="http://malsup.github.com/jquery.form.js"></script> 
 </head>
 <body>
+
 <form id="excelUploadForm" name="excelUploadForm" enctype="multipart/form-data" method="post"  action= "${pageContext.request.contextPath}/backoffice/operManage/excelUpload.do">
+    
+    <input type="hidden" id="uploadGubun" value="${uploadGubun }">
     <div class="contents">
         <div>첨부파일은 한개만 등록 가능합니다.</div>
  
