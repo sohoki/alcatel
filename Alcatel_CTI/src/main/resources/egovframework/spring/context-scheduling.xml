@@ -3,25 +3,25 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 	
-	<!-- <bean id="resveAgentStateCreateScheduling"
+	<bean id="resTelRestScheduling"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="AgentStateCreateSchedulerService" />
-		<property name="targetMethod" value="agentStateScheduling" />
+		<property name="targetObject" ref="TelStateResetSchedulerService" />
+		<property name="targetMethod" value="telStateResetScheduling" />
 		<property name="concurrent" value="false" />
 	</bean> 
 	
-	<bean id="resveAgentStateCreateSchedulingTrigger"
+	<bean id="resTelRestSchedulingTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="resveAgentStateCreateScheduling" />
-		<property name="cronExpression" value="0 0 23 * * ?" />
+		<property name="jobDetail" ref="resTelRestScheduling" />
+		<property name="cronExpression" value="0 0 23 50 * ?" />
 	</bean>
 	
 	<bean id="agentStatsCreateBatchScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="resveAgentStateCreateSchedulingTrigger" />
+				<ref bean="resTelRestSchedulingTrigger" />
 			</list>
 		</property>
-	</bean>  -->
+	</bean> 
 	
 </beans>

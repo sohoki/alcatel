@@ -50,17 +50,48 @@ public class TelephoneInfoVO extends TelephoneInfo implements Serializable {
     private String searchPartid= "";
     private String searchAgentgubun= "";
     
-    private String searchDisplayseq= "";
-    
-    
-    
     private String agentCnt = "";
     private String tCnt = "";
     private String statePer = "";
     
     private String searchAgentState = "";
     
+    private String agentStateTxt = "";
+    private String telChangeTxt = "";
+    private String searchReset = "";
     
+    private String searchTelChange = "";
+    
+    
+    
+    
+    
+    
+    
+	public String getSearchTelChange() {
+		return searchTelChange;
+	}
+	public void setSearchTelChange(String searchTelChange) {
+		this.searchTelChange = searchTelChange;
+	}
+	public String getSearchReset() {
+		return searchReset;
+	}
+	public void setSearchReset(String searchReset) {
+		this.searchReset = searchReset;
+	}
+	public String getAgentStateTxt() {
+		return agentStateTxt;
+	}
+	public void setAgentStateTxt(String agentStateTxt) {
+		this.agentStateTxt = agentStateTxt;
+	}
+	public String getTelChangeTxt() {
+		return telChangeTxt;
+	}
+	public void setTelChangeTxt(String telChangeTxt) {
+		this.telChangeTxt = telChangeTxt;
+	}
 	public String getSearchAgentState() {
 		return searchAgentState;
 	}
@@ -84,12 +115,6 @@ public class TelephoneInfoVO extends TelephoneInfo implements Serializable {
 	}
 	public void setAgentCnt(String agentCnt) {
 		this.agentCnt = agentCnt;
-	}
-	public String getSearchDisplayseq() {
-		return searchDisplayseq;
-	}
-	public void setSearchDisplayseq(String searchDisplayseq) {
-		this.searchDisplayseq = searchDisplayseq;
 	}
 	public String getSearchCenterid() {
 		return searchCenterid;

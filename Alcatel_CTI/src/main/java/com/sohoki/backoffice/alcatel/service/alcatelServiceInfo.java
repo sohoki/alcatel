@@ -12,4 +12,7 @@ public interface alcatelServiceInfo {
 	String telelPhoneStateChange(String loginId, String seatId, String state) throws Exception;
 	
 	Boolean userStateChange(String loginId) throws Exception;
+	
+	Boolean telePhoneReset() throws Exception;
+	
 }

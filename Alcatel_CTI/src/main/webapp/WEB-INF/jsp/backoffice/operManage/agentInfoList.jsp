@@ -109,6 +109,7 @@
                             <th><spring:message code="page.agent.CenterInfo" /></th>
                             <th><spring:message code="page.agent.floor" /></th>
                             <th><spring:message code="page.agentNownumber" /></th>
+                            <th><spring:message code="page.agent.Telgubun" /></th>
                             <th><spring:message code="page.agent.state" /></th>
                             <th><spring:message code="common.UseYn.title" /></th>
                             <th><spring:message code="button.delete" /></th>
@@ -124,7 +125,8 @@
                             <td style="text-align:left">${agentInfo.centerNm }</td>
                             <td>${agentInfo.agentFloor }<spring:message code="page.agent.floorTxt" /></td>
                             <td>${agentInfo.agentNownumber }</td>
-                            <td>${agentInfo.agentState }</td>
+                            <td>${agentInfo.telChangeTxt }</td>
+                            <td>${agentInfo.agentStateTxt }</td>
                             <td>${agentInfo.agentUseyn }</td>
                             <td><a href="javascript:del_check('${ agentInfo.agentCode }','${ agentInfo.agentNm }');" class="grayBtn">
                                 <spring:message code="button.delete" />
@@ -255,6 +257,15 @@
                     <form:input  path="nodeInfo" size="10"  id="nodeInfo" />
                 </div>                
             </div>
+             <div class="pop_box50">
+                <div class="padding15">
+                    <p class="pop_tit">*<spring:message code="page.agent.Telgubun" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:select path="telChange" id="telChange" title="소속">
+							     <option value=""><spring:message code="combobox.text" /></option>
+		                         <form:options items="${selectTelCombo}" itemValue="code" itemLabel="codeNm"/>
+					</form:select>
+                </div>                
+            </div>
              
             <div class="clear"></div>   
             
@@ -313,6 +324,8 @@
 		  					 
 		  					   $("#agentBasicnumber").val(obj.agentBasicnumber);
 		  					   $("#nodeInfo").val(obj.nodeInfo);
+		  					   $("#telChange").val(obj.telChange);
+		  					 
 		  					   $('input:radio[name=agentUseyn]:input[value=' + obj.agentUseyn + ']').attr("checked", true);	 
 		  					   //fn_SearchNumber("Edt");
 		  					   fn_FlooerView("P", obj.agentFloor);
@@ -387,7 +400,8 @@
 					   agentFloor : $("#agentFloor").val(),
 					   seatId : $("#seatId").val(),
 					   agentCode : $("#agentCode").val(),
-					   nodeInfo : $("#nodeInfo").val()
+					   nodeInfo : $("#nodeInfo").val(),
+					   telChange : $("#telChange").val()
 			        };
 	            uniAjax("/backoffice/operManage/agentInfoUpdate.do", params, 
      			function(result) {

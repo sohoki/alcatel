@@ -195,10 +195,10 @@ CREATE TABLE `tb_telephoneinfo` (
   `AGENT_NOWNUMBER` varchar(20)  DEFAULT 0 COMMENT '단말기 현재 상태 전화번호',
   `AGENT_OSVERSION` varchar(50) DEFAULT NULL COMMENT '단말기 OS 버전',
   `UPDATE_DATE` datetime DEFAULT NULL COMMENT '말기 변경 시간',
-  `AGENT_STATE` varchar(20) comment '단말기 생태',
+  `AGENT_STATE` varchar(20) comment '단말기 상ㄴ태',
    `LOGIN_ID` varchar(20) DEFAULT NULL COMMENT '단말기 로그인 아이디',
    `LOGIN_PWD` varchar(20) DEFAULT NULL COMMENT '단말기 로그인 패스워드',
-   `AUTH_COOKIE` varchar(20) DEFAULT NULL COMMENT '단말기 인증쿠기',
+   `TEL_CHANGE` varchar(20) DEFAULT NULL COMMENT '단말기 고정석 구분',
    `SEAT_ID` varchar(20) DEFAULT NULL COMMENT '스마트오피스 좌석 아이디',
   `FRST_REGIST_PNTTM` datetime DEFAULT current_timestamp() COMMENT '최초 등록시간',
   `FRST_REGISTER_ID` varchar(20) DEFAULT NULL COMMENT '최초 등록자',
@@ -349,3 +349,27 @@ values ('admin','1234', '관리자', 'N','Y');
 //부서 등록
 insert into tb_partinfo (PART_ID, PART_NM, PART_CREATE_DE, PART_DC, PART_USEYN, PARENT_PART_ID, PART_ORDER)
 values (1, 'ROOT', '20200306120000', '','Y', 0, 1)
+
+//전화기 변경 가능 조회 함수
+create or replace function FN_TELAVAL( AS_SEATID VARCHAR(30), AS_USERNUMBER VARCHAR(20))
+RETURNS varchar(2)
+
+begin 
+        declare RTN_RESULT varchar(2);
+        set RTN_RESULT = (
+		select 
+		case when  ( DATE_ADD(LAST_UPDT_PNTTM, INTERVAL 3 MINUTE) > LAST_UPDT_PNTTM) then 
+		         CASE WHEN (SELECT COUNT(*) FROM tb_telephoneinfo WHERE  AGENT_NOWNUMBER = AS_USERNUMBER) < 1 THEN
+		            'OK'
+		         ELSE
+		            'OT'   
+		         end 
+		      else 
+		      'WT'
+		end 
+		from tb_telephoneinfo
+		where SEAT_ID = AS_SEATID);
+		
+		return RTN_RESULT;
+
+end 

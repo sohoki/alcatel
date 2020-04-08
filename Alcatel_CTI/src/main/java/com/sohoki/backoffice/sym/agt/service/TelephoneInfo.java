@@ -32,12 +32,20 @@ public class TelephoneInfo implements  Serializable {
     private String loginId = "";
     private String loginPwd = "";
 	
-    private String authCookie = "";
+    private String telChange = "";
     private String seatId = "";
     private String nodeInfo = "";
     
     
 	
+	public String getTelChange() {
+		return telChange;
+	}
+
+	public void setTelChange(String telChange) {
+		this.telChange = telChange;
+	}
+
 	public String getNodeInfo() {
 		return nodeInfo;
 	}
@@ -52,14 +60,6 @@ public class TelephoneInfo implements  Serializable {
 
 	public void setSeatId(String seatId) {
 		this.seatId = seatId;
-	}
-
-	public String getAuthCookie() {
-		return authCookie;
-	}
-
-	public void setAuthCookie(String authCookie) {
-		this.authCookie = authCookie;
 	}
 
 	public String getLoginId() {
