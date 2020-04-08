@@ -41,19 +41,10 @@ public enum ApiConfig {
     
     private ApiConfig() {
         try {
-           // Properties apiProperties = ConfigReader.load("client-rest.properties");
-            /*this.apiVersion =  apiProperties.getProperty("api.version");
-            this.rootPath = buildRootPath(apiProperties.getProperty("roxe.host"), apiProperties.getProperty("api.path"));
-            this.apiLogFile = apiProperties.getProperty("api.log.file");*/
-        
-        	//this.apiVersion = fileProperties.getProperty("api.version");// .getString("api.version")
+            
         	this.apiVersion = "1.0"; 
-        	//this.rootPath = buildRootPath(fileProperties.getProperty("roxe.host"), fileProperties.getProperty("api.path"));
-        	this.rootPath = buildRootPath( "otwog.hankooktech.com",  "/api/rest");
-        	
-        	//this.apiLogFile = fileProperties.getProperty("api.log.file");
-        	this.apiLogFile = "C:/Users/user/git/alcatel/Alcatel_CTI/src/main/webapp/log";
-        	
+        	this.rootPath = buildRootPath(fileProperties.getProperty("roxe.host"), fileProperties.getProperty("api.path"));
+        	this.apiLogFile = fileProperties.getProperty("api.log.file");
         } catch (Exception e) {
         	
         	System.out.println( "error:" + e.toString());

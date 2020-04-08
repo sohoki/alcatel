@@ -62,6 +62,7 @@ import javax.ws.rs.client.WebTarget;
 
 
 
+
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
@@ -130,9 +131,11 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
             
             
             
-            /*LOGGER.debug("4--------------------------------------------------------------------------------------------------------------------");
+            LOGGER.debug("4--------------------------------------------------------------------------------------------------------------------");
             // User 1 subscribes to telephonic events
+            
             userSubscription = new ClientSubscription(userConfig.getLogin(), userAuthentication.getCookie(), userSession);
+            /*
             LOGGER.debug("5--------------------------:" + EventPackages.TELEPHONY.getPackage());
             userSubscription.subscribe(EventPackages.TELEPHONY.getPackage());
             LOGGER.debug("6--------------------------------------------------------------------------------------------------------------------");
@@ -198,42 +201,89 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 	}
 
 	@Override
-	public Boolean userSessionOut(String seatId) throws Exception {
+	public String telelPhoneStateChange(String loginId, String seatName, String state) throws Exception {
 		// TODO Auto-generated method stub
-		Boolean result = false;
+		String result = "";
 		try{
-			/*userSubscription.unsubscribe();
-			userSession.close();*/
 			
-			client = createClient();
-	        webTarget = client.target(fileProperties.getProperty("roxe.hostRootPath"));
-
-	        TelephoneInfoVO telInfoVO = telManageInfo.selectAgentPageInfoManageDetailSeatId(seatId);
+			 TelephoneInfoVO telInfoVO = telManageInfo.selectAgentPageInfoManageDetailSeatId(seatName);
+	    	 UserPhoneInfoVO userInfo = phoneInfo.selectUsserPhoneInfoDetail(loginId);
+			
+	    	 //우선 전화기 변경 작업 시간 확인
+	    	 // 사용자가 다른 번호를 사용 하고 있는지 확인
+	    	 
+	    	 
+	    	 if (telInfoVO == null || userInfo ==  null ){
+	    		 result = "Insufficient information";
+	    	 }else {
+	    		
+	    		client = createClient();
+	 	        webTarget = client.target(fileProperties.getProperty("roxe.hostRootPath"));
+	 	        Cookie spCookie = authenticate(fileProperties.getProperty("roxe.adminId"), fileProperties.getProperty("roxe.adminPwd"));
+	 	        try{
+	 	        	openSession(spCookie);
+	 	        }catch(Exception e1){
+	 	        	LOGGER.debug("open_Session Error:" + e1.toString());
+	 	        }
+	 	        
+	 	       
+	 	        String macAddress = telInfoCheck( telInfoVO.getNodeInfo(),   spCookie, userInfo.getPhoneNumber());
+	     	
+	 	        TelephoneInfoVO info = new TelephoneInfoVO();
+	            
+	            
+	            info.setAgentCode(telInfoVO.getAgentCode());
 	        
-	        
-	        Cookie spCookie = authenticate(telInfoVO.getLoginId(), telInfoVO.getLoginPwd());
+	 	        
+	 	        if (!macAddress.equals("") && state.equals("OT")) {
+	 	           
+	 	    	   Subscription subscription = sendJson( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  "");
+	 	    	   /*LOGGER.debug("----------------------------------------- 01  --------------------------------------------------------------");
+	 	    	   if (subscription.subscriptionId != null){
+	 	        	  unsubscribe(fileProperties.getProperty("roxe.adminId"), spCookie, subscription.subscriptionId);
+	 	           }
+	 	    	   LOGGER.debug("-----------------------------------------  02    --------------------------------------------------------------");*/
+	 	    	   result = "OK";
+	 	    	   info.setAgentState("PHONE_STATE_4");
+	 	    	   info.setAgentNownumber( "" );
+	 	    	   telManageInfo.updateAgentChangeNumber(info);
+	 	    	   
+	 	        }else if (macAddress.equals("") && state.equals("IN")) {
+	 	        	//시간 체크 후 확인 하기 
+	 	        	
+	 	           Subscription subscription = sendJson( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  telInfoVO.getAgentMac());
+	 	           /*if (subscription.subscriptionId != null){
+	 	        	  unsubscribe(fileProperties.getProperty("roxe.adminId"), spCookie, subscription.subscriptionId);
+	 	           }*/
+	 	          
+	 	    	  result = "OK";
+	 	    	  info.setAgentState("PHONE_STATE_2");  
+	 	    	  info.setAgentNownumber( userInfo.getPhoneNumber() );
+	 	    	  telManageInfo.updateAgentChangeNumber(info);
+	 	    	   
+	 	    	   
+	 	        }else if  (macAddress.equals("") && state.equals("OT")) {
+	 	    	   result = "ChangeERROR NOT MACADDRESS";  
+	 	        }else if  (!macAddress.equals("") && state.equals("IN")) {
+	 		    	   result = "MACADDRESS EXIST"; 
+	 	        }else {
+	 	        	result = "CHANGE ERROR";
+	 	        }
+	 	        
+	 	        //Thread.sleep(1000L);
+	 	     
+	 	        closeSession(spCookie);
+	 	        LOGGER.debug("STEP01----- Close Session End-");
 
-	        // II) open session:
-
-	        openSession(spCookie);
-
-	        // III) subscribe to some events, and wait for a call-ref:
-     
-	        Subscription subscription = subscribe(telInfoVO.getLoginId(), spCookie);
-	        
-	        unsubscribe(telInfoVO.getLoginId(), spCookie, subscription.subscriptionId);
-
-	        Thread.sleep(1000L);
-
-	        closeSession(spCookie);
-
-	        client.close();
-	        
-	        result = true;
+	 	        client.close();
+	 	       LOGGER.debug("STEP02- client Close-");
+	    	 }
+	    	 
+			
 	        
 		}catch(Exception e){
 			LOGGER.debug("error userSessionOut:" + e.toString());
-			result = false;
+			result = "FALSE";
 		}
 		return result;
 	}
@@ -273,6 +323,8 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 	        Cookie spCookie = authenticate(telInfoVO.getLoginId(), telInfoVO.getLoginPwd());
 	        openSession(spCookie);
 	        Subscription subscription = subscribe(  telInfoVO.getLoginId() , spCookie);
+	        //Subscription subscription = sendJson(  telInfoVO.getLoginId() , spCookie);
+	        
 	        //Subscription subscription = subscribe(User.SP.login, spCookie);
 	        
 	        
@@ -313,28 +365,44 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
         //return webTarget.path(arg0)
     }
 	//전화기 사용자 인증 
-	private Subscription sendJson(String login, Cookie cookie, String seatNm, String sendGubun) throws Exception {
+	private Subscription sendJson(String node, Cookie cookie, String phoneNumber, String macAddress) throws Exception {
 		
-		TelephoneInfoVO telInfoVO = telManageInfo.selectAgentPageInfoManageDetail(seatNm);
-		UserPhoneInfoVO userInfo = phoneInfo.selectUsserPhoneInfoDetail(login);
-		String pathUrl = "1.0/pbxs/"+  telInfoVO.getNodeInfo() +"/instances/Subscriber/"+ userInfo.getPhoneNumber() +  "/Tsc_IP_subscriber/"+ userInfo.getPhoneNumber();
-		String jsonR = sendGubun.equals("OT")  ? "" :  telInfoVO.getAgentMac() ;
-		String sendJson =  "{ \"attributes\" : [ { \"name\": \"Ethernet_Address\", \"value\": [\""+  jsonR + "\"] } ] } "; 
-	    if (sendGubun.equals("INFO")){
-	    	return webTarget.path(pathUrl).request().cookie(cookie).post(Entity.json(sendJson), Subscription.class);
-	    }else {
-	    	return webTarget.path(pathUrl).request().cookie(cookie).put(Entity.json(sendJson), Subscription.class);
-	    }
 		
+		Subscription subscript = new Subscription();
+		try{
+			String pathUrl = "pbxs/"+ node +"/instances/Subscriber/"+ phoneNumber +  "/Tsc_IP_subscriber/"+ phoneNumber;
+			String sendJson =  "{ \"attributes\" : [ { \"name\": \"Ethernet_Address\", \"value\": [\""+  macAddress + "\"] } ] } "; 
+			subscript =  webTarget.path(pathUrl).request().cookie(cookie).put(Entity.json(sendJson), Subscription.class);
+		}catch(Exception e1){
+			LOGGER.debug("sendJson ERROR:" + e1.toString());
+		}
+		return subscript;
+	   
+	}
+	 
+	private String telInfoCheck(String node, Cookie cookie, String userNumber) {
+		
+		String pathUrl = "pbxs/"+  node +"/instances/Subscriber/"+ userNumber +  "/Tsc_IP_subscriber/"+ userNumber;
+		
+		Response response =webTarget.path(pathUrl).request().cookie(cookie).get();
+		JsonNode jsonNode1 = response.readEntity(JsonNode.class);
+		String macAddress = jsonNode1.get("attributes").get(1).get("value").get(0).getTextValue();
+		 
+		return macAddress;
 	}
 	//작업 해제
 	private void unsubscribe(final String login, final Cookie cookie, String subscriptionId) {
+      
+       try{
+    	   LOGGER.debug("unsubscribe subscriptionId:"  + subscriptionId + ":" + login);
+    	   Response response = webTarget.path("subscriptions").path(subscriptionId).request().cookie(cookie).delete();
+    	   LOGGER.debug("unsubscribe response:"  + response );   	   
+       }catch(Exception e1){
+    	   LOGGER.debug("unsubscribe ERROR:"  + e1.toString() );
+       }
 
-        System.out.println("Unsubscribe for " + login);
+       
 
-        Response response = webTarget.path("subscriptions").path(subscriptionId).request().cookie(cookie).delete();
-
-        System.out.println("Unsubscribe response: " + response);
     }
 	private static Client createClient() throws KeyManagementException, IOException {
 
@@ -401,10 +469,21 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
     }
 	private void openSession(Cookie cookie)  {
 
-        class SessionRequest { public String getApplicationName() { return "Test API"; } }
-
-        Response response = webTarget.path("sessions").request().cookie(cookie).post(Entity.json(new SessionRequest()));
-        LOGGER.debug("open response:" + response);
+        class SessionRequest { public String getApplicationName() { return "TEST_APIROX_SERVER"; } }
+        
+		try{
+			//String sendJson =  "{\"applicationName\":\"TEST_APIROX_SERVER\"} ";
+			Response response = webTarget.path("sessions").request().cookie(cookie).post(Entity.json(new SessionRequest()));
+			//Response response = webTarget.path("sessions").request().cookie(cookie).post(Entity.json(sendJson ));
+			
+	        JsonNode jsonNode1 = response.readEntity(JsonNode.class);
+	        String publicUrl = jsonNode1.get("versions").get(0).get("publicUrl").getTextValue();
+	        LOGGER.debug("public Url:" + publicUrl);
+	        LOGGER.debug("Session open response:" + jsonNode1);
+		}catch(Exception e){
+			LOGGER.debug("ERROR open session:" + e.toString());
+		}
+		
     }
 
 
@@ -418,16 +497,15 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
     private Cookie authenticate(String login, String password) {
 
         Response response1 = client.target(fileProperties.getProperty("roxe.hosturl")).request().get();
-        LOGGER.debug("response1:" + response1) ;
         
         JsonNode jsonNode1 = response1.readEntity(JsonNode.class);
         String publicUrl = jsonNode1.get("versions").get(0).get("publicUrl").getTextValue();
-        LOGGER.debug("public Url:" + response1);
+        //LOGGER.debug("public Url:" + publicUrl);
         
-        Response response2 = client.target(publicUrl).request().get();
-        LOGGER.debug("response2:" + response2);
+        /*Response response2 = client.target(publicUrl).request().get();
+        LOGGER.debug("response2:" + response2 + ":" + login +":" +password);*/
         
-        Response response3 = client.target(response2.getLocation()).register(HttpAuthenticationFeature.basic(login, password)).request().get();
+        Response response3 = client.target(publicUrl).register(HttpAuthenticationFeature.basic(login, password)).request().get();
         LOGGER.debug("response3:" + response3);
 
         Map<String, NewCookie> cookies = response3.getCookies();

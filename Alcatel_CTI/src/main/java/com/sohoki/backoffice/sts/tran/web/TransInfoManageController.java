@@ -415,25 +415,17 @@ public class TransInfoManageController {
 			  */
 			  if (commandType.equals("SP_LOGIN")){
 				  
-				  
 				  agentInfo.setAgentCode(dataObject.get("USER_ID").toString());
 				  agentInfo.setAgentCode(dataObject.get("SEAT_ID").toString());
 				  agentInfo.setAgentCode(dataObject.get("TEL_GUBUN").toString());
 				  LOGGER.debug("SP_LOGIN");
 				  
-				  Boolean result  = alcatelService.userAuthentication(dataObject.get("USER_ID").toString(), dataObject.get("SEAT_ID").toString(), dataObject.get("TEL_GUBUN").toString());
-			      String message =  ( result == true) ? "OK": "FALSE";
-				  resultTxt = "{'command_type':'"+commandType+"','result:': '" + message +"'}"; 
+				  String result  = alcatelService.telelPhoneStateChange(dataObject.get("USER_ID").toString(), dataObject.get("SEAT_ID").toString(), dataObject.get("TEL_GUBUN").toString());
+			     
+				  resultTxt = "{'command_type':'"+commandType+"','result:': '" + result +"'}"; 
 				  //단말기 구분을 통해 값 변경 전달 
 				  //resultTxt = "{'command_type':'"+commandType+"','result':[{'"+sendGubun+"' : '"+sendInfo+"','ORD_CNT' : '"+orderCnt+"','MSG_CNT' : '"+msgCnt+"'}]}";
 				  
-			  }else if (commandType.equals("SP_LOGOUT")){
-				  agentInfo.setAgentCode(dataObject.get("USER_ID").toString());
-				  agentInfo.setAgentCode(dataObject.get("SEAT_ID").toString());
-				  
-				  Boolean result  = alcatelService.userSessionOut(dataObject.get("SEAT_ID").toString());
-			      String message =  ( result == true) ? "OK": "FALSE";
-				  resultTxt = "{'command_type':'"+commandType+"','result:': '" + message +"'}"; 
 			  }
 			  
 		}catch (ParseException e) {
