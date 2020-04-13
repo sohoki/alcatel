@@ -90,8 +90,6 @@ public class UserPhoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 			   
 			   for(Map<String, String> article: excelContent){
 				   
-				   
-				     System.out.print("0");
 					 phoneinfo.setPhoneNumber( String.valueOf( Integer.parseInt( article.get("A")) ) );
 					 phoneinfo.setPhoneGubun(article.get("B"));
 					 phoneinfo.setLoginId(article.get("C"));

@@ -13,7 +13,7 @@
 	<bean id="resTelRestSchedulingTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="resTelRestScheduling" />
-		<property name="cronExpression" value="0 0 23 50 * ?" />
+		<property name="cronExpression" value="0 50 23 * * ?" />
 	</bean>
 	
 	<bean id="agentStatsCreateBatchScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

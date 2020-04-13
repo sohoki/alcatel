@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfo;
@@ -13,6 +14,7 @@ import com.sohoki.backoffice.sym.agt.service.TelephoneInfoVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 
+import com.sohoki.backoffice.alcatel.service.alcatelServiceInfo;
 import com.sohoki.backoffice.mapper.TelephoneInfoManageMapper;
 
 @Service("TelephoneInfoManageService")
@@ -26,6 +28,9 @@ public class TelephoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
     @Resource(name = "egovAgentIdGnrService")
     private EgovIdGnrService idgenService;
 
+    
+    @Autowired
+    private alcatelServiceInfo  alcatel;
     
 	@Override
 	public List<TelephoneInfoVO> selectAgentPageInfoManageListByPagination(TelephoneInfoVO searchVO) throws Exception {
@@ -90,5 +95,36 @@ public class TelephoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 	public int updateAgentStateChange(TelephoneInfo vo) throws Exception {
 		// TODO Auto-generated method stub
 		return agentMapper.updateAgentStateChange(vo);
+	}
+    //초기화
+	@Override
+	public String agentReset(String agentReset) throws Exception {
+		// TODO Auto-generated method stub
+		String[] agentCodes = agentReset.split(",");
+		String result = "";
+		TelephoneInfoVO info = new TelephoneInfoVO();
+		for(String agentCode : agentCodes){
+			
+			info = agentMapper.selectAgentPageInfoManageDetail(agentCode);
+			if ( info.getAgentState().equals("PHONE_STATE_2") && !info.getAgentNownumber().equals("")){
+				if (!alcatel.telelPhoneChange(info.getAgentNownumber(), info.getSeatId(), "OT").equals("OK")){
+					result = result + "," + info.getAgentNm();
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public String agentTelChange(TelephoneInfo  vo) throws Exception {
+		// TODO Auto-generated method stub
+		TelephoneInfoVO info = agentMapper.selectAgentPageInfoManageDetail(vo.getAgentCode());
+		String result = "FALSE";
+		if ( info.getAgentState().equals("PHONE_STATE_1") && !info.getAgentNownumber().equals("")){
+			result = alcatel.telelPhoneChange( vo.getAgentNownumber(),  info.getSeatId(), "IN");
+		}else {
+			result = "FALSE";
+		}
+		return result;
 	}
 }

@@ -402,29 +402,20 @@ public class TransInfoManageController {
 			  JSONObject dataObject = (JSONObject) dataInfoArray.get(0);	
 			  
 			  TelephoneInfoVO  agentInfo = new TelephoneInfoVO();
-			  /*SendMsgInfo sminfo = new SendMsgInfo();*/
 			  
-			  //commandType input type 값 split 으로 정리 해서 넘기기
-			  
-			  /*
-			  TransInfoVO info = tranService.selectTranProcessInfo(commandType);
-			  String[] inputParams = info.getTranInputParam().split(",");
-			  for (String strTemp : inputParams){
-				  dataObject.get(strTemp ).toString()
-			  }
-			  */
-			  if (commandType.equals("SP_LOGIN")){
+			  if (commandType.equals("TEL_STATECHANGE")){
 				  
 				  agentInfo.setAgentCode(dataObject.get("USER_ID").toString());
 				  agentInfo.setAgentCode(dataObject.get("SEAT_ID").toString());
 				  agentInfo.setAgentCode(dataObject.get("TEL_GUBUN").toString());
-				  LOGGER.debug("SP_LOGIN");
 				  
-				  String result  = alcatelService.telelPhoneStateChange(dataObject.get("USER_ID").toString(), dataObject.get("SEAT_ID").toString(), dataObject.get("TEL_GUBUN").toString());
-			     
+				  String result  = alcatelService.telelPhoneChange(dataObject.get("USER_ID").toString(), dataObject.get("SEAT_ID").toString(), dataObject.get("TEL_GUBUN").toString());
+				 
 				  resultTxt = "{'command_type':'"+commandType+"','result:': '" + result +"'}"; 
-				  //단말기 구분을 통해 값 변경 전달 
-				  //resultTxt = "{'command_type':'"+commandType+"','result':[{'"+sendGubun+"' : '"+sendInfo+"','ORD_CNT' : '"+orderCnt+"','MSG_CNT' : '"+msgCnt+"'}]}";
+				  
+			  }else if (commandType.equals("SP_RESTEL")){
+				  //jsonList 
+				  dataObject.get("RES_INFO").toString();
 				  
 			  }
 			  

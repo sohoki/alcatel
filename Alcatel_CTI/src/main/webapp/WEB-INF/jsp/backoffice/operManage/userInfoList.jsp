@@ -92,7 +92,7 @@
                             <th><spring:message code="page.user.phoneNumber" /></th>
                             <th><spring:message code="page.user.phoneGubun" /></th>
                             <th><spring:message code="page.user.loginId" /></th>
-                            <th><spring:message code="page.user.phoneState" /></th>
+                            <th><spring:message code="page.user.userNm" /></th>
                             <th><spring:message code="common.UseYn.title" /></th>
                             <th><spring:message code="button.delete" /></th>
                         </tr>
@@ -103,7 +103,7 @@
                             <td><a href="#" onclick="fn_agentPop('Edt','${ userInfo.phoneNumber }')"  data-needpopup-show="#agent_pop" class="underline" >${ userInfo.phoneNumber }</a></td>
                             <td>${userInfo.phoneGubunTxt }</td>
                             <td style="text-align:left">${userInfo.loginId }</td>
-                            <td>${userInfo.phoneStateTxt }</td>
+                            <td style="text-align:left">${userInfo.userName }</td>
                             <td>${userInfo.phoneUseyn }</td>
                             <td><a href="javascript:del_check(''${ userInfo.phoneNumber }');" class="grayBtn">
                                 <spring:message code="button.delete" />
@@ -155,10 +155,16 @@
 					<span id="uniCheckID" ></span>
                 </div>   
             </div>
-             <div class="pop_box50">
+            <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.user.loginPassword" /> <span class="join_id_comment joinSubTxt"></span></p>
                     <form:input  type="password" path="loginPassword" size="20" maxlength="20" id="loginPassword"   />
+                </div>   
+            </div>
+             <div class="pop_box50">
+                <div class="padding15">
+                    <p class="pop_tit">*<spring:message code="page.user.userNm" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:input  path="userName" size="20" maxlength="20" id="userName"   />
                 </div>   
             </div>
              <div class="pop_box50">
@@ -215,6 +221,7 @@
 	  						    $("#phoneNumber").val(obj.phoneNumber);
 	  						    $("#phoneGubun").val(obj.phoneGubun);
 		  						$("#loginId").val(obj.loginId);
+		  						$("#userName").val(obj.userName);
 	 		            	    $('input:radio[name=phoneUseyn]:input[value=' + obj.phoneUseyn + ']').attr("checked", true);	 
 	 		            	    $('#phoneNumber').attr("readOnly", true);
 	 		            	    
@@ -231,8 +238,9 @@
 		  }
    }
    function del_check(code){	
+	    var params = {phoneNumber : code};
     	fn_uniDelJSON("/backoffice/operManage/userInfoDelete.do"
-				  , {phoneNumber : code}
+				  , params
 		          , "/backoffice/operManage/userList.do");	
    }  
    function fn_checkId(){
@@ -261,6 +269,7 @@
 			           phoneGubun : $("#phoneGubun").val(),
 			           loginId : $("#loginId").val(),
 			           loginPassword : $("#loginPassword").val(),
+			           userName : $("#userName").val(),
 			           phoneUseyn :  fn_emptyReplace($('input[name="phoneUseyn"]:checked').val(),"Y"),
 					   mode : $("#mode").val()
 			        };

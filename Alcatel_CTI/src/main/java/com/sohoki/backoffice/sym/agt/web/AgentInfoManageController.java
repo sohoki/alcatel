@@ -349,6 +349,7 @@ public class AgentInfoManageController {
 			       
 			       mv.addObject("selectCenterCombo", centerService.selectCenterCombo());
 			       mv.addObject("selectGroupCombo", partService.selectPartInfoCombo());
+			       mv.addObject("selectTelCombo", detailService.selectCmmnDetailCombo("TEL_CHANGE") );
 			       
 			       mv.addObject("totalCnt", totCnt);
 		      }catch(Exception e){
@@ -384,6 +385,53 @@ public class AgentInfoManageController {
 			}
 			return model;
 	 }
+	 @RequestMapping(value="agentInfoReset.do")
+	 public ModelAndView agentInfoReset (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+															   ,@RequestBody  TelephoneInfoVO vo
+															   , BindingResult bindingResult) throws Exception{
+		 
+		    ModelAndView model = new ModelAndView("jsonView");
+			String meesage = "";
+			try{
+				LOGGER.debug("agentCode:" + vo.getAgentReset());
+				meesage = telephoneService.agentReset(vo.getAgentReset());
+				if (meesage.equals("")) {
+					model.addObject("status", Globals.STATUS_SUCCESS);
+				}else {
+					model.addObject("status", Globals.STATUS_FAIL);
+					model.addObject("message", meesage);
+				}
+				
+			}catch(Exception e){
+				  model.addObject("status", Globals.STATUS_FAIL);
+			  	  model.addObject("message", "ERROR:" + e.toString());
+			}
+			return model;
+		 
+	 }
+	 @RequestMapping(value="agentInfoTelChange.do")
+	 public ModelAndView agentInfoTelChange (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+														   ,@RequestBody  TelephoneInfoVO vo
+														   , BindingResult bindingResult) throws Exception{
+
+		ModelAndView model = new ModelAndView("jsonView");
+		String meesage = "";
+		try{
+			meesage = telephoneService.agentTelChange(vo) ;
+			if (meesage.equals("OK")) {
+			    model.addObject("status", Globals.STATUS_SUCCESS);
+			}else {
+			    model.addObject("status", Globals.STATUS_FAIL);
+			    model.addObject("message", meesage);
+			}
+		
+		}catch(Exception e){
+		    model.addObject("status", Globals.STATUS_FAIL);
+		    model.addObject("message", "ERROR:" + e.toString());
+		}
+		return model;
+		
+	  }
 	 @RequestMapping(value="agentInfoUpdate.do")
 	 public ModelAndView agentInfoUpdate (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
 													   ,@RequestBody  TelephoneInfoVO vo

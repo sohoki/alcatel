@@ -59,15 +59,18 @@ public class TelephoneInfoVO extends TelephoneInfo implements Serializable {
     private String agentStateTxt = "";
     private String telChangeTxt = "";
     private String searchReset = "";
-    
     private String searchTelChange = "";
+    private String agentReset = "";
     
     
     
     
-    
-    
-    
+	public String getAgentReset() {
+		return agentReset;
+	}
+	public void setAgentReset(String agentReset) {
+		this.agentReset = agentReset;
+	}
 	public String getSearchTelChange() {
 		return searchTelChange;
 	}

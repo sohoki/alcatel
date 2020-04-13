@@ -93,6 +93,7 @@
                     <a href="javascript:search_form();"><span class="redBtn"><spring:message code="button.inquire" /></span></a>
                     <div class="rightB">
                         <a href="#" onclick="fn_excelPop()"><span class="deepBtn"><spring:message code="page.commo.excelUpload" /></a>
+                        <a href="#" onclick="fn_AgentReste()"><span class="deepBtn"><spring:message code="page.agent.sendBtn1" /></a>
                         <a href="#" onclick="fn_agentPop('Ins','0')" data-needpopup-show="#agent_pop"><span class="deepBtn"><spring:message code="button.create" /></a>
                     </div>
                 </section>
@@ -118,7 +119,11 @@
                     <tbody>
                      <c:forEach items="${resultList }" var="agentInfo" varStatus="status">
                         <tr>
-                            <td><input type="checkbox" name="agentInput" value="<c:out value="${agentInfo.agentCode}"/>"></td>
+                            <td>
+                            <c:if test="${agentInfo.agentState == 'PHONE_STATE_2' }">
+                            <input type="checkbox" name="agentInput"  value="<c:out value="${agentInfo.agentCode}"/>">
+                            </c:if>
+                            </td>
                             <td>${ agentInfo.agentOsversion}</td>
                             <td><a href="#" onclick="fn_agentPop('Edt','${ agentInfo.agentCode }')"  data-needpopup-show="#agent_pop" class="underline" >${ agentInfo.agentMac }</a></td>
                             <td><a href="#" onclick="fn_agentPop('Edt','${ agentInfo.agentCode }')"  data-needpopup-show="#agent_pop" class="underline" >${ agentInfo.agentNm }</a></td>
@@ -126,7 +131,23 @@
                             <td>${agentInfo.agentFloor }<spring:message code="page.agent.floorTxt" /></td>
                             <td>${agentInfo.agentNownumber }</td>
                             <td>${agentInfo.telChangeTxt }</td>
-                            <td>${agentInfo.agentStateTxt }</td>
+                            <td>
+                            <c:choose>
+                               <c:when test="${agentInfo.agentState == 'PHONE_STATE_2' }">
+                                ${agentInfo.agentStateTxt }
+                               </c:when>
+                               <c:when test="${agentInfo.agentState == 'PHONE_STATE_1' }">
+                                <a href="#" onclick="fn_agentChangePop('${ agentInfo.agentCode }')"  data-needpopup-show="#agent_telChange" class="underline" >
+                                 ${agentInfo.agentStateTxt }
+                                 </a>
+                               </c:when>
+                               <c:otherwise>
+                               ${agentInfo.agentStateTxt }
+                               </c:otherwise>
+                            </c:choose>
+                            
+                            
+                            </td>
                             <td>${agentInfo.agentUseyn }</td>
                             <td><a href="javascript:del_check('${ agentInfo.agentCode }','${ agentInfo.agentNm }');" class="grayBtn">
                                 <spring:message code="button.delete" />
@@ -146,6 +167,27 @@
             </div>
         </div>
     </div>
+    
+     <div id='agent_telChange' class="needpopup">  
+         <div class="popHead">
+            <h2>전화번호 변경</h2>
+        </div>
+        <div class="popCon">
+	        <div class="pop_box100">
+	                <div class="padding15">
+	                    <p class="pop_tit">*<spring:message code="page.user.phoneNumber" /> <span class="join_id_comment joinSubTxt"></span></p>
+	                    <form:input  path="agentNownumber" size="5" maxlength="10" id="agentNownumber"   />
+	                </div>                
+	            </div>
+	        <div class="clear"></div>   
+            
+        </div>
+        <div class="pop_footer">
+            <span id="join_confirm_comment" class="join_pop_main_subTxt">내용을 모두 입력후  클릭해주세요.</span>
+            <a href="javascript:fn_telChange();" class="redBtn" id="btnUpdate"><spring:message code="button.create" /></a>
+        	<div class="clear"></div>
+        </div>
+     </div>
     <div id='agent_pop' class="needpopup">  
         <!-- popheader-->                        
         <div class="popHead">
@@ -166,18 +208,6 @@
                     <form:input  path="agentOsversion" size="20" maxlength="100" id="agentOsversion"  />
                 </div>                
             </div>
-           <%--  <div class="pop_box50">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.loginId" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="loginId" size="20" maxlength="100" id="loginId"    />
-                </div>                
-            </div>
-             <div class="pop_box50">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.loginPwd" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="loginPwd" size="20"  type="password" maxlength="100" id="loginPwd"  />
-                </div>                
-            </div> --%>
             <!--팝업 필드박스 //-->
             <div class="pop_box50">
                 <div class="padding15">
@@ -196,19 +226,6 @@
 					
                 </div>            
             </div>
-            
-            <!--// 팝업 필드박스-->
-            <%-- <div class="pop_box50">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.center.centerNm" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:select path="centerId" id="centerId" title="지점" onChange="javascript:fn_FlooerView('P', '')" style="width:200px;">
-							     <option value=""><spring:message code="combobox.text" /></option>
-		                         <form:options items="${selectCenterCombo}" itemValue="centerId" itemLabel="centerNm"/>
-					</form:select>
-					<select id='agentFloor' name='agentFloor' style="display:none;width:120px;"></select>
-					
-                </div>   
-            </div> --%>
              <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="page.agent.partInfo" /> <span class="join_id_comment joinSubTxt"></span></p>
@@ -224,24 +241,6 @@
                     <form:input  path="agentMac" size="10"  id="agentMac" />
                 </div>                
             </div>
-            
-           <%--  <div class="pop_box50">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agentBasicnumber" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <input type="text" id="agentBasicnumber"  size="10" maxlength="10" style="width:150px;" >
-                    <!-- <a href="#" onClick="fn_SearchNumber('Ins')"> [찾기]</a>
-                    <select id="agentBasicnumber" style="width:120px;"></select> -->
-                    
-                    
-                </div>   
-            </div>
-            <div class="pop_box50">
-                <div class="padding15">
-                    <p class="pop_tit">*<spring:message code="page.agent.IP" /> <span class="join_id_comment joinSubTxt"></span></p>
-                    <form:input  path="agentIp" size="10"  id="agentIp" />
-                </div>                
-            </div> --%>
-            
              <div class="pop_box50">
                 <div class="padding15">
                     <p class="pop_tit">*<spring:message code="common.UseYn.title" /> <span class="join_id_comment joinSubTxt"></span></p>
@@ -290,6 +289,54 @@
 	});
    function fn_excelPop(){
 	   window.open("/backoffice/operManage/excelUploadPop.do?gubun=Agent", "zip_code", "width=500, height=400, toolbar=no, menubar=no, scrollbars=no, resizable=auto" );	
+   }
+   function fn_agentChangePop(code){
+	   $('#agentCode').val(code);
+   }
+   //전화기 입력 
+   function fn_telChange(){
+	   if (any_empt_line_id("agentNownumber", '<spring:message code="page.user.alert01" />') == false) return;
+	   
+	   uniAjax("/backoffice/operManage/agentInfoTelChange.do", { agentNownumber : $("#agentNownumber").val(), agentCode : $("#agentCode").val() }, 
+      			function(result) {
+ 	    	            if (result.status == "SUCCESS"){
+ 	    	            	alert('<spring:message code="success.common.update" />');
+ 						}else{
+ 							alert("처리 도중 장애가 발생하였습니다." + result.message);
+ 						}
+ 				    },
+ 				    function(request){
+ 					    alert("Error:" +request.status );	       						
+ 				    }    		
+       );
+	   $('#agentNownumber').val("");
+	   $('#agentCode').val("");
+	   location.reload();
+   }
+   //초기화 
+   function fn_AgentReste(){
+		var reportSeq = ckeckboxValue('<spring:message code="common.radionCheck.msg" />',"agentInput");
+    	if (reportSeq == false){
+    		return;
+    	}
+    	if (confirm('<spring:message code="common.reset.msg" />')== true){
+    		
+    		uniAjax("/backoffice/operManage/agentInfoReset.do", { agentReset : reportSeq }, 
+	       			function(result) {
+	  	    	            if (result.status == "SUCCESS"){
+	  	    	            	alert('<spring:message code="success.common.update" />');
+	  						}else{
+	  							alert("처리 도중 장애가 발생하였습니다." + result.message);
+	  						}
+	  				    },
+	  				    function(request){
+	  					    alert("Error:" +request.status );	       						
+	  				    }    		
+	        );
+    		$('#agentNownumber').val("");
+    		$('#agentCode').val("");
+    		window.location.reload();
+    	}
    }
    function fn_agentPop(mode, code){
 		  $('#mode').val(mode);
@@ -348,7 +395,7 @@
    function del_check(code){	
     	fn_uniDelJSON("/backoffice/operManage/agentInfoDelete.do"
 				  , {agentCode : code}
-		          , "/backoffice/operManage/agentList.do.do");	
+		          , "/backoffice/operManage/agentList.do");	
    }
    function fn_FlooerView(searhGubun, floorInfo){
 		if ($("#centerId").val()  != "" || $("#searchCenterid").val()  != ""){

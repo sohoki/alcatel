@@ -10,6 +10,10 @@ public interface TelephoneInfoManageService {
     
     TelephoneInfoVO selectAgentPageInfoManageDetail(String  agentCode ) throws Exception;
     
+    String agentReset(String  agentReset ) throws Exception;
+    
+    String agentTelChange(TelephoneInfo  vo ) throws Exception;
+    
     int selectAgentPageInfoManageListTotCnt_S(TelephoneInfoVO searchVO) throws Exception;
     
     int selectAgentExist (String agentCode) throws Exception;

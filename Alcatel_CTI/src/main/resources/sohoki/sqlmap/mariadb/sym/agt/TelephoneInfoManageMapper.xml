@@ -9,7 +9,7 @@
 						           a.AGENT_USEYN, a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,
 								   a.AGENT_FLOOR,  fn_DetailCodeNm(a.AGENT_STATE) agentStateTxt , a.AGENT_BASICNUMBER, a.AGENT_NOWNUMBER, a.AGENT_OSVERSION,
 								   c.CENTER_NM,  a.CENTER_ID, a.part_id, a.SEAT_ID, a.NODE_INFO
-								   , fn_DetailCodeNm(a.TEL_CHANGE) telChangeTxt
+								   , fn_DetailCodeNm(a.TEL_CHANGE) telChangeTxt , a.AGENT_STATE 
 							FROM tb_telephoneinfo a, tb_centerinfo c
 							WHERE a.CENTER_ID = c.CENTER_ID
 		        <if test="searchKeyword != ''">
@@ -58,9 +58,9 @@
 								ON hi.part_id = ho.partId
 				   ) 
 				</if> 
-				ORDER BY  a.AGENT_CODE  DESC
+				ORDER BY  a.AGENT_NM ASC,  a.AGENT_CODE  DESC
 	        )TB
-	        ORDER BY  TB.AGENT_CODE  DESC
+	        ORDER BY  TB.AGENT_NM ASC,  TB.AGENT_CODE  DESC
 	        limit  #{firstIndex}, #{recordCountPerPage}         		 	    
    </select>
    
@@ -166,6 +166,7 @@
     
    <update id="updateAgentPageInfoManage">
       UPDATE tb_telephoneinfo SET AGENT_NM = #{agentNm}
+                             ,  AGENT_OSVERSION = #{agentOsversion, jdbcType=VARCHAR } 
                              ,  AGENT_REMARK = #{agentRemark,jdbcType=VARCHAR }
                              ,  AGENT_USEYN =  #{agentUseyn,jdbcType=VARCHAR }
                              ,  LAST_UPDT_PNTTM = now()
@@ -178,6 +179,7 @@
                              , LOGIN_PWD =  #{loginPwd , jdbcType=VARCHAR}
                              , SEAT_ID =  #{seatId , jdbcType=VARCHAR}
                              , NODE_INFO =  #{nodeInfo , jdbcType=VARCHAR}
+                             , AGENT_MAC = #{agentMac,jdbcType=VARCHAR }
                              , TEL_CHANGE = #{telChange, jdbcType=VARCHAR}
       WHERE AGENT_CODE = #{agentCode}
    </update>
