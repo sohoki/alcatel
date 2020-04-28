@@ -60,6 +60,6 @@ public class TransInfoManageServiceImpl extends EgovAbstractServiceImpl implemen
 		// TODO Auto-generated method stub
 		return tranMapper.selectTranProcessInfo(tranProcessName);
 	}
-	
+
 	
 }

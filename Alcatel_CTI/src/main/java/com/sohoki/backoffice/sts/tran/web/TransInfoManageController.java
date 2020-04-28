@@ -46,6 +46,7 @@ import egovframework.let.sym.ccm.cde.service.EgovCcmCmmnDetailCodeManageService;
 import com.sohoki.backoffice.sts.tran.service.TransInfo;
 import com.sohoki.backoffice.sts.tran.service.TransInfoVO;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfo;
+import com.sohoki.backoffice.sym.agt.service.TelephoneInfoManageService;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfoVO;
 import com.sohoki.backoffice.sym.agt.service.UserPhoneInfoVO;
 
@@ -89,7 +90,8 @@ public class TransInfoManageController {
 	@Autowired
 	private DefaultBeanValidator beanValidator;
 	
-	
+	@Autowired
+	private TelephoneInfoManageService telService;
 	
 	@RequestMapping ("tranList.do")
 	public ModelAndView selectTranLst(@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
@@ -312,7 +314,7 @@ public class TransInfoManageController {
 		   
 		   return model;
 	}
-	@RequestMapping({"jsonAuthReq.do"})
+	@RequestMapping("jsonAuthReq.do")
 	public ModelAndView selectJsonSendPage(HttpServletRequest request)   throws Exception {
 		
 		ModelAndView model = new 	ModelAndView("jsonView");
@@ -374,16 +376,22 @@ public class TransInfoManageController {
 	@RequestMapping("jsonAuth.do")
 	public String selectJsonResultPage(HttpServletRequest request) throws Exception{
 		String json =   request.getParameter("json") != null ? request.getParameter("json") : "";
+		LOGGER.debug("json reader:" + json);
 	    String jsonResult = "";
 	    
-	    json = json.replace("'", "\"");
+	    if (json.length() > 10 ){
+	    	json = json.replace("&quot;", "\"").replace("&apos;", "\"").replace("'", "\"");
+		    
+		    JSONParser  jsonparse = new JSONParser(); 		
+		    JSONObject jsonObject = (JSONObject) jsonparse.parse(json);						 
+			String commandType = jsonObject.get("command_type").toString();
+			
+			int ProcessCk = tranService.selectTranProcessCount(commandType);
+			jsonResult = (ProcessCk > 0) ?  jsonDocResult(json) : "NO_JSON";
+	    }else{
+	    	jsonResult ="Insufficient information";
+	    }
 	    
-	    JSONParser  jsonparse = new JSONParser(); 		
-	    JSONObject jsonObject = (JSONObject) jsonparse.parse(json);						 
-		String commandType = jsonObject.get("command_type").toString();
-		
-		int ProcessCk = tranService.selectTranProcessCount(commandType);
-		jsonResult = (ProcessCk > 0) ?  jsonDocResult(json) : "NO_JSON";
 		
 		return jsonResult;
 		
@@ -417,6 +425,13 @@ public class TransInfoManageController {
 				  //jsonList 
 				  dataObject.get("RES_INFO").toString();
 				  
+			  }else if (commandType.equals("SEAT_INFOCHANGE")){
+				  //jsonList 
+				  String seatInfo = dataObject.get("SEAT_ID").toString();
+				  String seatGubun = dataObject.get("SEAT_GUBUN").toString();
+				  
+				  String result = telService.updateTelSeatChangeManage(seatInfo, seatGubun) >0 ? "OK" : "FALSE";
+				  resultTxt = "{'command_type':'"+commandType+"','result:': '" + result +"'}"; 
 			  }
 			  
 		}catch (ParseException e) {

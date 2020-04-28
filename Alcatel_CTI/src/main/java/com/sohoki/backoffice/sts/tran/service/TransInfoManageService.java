@@ -11,9 +11,12 @@ public interface TransInfoManageService {
 	
 	TransInfoVO selectTranProcessInfo(String tranProcessName)throws Exception;
 	
+	
+	
 	int selectTranProcessCount(String tranProcessName)throws Exception;
 	
 	int selectTrannfoManageListTotCnt_S(TransInfoVO searchVO)throws Exception;
 	
 	int updateTraninfoManage(TransInfo VO)throws Exception;
+
 }

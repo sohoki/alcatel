@@ -1,5 +1,6 @@
 package com.sohoki.backoffice.sym.agt.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -118,13 +119,56 @@ public class TelephoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 	@Override
 	public String agentTelChange(TelephoneInfo  vo) throws Exception {
 		// TODO Auto-generated method stub
-		TelephoneInfoVO info = agentMapper.selectAgentPageInfoManageDetail(vo.getAgentCode());
 		String result = "FALSE";
-		if ( info.getAgentState().equals("PHONE_STATE_1") && !info.getAgentNownumber().equals("")){
-			result = alcatel.telelPhoneChange( vo.getAgentNownumber(),  info.getSeatId(), "IN");
-		}else {
-			result = "FALSE";
+		try{
+			TelephoneInfoVO info = agentMapper.selectAgentPageInfoManageDetail(vo.getAgentCode());
+			if ( info.getAgentState().equals("PHONE_STATE_1") && info.getAgentNownumber().toString().length() < 2   ){
+				result = alcatel.telelPhoneChange( vo.getAgentNownumber(),  info.getSeatId(), "IN");
+			}else {
+				result = "FALSE";
+			}
+		}catch(Exception e){
+			System.out.println("agentTelChange ERROR:" + e.toString());
 		}
+		
+		return result;
+	}
+
+	@Override
+	public String agentResetAll() throws Exception {
+		// TODO Auto-generated method stub
+		String result = "FALSE";
+		try{
+			result = alcatel.telePhoneReset();
+			result = "OK";
+		}catch(Exception e){
+			System.out.println("agentTelChange ERROR:" + e.toString());
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int updateTelSeatChangeManage(String seatInfo, String seatGubun) throws Exception {
+		// TODO Auto-generated method stub
+		TelephoneInfoVO info = new TelephoneInfoVO();
+		info.setTelChange(seatGubun);
+		info.setSeatChangeInfo(Arrays.asList(seatInfo.split("\\s*,\\s*")) ); 
+		
+		return agentMapper.updateTelSeatChangeManage(info);
+	}
+
+	@Override
+	public String agentResetBasicUpdate() throws Exception {
+		String result = "FALSE";
+		try{
+			System.out.println("agentResetBasicUpdate-----------------------------------------------------------------------------------------------------------------------");
+			result = alcatel.telePhoneBasicUpdate();
+			result = "OK";
+		}catch(Exception e){
+			System.out.println("agentTelChange ERROR:" + e.toString());
+		}
+		
 		return result;
 	}
 }

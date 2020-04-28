@@ -1,6 +1,7 @@
 package com.sohoki.backoffice.sym.agt.service;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfo;
 
@@ -61,10 +62,27 @@ public class TelephoneInfoVO extends TelephoneInfo implements Serializable {
     private String searchReset = "";
     private String searchTelChange = "";
     private String agentReset = "";
+    //신규
+    private List<String> seatChangeInfo = null;
+    
+    private String agentNownumberSetting = "";
     
     
     
     
+    
+	public String getAgentNownumberSetting() {
+		return agentNownumberSetting;
+	}
+	public void setAgentNownumberSetting(String agentNownumberSetting) {
+		this.agentNownumberSetting = agentNownumberSetting;
+	}
+	public List<String> getSeatChangeInfo() {
+		return seatChangeInfo;
+	}
+	public void setSeatChangeInfo(List<String> seatChangeInfo) {
+		this.seatChangeInfo = seatChangeInfo;
+	}
 	public String getAgentReset() {
 		return agentReset;
 	}

@@ -19,9 +19,11 @@ import com.sohoki.backoffice.alcatel.core.EventPackages;
 import com.sohoki.backoffice.alcatel.core.exception.OTRestClientException;
 
 
+import com.sohoki.backoffice.mapper.ErrorInfoManageMapper;
 import com.sohoki.backoffice.mapper.TelephoneInfoManageMapper;
 import com.sohoki.backoffice.mapper.TranInfoManagerMapper;
 import com.sohoki.backoffice.mapper.UserPhoneInfoManageMapper;
+import com.sohoki.backoffice.sts.error.service.ErrorInfo;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfoVO;
 import com.sohoki.backoffice.sym.agt.service.UserPhoneInfoVO;
 import com.sohoki.backoffice.sym.agt.web.AgentInfoManageController;
@@ -72,6 +74,11 @@ import javax.ws.rs.client.WebTarget;
 
 
 
+
+
+
+
+
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
@@ -107,6 +114,10 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
     
 	@Resource(name="TelephoneInfoManageMapper")
 	private TelephoneInfoManageMapper agentMapper;
+	
+	
+	@Resource(name="ErrorInfoManageMapper")
+	private ErrorInfoManageMapper errorMapper;
 
 	
 	@Override
@@ -211,6 +222,8 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 	 	    	   Subscription subscription = sendJson( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  "");
 	 	    	   result = "OK";
 	 	    	   info.setAgentState("PHONE_STATE_4");
+	 	    	   
+	 	    	   LOGGER.debug("PHONE_STATE_4 ---------------------------------------------------------");
 	 	    	   info.setAgentNownumber( "" );
 	 	    	   telManageInfo.updateAgentChangeNumber(info);
 	 	    	   
@@ -283,25 +296,69 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 			 	        if (!macAddress.equals("") && state.equals("OT")) {
 			 	           
 			 	    	   Subscription subscription = sendJTelTypeChange( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  "NOE_C");
+			 	    	   LOGGER.debug("subscription:" +subscription.toString() );
 			 	    	   //폰 타입 변경 확인
+			 	    	   Thread.sleep(1000L);
 			 	    	   subscription = sendJTelTypeChange( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  "NOE_B_IP_8008");	
+			 	    	   LOGGER.debug("subscription:" +subscription.toString() );
 			 	           result = "OK";
 			 	           //체크 구문이 먼저 필요 
+			 	          
 			 	           info.setAgentState("PHONE_STATE_1");  
-			 	           info.setAgentNownumber( "" );
-			 	    	   info.setAgentNownumber( userInfo.getPhoneNumber() );
+			 	           info.setAgentNownumber( "0" );
 			 	    	   telManageInfo.updateAgentChangeNumber(info);
 			 	    	   subscription = null;
 			 	    	   result = "OK";
-			 	        }else if (macAddress.equals("") && state.equals("IN")) {
-			 	          //전화 타입 변경 먼저 하기 (IP_tel로 변경)
-			 	          //Subscription subscription = sendJTelTypeChange( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  "NOE_B_IP_8008");	
-			 	          Subscription subscription = sendJson( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  telInfoVO.getAgentMac());
-			 	          result = "OK";
-			 	          //체크 구문이 먼저 필요 
-			 	          info.setAgentState("PHONE_STATE_2");  
-			 	    	  info.setAgentNownumber( userInfo.getPhoneNumber() );
-			 	    	  telManageInfo.updateAgentChangeNumber(info);
+			 	        }else if (macAddress.equals("") && state.equals("OT")) {
+				 	           
+				 	    	   Subscription subscription = sendJTelTypeChange( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  "NOE_C");
+				 	    	   //폰 타입 변경 확인
+				 	    	   Thread.sleep(1000L);
+				 	    	   subscription = sendJTelTypeChange( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  "NOE_B_IP_8008");	
+				 	    	   result = "OK";
+				 	           //체크 구문이 먼저 필요 
+				 	          
+				 	           info.setAgentState("PHONE_STATE_1");  
+				 	           info.setAgentNownumber( "0" );
+				 	    	   telManageInfo.updateAgentChangeNumber(info);
+				 	    	   subscription = null;
+				 	    	   result = "OK";
+				 	     }else if (macAddress.equals("") && state.equals("IN")) {
+			 	              //전화 타입 변경 먼저 하기 (IP_tel로 변경)
+			 	             //좌석 번호에 이전 번호가 있으면 로그 아웃
+				 	          TelephoneInfoVO info_pre = new TelephoneInfoVO();	
+				 	          info_pre.setSeatId(seatId);
+				 	          info_pre.setAgentNownumber(loginId);
+				 	         LOGGER.debug("PHONE_STATE_2:" + seatId + ":" + loginId);
+				 	          String in_preCheck = 	telManageInfo.selectTelChangeInfo(info_pre);
+				 	          if (in_preCheck.equals("OK")){
+				 	        	  Subscription subscription = sendJson( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  telInfoVO.getAgentMac());
+				 	        	  //변경 된 내역 확인
+				 	        	  if (subscription.subscriptionId.contains("sendJson ERROR")){
+				 	        		 Thread.sleep(1000L);
+				 	        		 
+				 	        		 subscription = sendJson( telInfoVO.getNodeInfo() , spCookie, userInfo.getPhoneNumber(),  telInfoVO.getAgentMac());
+				 	        		 if (subscription.subscriptionId.contains("sendJson ERROR")){
+				 	        			result = "CHANGE ERROR";
+				 	        		 }else {
+				 	        			result = "OK";
+							 	        //체크 구문이 먼저 필요 
+							 	        info.setAgentState("PHONE_STATE_2");  
+							 	    	info.setAgentNownumber( userInfo.getPhoneNumber() );
+							 	    	telManageInfo.updateAgentChangeNumber(info);
+				 	        		 }
+				 	        	  }else {
+				 	        		  result = "OK";
+						 	          //체크 구문이 먼저 필요 
+						 	          info.setAgentState("PHONE_STATE_2");  
+						 	    	  info.setAgentNownumber( userInfo.getPhoneNumber() );
+						 	    	  telManageInfo.updateAgentChangeNumber(info);
+				 	        	  }
+				 	        	  
+				 	        	  
+				 	          }else {
+				 	        	 result = in_preCheck;
+				 	          }
 			 	          
 			 	        }else if (macAddress.equals("") && state.equals("ST")) {
 				 	          //전화 타입 변경 먼저 하기 (IP_tel로 변경)
@@ -312,13 +369,13 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 				 	    	  info.setAgentNownumber( userInfo.getPhoneNumber() );
 				 	    	  telManageInfo.updateAgentChangeNumber(info);
 				 	    	  
-				 	        }else if  (macAddress.equals("") && state.equals("OT")) {
-			 	    	   result = "ChangeERROR NOT MACADDRESS";  
-			 	        }else if  (!macAddress.equals("") && state.equals("IN")) {
+				 	     }else if  (macAddress.equals("") && state.equals("OT")) {
+			 	    	        result = "ChangeERROR NOT MACADDRESS";  
+			 	         }else if  (!macAddress.equals("") && state.equals("IN")) {
 			 		    	   result = "MACADDRESS EXIST"; 
-			 	        }else {
+			 	         }else {
 			 	        	result = "CHANGE ERROR";
-			 	        }
+			 	         }
 			 	         info = null;
 			 	        closeSession(spCookie);
 			 	        client.close();
@@ -367,6 +424,137 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 		String result = "";
 		try{
 			
+			    LOGGER.debug("telePhoneReset---------------------------------------------------------------------------------------------------");
+			    
+			   client = createClient();
+	 	        webTarget = client.target(fileProperties.getProperty("roxe.hostRootPath"));
+	 	        Cookie spCookie = authenticate(fileProperties.getProperty("roxe.adminId"), fileProperties.getProperty("roxe.adminPwd"));
+	 	        try{
+	 	        	openSession(spCookie);
+	 	        }catch(Exception e1){
+	 	        	LOGGER.debug("open_Session Error:" + e1.toString());
+	 	        }
+	 	        
+	 	        //리스트 처리 이후 reset 처리 하기
+	 	       TelephoneInfoVO searchVO = new TelephoneInfoVO();
+	 	       searchVO.setSearchReset("R");
+	 	       searchVO.setSearchTelChange("TEL_CHANGE_2");
+	 	       searchVO.setFirstIndex(0);
+	 	       searchVO.setRecordCountPerPage(2000);
+	 	      
+	 	       List<TelephoneInfoVO> telEesets = agentMapper.selectAgentPageInfoManageListByPagination(searchVO);
+	 	       LOGGER.debug("update telEesets.count:" + telEesets.size());
+	 	       
+	 	       TelephoneInfoVO info = new TelephoneInfoVO();
+	 	       //에러 설정 
+	 	       ErrorInfo vo = new ErrorInfo();
+	 	      
+	 	       for(TelephoneInfoVO telInfo : telEesets){
+	 	    	   try{
+	 	    		   
+	 	    		   String macAddress = telInfoCheck( telInfo.getNodeInfo(),   spCookie, telInfo.getAgentNownumber());
+		 		     	info.setAgentCode(telInfo.getAgentCode());
+			            if (!macAddress.equals("") ) {
+			 	           
+			               Subscription subscription = sendJTelTypeChange( telInfo.getNodeInfo() , spCookie, telInfo.getAgentNownumber(),  "NOE_C");
+				 	        //폰 타입 변경 확인
+			               Thread.sleep(100L);
+				 	       subscription = sendJTelTypeChange( telInfo.getNodeInfo() , spCookie, telInfo.getAgentNownumber(),  "NOE_B_IP_8008");	
+				 	       Thread.sleep(100L);
+			 	    	   result = result ;
+			 	    	   info.setAgentState("PHONE_STATE_1");
+			 	    	   info.setAgentNownumber( "0" );
+			 	    	   telManageInfo.updateAgentChangeNumber(info);
+			 	    	   Thread.sleep(100L);
+			 	    	   
+			 	        }else {
+			 	        	result = result + "," + telInfo.getAgentCode();
+			 	        }
+	 	    		   
+	 	    	   }catch(Exception e2){
+	 	    		  result = result + "," + telInfo.getAgentCode();
+	 	    		  vo.setErrorType("ERROR_TYPE_3");
+	 				  vo.setErrorMessage(telInfo.getNodeInfo() + "," +telInfo.getAgentNownumber());
+	 				  errorMapper.insertErrorMessage(vo);
+	 				   
+	 	    		  LOGGER.debug("---------------------------------------------------------------------------:");
+	 	    		  LOGGER.debug("mac SearchError:" + e2.toString());
+	 	    		  LOGGER.debug("---------------------------------------------------------------------------:");
+	 	    	   }
+	 	    	    
+		 	       
+	 	       }
+	 	       
+	 	       int totalCnt = 0;
+	 	       totalCnt = agentMapper.selectRestChangeCount();
+	 	       if ( totalCnt > 0){
+	 	    	  
+	 	       	 List<TelephoneInfoVO> telEeset = agentMapper.selectRestChangeUpdate();
+	 	    	 
+	 	         for(TelephoneInfoVO telInfo_Pre : telEeset){
+		 	    	   try{
+		 	    		   
+		 	    		   String macAddress = telInfoCheck( telInfo_Pre.getNodeInfo(),   spCookie, telInfo_Pre.getAgentNownumber());
+			 		     	info.setAgentCode(telInfo_Pre.getAgentCode());
+				            if (!macAddress.equals("") ) {
+				 	           
+				               Subscription subscription = sendJTelTypeChange( telInfo_Pre.getNodeInfo() , spCookie, telInfo_Pre.getAgentNownumber(),  "NOE_C");
+					 	        //폰 타입 변경 확인
+				               Thread.sleep(100L);
+					 	       subscription = sendJTelTypeChange( telInfo_Pre.getNodeInfo() , spCookie, telInfo_Pre.getAgentNownumber(),  "NOE_B_IP_8008");	
+					 	       Thread.sleep(100L);
+				 	    	   result = result ;
+				 	    	   info.setAgentState("PHONE_STATE_1");
+				 	    	   info.setAgentNownumber( "0" );
+				 	    	   telManageInfo.updateAgentChangeNumber(info);
+				 	    	   Thread.sleep(100L);
+				 	    	   
+				 	        }else {
+				 	        	
+				 	        	info.setAgentState("PHONE_STATE_1");
+					 	    	info.setAgentNownumber( "0" );
+					 	    	telManageInfo.updateAgentChangeNumber(info);
+					 	    	Thread.sleep(100L);
+				 	        	//에러 구문 넣기 
+					 	    	vo.setErrorType("ERROR_TYPE_1");
+				 				vo.setErrorMessage("agent reset Error:" + telInfo_Pre.getAgentCode());
+				 				errorMapper.insertErrorMessage(vo);
+				 	        	
+				 	        	
+				 	        }
+		 	    		   
+		 	    	   }catch(Exception e2){
+		 	    		  
+		 	    		 vo.setErrorType("ERROR_TYPE_1");
+		 				 vo.setErrorMessage("step 2 agent mac address Error:" + e2.toString());
+		 				 errorMapper.insertErrorMessage(vo);
+		 				 
+		 	    	   }
+		 	       }
+	 	       	telEeset = null ;
+	 	      }else {
+	 	    	 vo.setErrorType("ERROR_TYPE_4");
+ 				 vo.setErrorMessage("리셋 에러 없음");
+ 				 errorMapper.insertErrorMessage(vo);
+	 	      }
+	 	      
+	 	      info = null;
+	 	      vo = null;
+	 	      closeSession(spCookie);
+	 	      client.close();
+	 	       
+		}catch(Exception e){
+			LOGGER.debug("error userSessionOut:" + e.toString());
+			result = "F";
+		}
+		return result;
+		
+	}
+	@Override
+	public String telePhoneBasicUpdate() throws Exception {
+		String result = "";
+		try{
+			
 			   
 	    		client = createClient();
 	 	        webTarget = client.target(fileProperties.getProperty("roxe.hostRootPath"));
@@ -380,28 +568,26 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 	 	        //리스트 처리 이후 reset 처리 하기
 	 	       TelephoneInfoVO searchVO = new TelephoneInfoVO();
 	 	       searchVO.setSearchReset("R");
-	 	       searchVO.setSearchTelChange("TEL_CHANGE_2");
+	 	       searchVO.setSearchTelChange("TEL_CHANGE_1");
+	 	       searchVO.setFirstIndex(0);
+	 	       searchVO.setRecordCountPerPage(2000);
+	 	      LOGGER.debug("telePhoneBasicUpdate---------------------------------------------------------------------------------------------------");
 	 	       List<TelephoneInfoVO> telEesets = agentMapper.selectAgentPageInfoManageListByPagination(searchVO);
+	 	       LOGGER.debug("telEesets.count:" + telEesets.size());
 	 	       
 	 	       TelephoneInfoVO info = new TelephoneInfoVO();
 	 	       
 	 	       for(TelephoneInfoVO telInfo : telEesets){
 	 	    	   
-	 	    	    String macAddress = telInfoCheck( telInfo.getNodeInfo(),   spCookie, telInfo.getAgentNownumber());
-	 		     	info.setAgentCode(telInfo.getAgentCode());
-		            if (!macAddress.equals("") ) {
-		 	           
-		 	    	   //Subscription subscription = sendJson( telInfo.getNodeInfo() , spCookie, telInfo.getAgentNownumber(),  "");
-		 	    	   Subscription subscription = sendJTelTypeChange( telInfo.getNodeInfo() , spCookie, telInfo.getAgentNownumber(),  "NOE_C");
-		 	    	   result = result ;
-		 	    	   info.setAgentState("PHONE_STATE_4");
-		 	    	   info.setAgentNownumber( "" );
-		 	    	   telManageInfo.updateAgentChangeNumber(info);
-		 	    	   
-		 	        }else {
-		 	        	result = result + "," + telInfo.getAgentCode();
-		 	        }
-		 	       
+	 	    	 	info.setAgentCode(telInfo.getAgentCode());
+		          	LOGGER.debug("-----" +  telInfo.getAgentBasicnumber() + ":" +  telInfo.getAgentMac());
+		            Subscription subscription = sendJson( telInfo.getNodeInfo() , spCookie, telInfo.getAgentBasicnumber(),  telInfo.getAgentMac());
+			 	    result = result;
+			 	          //체크 구문이 먼저 필요 
+			 	    info.setAgentState("PHONE_STATE_2");  
+			 	    info.setAgentNownumber( telInfo.getAgentBasicnumber() );
+			 	    telManageInfo.updateAgentChangeNumber(info);
+			 	    Thread.sleep(1000L);
 	 	       }
 	 	       info = null;
 	 	       
@@ -426,6 +612,8 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
                 + '}';
         return webTarget.path("subscriptions").request().cookie(cookie).post(Entity.json(subscriptionRequest), Subscription.class);
     }
+	
+	
 	//전화기 사용자 인증 
 	private Subscription sendJson(String node, Cookie cookie, String phoneNumber, String macAddress) throws Exception {
 		Subscription subscript = new Subscription();
@@ -435,6 +623,7 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 			LOGGER.debug("sendJson:" + sendJson);
 			subscript =  webTarget.path(pathUrl).request().cookie(cookie).put(Entity.json(sendJson), Subscription.class);
 		}catch(Exception e1){
+			subscript.setSubscriptionId("sendJson ERROR:" + e1.toString());
 			LOGGER.debug("sendJson ERROR:" + e1.toString());
 		}
 		return subscript;
@@ -447,8 +636,10 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 			try{
 				String pathUrl = "pbxs/"+ node +"/instances/Subscriber/"+ phoneNumber;
 				String sendJson = "{\"attributes\": [{\"name\": \"Station_Type\", \"value\": [\""+telType+"\"] } ] }";
+				LOGGER.debug("sendJson:" + sendJson);
 				subscript =  webTarget.path(pathUrl).request().cookie(cookie).put(Entity.json(sendJson), Subscription.class);
 			}catch(Exception e1){
+				subscript.setSubscriptionId("ERROR:Error reading");
 				LOGGER.debug("sendJson ERROR:" + e1.toString());
 			}
 			return subscript;
@@ -552,6 +743,7 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 	        String publicUrl = jsonNode1.get("versions").get(0).get("publicUrl").getTextValue();
 	        LOGGER.debug("public Url:" + publicUrl);
 		}catch(Exception e){
+			//여기 부분 확인 필요 
 			LOGGER.debug("ERROR open session:" + e.toString());
 		}
 		

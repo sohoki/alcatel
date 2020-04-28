@@ -17,6 +17,12 @@
 							<when test="searchCondition == 'agentNm'">
 								and a.AGENT_NM LIKE CONCAT('%',#{searchKeyword},'%') 
 							</when>
+							<when test="searchCondition == 'agentBasicnumber'">
+								and a.AGENT_BASICNUMBER LIKE CONCAT('%',#{searchKeyword},'%') 
+							</when>
+							<when test="searchCondition == 'agentNownumber'">
+								and a.AGENT_NOWNUMBER LIKE CONCAT('%',#{searchKeyword},'%') 
+							</when>
 							<when test="searchCondition == 'disSeq'">
 								and a.DISPLAY_SEQ =  #{searchKeyword} 
 							</when>
@@ -31,11 +37,12 @@
 				     and a.AGENT_FLOOR = #{searchFloor}
 				     </if>
 				</if>   
-				<if test="searchReset != ''">
-				   and a.AGENT_NOWNUMBER != '' 
+                <if test="searchReset != ''">
+				   AND (a.AGENT_NOWNUMBER != '' or a.AGENT_NOWNUMBER != '0') 
+				   AND agent_state = 'PHONE_STATE_2'
 				</if>
 				<if test="searchTelChange != ''">
-				   and a.TEL_CHANGE != #{searchTelChange} 
+				   and a.TEL_CHANGE = #{searchTelChange} 
 				</if>
 				<if test="adminLevel == 'ROLE_ADMIN' and searchPartid != ''">
 				   and a.PART_ID = #{searchPartid}
@@ -63,13 +70,29 @@
 	        ORDER BY  TB.AGENT_NM ASC,  TB.AGENT_CODE  DESC
 	        limit  #{firstIndex}, #{recordCountPerPage}         		 	    
    </select>
+   <select id="selectRestChangeCount"  resultType="java.lang.Integer">
+        SELECT isnull(count(*)) 
+        FROM tb_telephoneinfo 
+        where TEL_CHANGE = 'TEL_CHANGE_2'
+                 AND AGENT_NOWNUMBER != '0'
+                 AND AGENT_STATE = 'PHONE_STATE_1'
+                 AND AGENT_USEYN = 'Y'
+   </select>
+   <select id="selectRestChangeUpdate"  resultType="TelephoneInfoVO">
+        SELECT AGENT_NOWNUMBER, NODE_INFO, AGENT_CODE
+        FROM tb_telephoneinfo 
+        where TEL_CHANGE = 'TEL_CHANGE_2'
+                 AND AGENT_NOWNUMBER != '0'
+                 AND AGENT_STATE = 'PHONE_STATE_1'
+                 AND AGENT_USEYN = 'Y'
+   </select>
    
    <select id="selectAgentPageInfoManageDetail" resultType="TelephoneInfoVO">
      SELECT a.AGENT_CODE, a.AGENT_NM, a.AGENT_REMARK, a.AGENT_IP, a.AGENT_MAC,
             a.AGENT_USEYN, a.FRST_REGIST_PNTTM, a.FRST_REGISTER_ID, a.LAST_UPDT_PNTTM, a.LAST_UPDUSR_ID,
 			a.AGENT_FLOOR, a.AGENT_STATE , a.AGENT_BASICNUMBER, a.AGENT_NOWNUMBER, a.AGENT_OSVERSION, 
 			c.CENTER_NM, d.part_nm , a.CENTER_ID, a.part_id,
-			a.LOGIN_ID, a.LOGIN_PWD, a.SEAT_ID, a.NODE_INFO, a.TEL_CHANGE
+			a.LOGIN_ID, a.LOGIN_PWD, a.SEAT_ID, a.c, a.TEL_CHANGE
      FROM tb_telephoneinfo a, tb_centerinfo c,  tb_partinfo d
      WHERE a.center_id = c.center_id
            AND a.part_id = d.part_id
@@ -136,17 +159,19 @@
        from tb_telephoneinfo
        where AGENT_CODE = #{agentCode} 
    </select>
-   
+   <select id="selectTelChangeInfo" resultType="java.lang.String">
+       select FN_TELAVAL(#{seatId}, #{agentNownumber})
+   </select>
    <insert id="insertAgentInfoManage">
       INSERT INTO tb_telephoneinfo( AGENT_CODE, AGENT_NM, AGENT_REMARK, AGENT_IP, AGENT_MAC, AGENT_USEYN, 
                                 FRST_REGIST_PNTTM, FRST_REGISTER_ID, LAST_UPDT_PNTTM, LAST_UPDUSR_ID,
-                                CENTER_ID, PART_ID, AGENT_FLOOR, AGENT_BASICNUMBER, AGENT_OSVERSION, LOGIN_ID, LOGIN_PWD, SEAT_ID, NODE_INFO, TEL_CHANGE )
+                                CENTER_ID, PART_ID, AGENT_FLOOR, AGENT_BASICNUMBER, AGENT_OSVERSION, LOGIN_ID, LOGIN_PWD, SEAT_ID, NODE_INFO, TEL_CHANGE, AGENT_STATE )
       VALUES (#{agentCode}, #{agentNm}, #{agentRemark,jdbcType=VARCHAR}, #{agentIp,jdbcType=VARCHAR}, #{agentMac,jdbcType=VARCHAR }, 
               #{agentUseyn,jdbcType=VARCHAR },  now(), #{userId,jdbcType=VARCHAR}, now(), #{userId,jdbcType=VARCHAR},
               #{centerId ,jdbcType=VARCHAR}, #{partId, jdbcType=VARCHAR}, #{agentFloor, jdbcType=INTEGER },
               #{agentBasicnumber , jdbcType=VARCHAR}, #{agentOsversion , jdbcType=VARCHAR},
               #{loginId , jdbcType=VARCHAR}, #{loginPwd , jdbcType=VARCHAR},  #{seatId , jdbcType=VARCHAR},  #{nodeInfo , jdbcType=VARCHAR},
-              #{telChange , jdbcType=VARCHAR}
+              #{telChange , jdbcType=VARCHAR}, 'PHONE_STATE_1'
               )
    </insert>
    <update id="updateAgentIpMac">
@@ -181,6 +206,8 @@
                              , NODE_INFO =  #{nodeInfo , jdbcType=VARCHAR}
                              , AGENT_MAC = #{agentMac,jdbcType=VARCHAR }
                              , TEL_CHANGE = #{telChange, jdbcType=VARCHAR}
+							 , AGENT_NOWNUMBER = #{agentNownumber, jdbcType=VARCHAR}
+							 , AGENT_STATE = #{agentState, jdbcType=VARCHAR}
       WHERE AGENT_CODE = #{agentCode}
    </update>
    <delete id="deleteAgentPageInfoManage">

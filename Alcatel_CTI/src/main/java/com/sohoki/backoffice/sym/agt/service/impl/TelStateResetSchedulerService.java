@@ -25,6 +25,12 @@ public class TelStateResetSchedulerService {
 	
 	public void telStateResetScheduling() throws Exception{
 		try{
+			
+			   ErrorInfo vo = new ErrorInfo();
+		       vo.setErrorType("ERROR_TYPE_1");
+			   vo.setErrorMessage("telStateResetScheduling start:");
+			   errorMapper.insertErrorMessage(vo);
+			   
 			 alcalInfo.telePhoneReset();
 		}catch (RuntimeException re) {
 		       logger.error("telStateResetScheduling run failed", re);

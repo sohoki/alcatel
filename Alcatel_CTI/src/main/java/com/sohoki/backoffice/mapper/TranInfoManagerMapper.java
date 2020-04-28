@@ -24,4 +24,5 @@ public interface TranInfoManagerMapper {
 	public int insertTranInfoManage(TransInfo VO);
 	
 	public int updateTraninfoManage(TransInfo VO);
+	
 }

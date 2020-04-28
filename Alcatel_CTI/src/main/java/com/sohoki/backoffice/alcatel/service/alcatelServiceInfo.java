@@ -12,5 +12,7 @@ public interface alcatelServiceInfo {
 	String telePhoneStart(String jsonTxt)  throws Exception;
 	//배치 로그아웃 
 	String telePhoneReset() throws Exception;
+	//기본값 초기화 
+	String telePhoneBasicUpdate() throws Exception;
 	
 }

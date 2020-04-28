@@ -83,16 +83,24 @@
 		                         <form:options items="${selectGroupCombo}" itemValue="partId" itemLabel="partNm"/>
 					</form:select>
 					<% } %>
-						    
+					<form:select path="searchTelChange" id="searchTelChange" title="소속">
+							     <option value=""><spring:message code="combobox.text" /></option>
+		                         <form:options items="${selectTelCombo}" itemValue="code" itemLabel="codeNm"/>
+					</form:select>	    
                     <select name="searchCondition"  id="searchCondition">
 								<option value=""><spring:message code="combobox.text" /></option>
 								<option value="agentNm" <c:if test="${searchVO.searchCondition == 'agentNm' }"> selected="selected" </c:if>><spring:message code="page.agent.TitleNm" /></option>
 								<option value="agentRemark" <c:if test="${searchVO.searchCondition == 'agentRemark' }"> selected="selected" </c:if>><spring:message code="page.agent.remark" /></option>
 					</select>
+					
+
+
 					<input class="nameB" type="text" name="searchKeyword" id="searchKeyword" value="${searchVO.searchKeyword}">                    
                     <a href="javascript:search_form();"><span class="redBtn"><spring:message code="button.inquire" /></span></a>
                     <div class="rightB">
-                        <a href="#" onclick="fn_excelPop()"><span class="deepBtn"><spring:message code="page.commo.excelUpload" /></a>
+                        <!--<a href="#" onclick="fn_excelPop()"><span class="deepBtn"><spring:message code="page.commo.excelUpload" /></a>-->
+                        <a href="#" onclick="fn_AgentAllRest()"><span class="deepBtn">전체 초기화</a>
+						<!--<a href="#" onclick="fn_AgentAllUpdate()"><span class="deepBtn">기본값 입력</a>-->
                         <a href="#" onclick="fn_AgentReste()"><span class="deepBtn"><spring:message code="page.agent.sendBtn1" /></a>
                         <a href="#" onclick="fn_agentPop('Ins','0')" data-needpopup-show="#agent_pop"><span class="deepBtn"><spring:message code="button.create" /></a>
                     </div>
@@ -121,7 +129,9 @@
                         <tr>
                             <td>
                             <c:if test="${agentInfo.agentState == 'PHONE_STATE_2' }">
+							      <c:if test="${agentInfo.telChangeTxt == '유동전화' }">
                             <input type="checkbox" name="agentInput"  value="<c:out value="${agentInfo.agentCode}"/>">
+							      </c:if>
                             </c:if>
                             </td>
                             <td>${ agentInfo.agentOsversion}</td>
@@ -265,6 +275,23 @@
 					</form:select>
                 </div>                
             </div>
+
+
+			<div class="pop_box50">
+                <div class="padding15">
+                    <p class="pop_tit">*<spring:message code="page.agentNownumber" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:input  path="agentNownumber" size="10"  id="agentNownumber" />
+                </div>  
+            </div>
+            <div class="pop_box50">
+                <div class="padding15">
+                    <p class="pop_tit">*<spring:message code="page.agent.state" /> <span class="join_id_comment joinSubTxt"></span></p>
+                    <form:select path="agentState" id="agentState" title="소속">
+							     <option value=""><spring:message code="combobox.text" /></option>
+		                         <form:options items="${selectStateCombo}" itemValue="code" itemLabel="codeNm"/>
+					</form:select>
+                </div>    
+             </div>
              
             <div class="clear"></div>   
             
@@ -311,6 +338,36 @@
        );
 	   $('#agentNownumber').val("");
 	   $('#agentCode').val("");
+	   location.reload();
+   }
+   function fn_AgentAllRest(){
+	   uniAjax("/backoffice/operManage/agentInfoTelRest.do", null , 
+     			function(result) {
+	    	            if (result.status == "SUCCESS"){
+	    	            	alert('<spring:message code="success.common.update" />');
+						}else{
+							alert("처리 도중 장애가 발생하였습니다." + result.message);
+						}
+				    },
+				    function(request){
+					    alert("Error:" +request.status );	       						
+				    }    		
+      );
+	   location.reload();
+   }
+   function fn_AgentAllUpdate(){
+	   uniAjax("/backoffice/operManage/agentInfoTelBaicNumber.do", null , 
+     			function(result) {
+	    	            if (result.status == "SUCCESS"){
+	    	            	alert('<spring:message code="success.common.update" />');
+						}else{
+							alert("처리 도중 장애가 발생하였습니다." + result.message);
+						}
+				    },
+				    function(request){
+					    alert("Error:" +request.status );	       						
+				    }    		
+      );
 	   location.reload();
    }
    //초기화 
@@ -372,6 +429,10 @@
 		  					   $("#agentBasicnumber").val(obj.agentBasicnumber);
 		  					   $("#nodeInfo").val(obj.nodeInfo);
 		  					   $("#telChange").val(obj.telChange);
+
+
+							   $("#agentNownumber").val(obj.agentNownumber);
+		  					   $("#agentState").val(obj.agentState);
 		  					 
 		  					   $('input:radio[name=agentUseyn]:input[value=' + obj.agentUseyn + ']').attr("checked", true);	 
 		  					   //fn_SearchNumber("Edt");
@@ -448,6 +509,10 @@
 					   seatId : $("#seatId").val(),
 					   agentCode : $("#agentCode").val(),
 					   nodeInfo : $("#nodeInfo").val(),
+
+					   agentNownumber : $("#agentNownumber").val(),
+					   agentState : $("#agentState").val(),
+
 					   telChange : $("#telChange").val()
 			        };
 	            uniAjax("/backoffice/operManage/agentInfoUpdate.do", params, 
@@ -468,7 +533,7 @@
    function linkPage(pageNo) {
 		$(":hidden[name=pageIndex]").val(pageNo);	
 		$('#displaySeq').val("0");
-		$("form[name=regist]").attr("action","/backoffice/operManage/AgentInfoList.do").submit();
+		$("form[name=regist]").attr("action","/backoffice/operManage/agentList.do").submit();
    }
    function fn_viewAgent(agentCode){
 		  $('#mode').val("Edt");
@@ -479,7 +544,7 @@
    function search_form(){	
 		  $(":hidden[name=pageIndex]").val("1");	
 		  $('#displaySeq').val("0");
-		  $("form[name=regist]").attr("action", "/backoffice/operManage/AgentInfoList.do").submit();		  
+		  $("form[name=regist]").attr("action", "/backoffice/operManage/agentList.do").submit();		  
    }
 </script>
 </body>

@@ -272,6 +272,61 @@ public class AgentInfoManageController {
 			}
 			return model;
 	 }
+	 @RequestMapping(value="agentInfoTelRest.do") 
+	 public ModelAndView selectUserInfoUpdate (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+																	   ,BindingResult bindingResult) throws Exception{
+		ModelAndView model = new ModelAndView("jsonView");
+		String meesage = "";
+		try{
+				Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+				if(!isAuthenticated) {
+				model.addObject("status", Globals.STATUS_LOGINFAIL);
+				model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
+				}
+				
+				String result = telephoneService.agentResetAll();
+				
+				int ret = 1;
+				if (ret >0){
+					model.addObject("status", Globals.STATUS_SUCCESS);
+					model.addObject("message", egovMessageSource.getMessage(meesage));		
+		        }else {	
+		             throw new Exception();
+		       }
+		}catch(Exception e){
+			   model.addObject("status", Globals.STATUS_FAIL);
+			   model.addObject("message", "ERROR:" + e.toString());
+		}
+		return model;
+	 }
+	 @RequestMapping(value="agentInfoTelBaicNumber.do") 
+	 public ModelAndView selectUserInfoBasicUpdate (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
+																	   ,BindingResult bindingResult) throws Exception{
+		ModelAndView model = new ModelAndView("jsonView");
+		String meesage = "";
+		try{
+				Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+				if(!isAuthenticated) {
+				model.addObject("status", Globals.STATUS_LOGINFAIL);
+				model.addObject("message", egovMessageSource.getMessage("fail.common.login"));
+				}
+				LOGGER.debug("agentInfoTelBaicNumber 시작");
+				
+				String result = telephoneService.agentResetBasicUpdate();
+				
+				int ret = 1;
+				if (ret >0){
+					model.addObject("status", Globals.STATUS_SUCCESS);
+					model.addObject("message", egovMessageSource.getMessage(meesage));		
+		        }else {	
+		             throw new Exception();
+		       }
+		}catch(Exception e){
+			   model.addObject("status", Globals.STATUS_FAIL);
+			   model.addObject("message", "ERROR:" + e.toString());
+		}
+		return model;
+	 }
 	 @RequestMapping(value="userUpdate.do")
 	 public ModelAndView selectUserInfoUpdate (@ModelAttribute("AdminLoginVO") AdminLoginVO loginVO
 														   ,@RequestBody  UserPhoneInfoVO vo
@@ -350,6 +405,7 @@ public class AgentInfoManageController {
 			       mv.addObject("selectCenterCombo", centerService.selectCenterCombo());
 			       mv.addObject("selectGroupCombo", partService.selectPartInfoCombo());
 			       mv.addObject("selectTelCombo", detailService.selectCmmnDetailCombo("TEL_CHANGE") );
+			       mv.addObject("selectStateCombo", detailService.selectCmmnDetailCombo("PHONE_STATE") );
 			       
 			       mv.addObject("totalCnt", totCnt);
 		      }catch(Exception e){
@@ -417,7 +473,10 @@ public class AgentInfoManageController {
 		ModelAndView model = new ModelAndView("jsonView");
 		String meesage = "";
 		try{
+			LOGGER.debug("agentInfoTelChange-------------------------------------------------------------------");
+			LOGGER.debug("agentInfoTelChange" + vo.getAgentCode() + ":" + vo.getAgentNownumber());
 			meesage = telephoneService.agentTelChange(vo) ;
+			LOGGER.debug("meesage:" + meesage);
 			if (meesage.equals("OK")) {
 			    model.addObject("status", Globals.STATUS_SUCCESS);
 			}else {

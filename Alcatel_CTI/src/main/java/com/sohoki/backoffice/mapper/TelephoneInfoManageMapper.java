@@ -3,6 +3,8 @@ package com.sohoki.backoffice.mapper;
 import java.util.List;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+
+import com.sohoki.backoffice.sts.tran.service.TransInfoVO;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfo;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfoVO;
 
@@ -15,10 +17,16 @@ public interface TelephoneInfoManageMapper {
 	    
 	    public TelephoneInfoVO selectAgentPageInfoManageDetailSeatId(String  seatId );
 	    
-	    
 	    public int selectAgentPageInfoManageListTotCnt_S(TelephoneInfoVO searchVO);
+	    //신규 추가
+	    public int selectRestChangeCount();
+	    
+	    public List<TelephoneInfoVO> selectRestChangeUpdate();
+	    //신규 추가 끝 부분
 	    
 	    public int selectAgentExist (String agentCode);
+	    
+	    public String selectTelChangeInfo(TelephoneInfoVO vo);
 	    
 	    public int insertAgentInfoManage(TelephoneInfo vo);
 	    
@@ -29,6 +37,8 @@ public interface TelephoneInfoManageMapper {
 	    public int updateAgentStateChange(TelephoneInfo vo);
 	    
 	    public int updateAgentPageInfoManage(TelephoneInfo vo);
+	    //신규 좌석 변경
+		public int updateTelSeatChangeManage(TelephoneInfo vo);
 		
 	    public int deleteAgentPageInfoManage(String  agentCode);
 }
