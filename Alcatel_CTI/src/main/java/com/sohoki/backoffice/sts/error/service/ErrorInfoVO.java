@@ -30,10 +30,46 @@ public class ErrorInfoVO extends ErrorInfo implements  Serializable {
     
     private String searchError = "";
     
+    private int totalRecordCount = 0;
+    
+    private String codeNm="";
+    private String searchErrorgubun = "";
+    
+    private String searchStartDay = "";
+    private String searchEndDay = "";
     
     
     
-    
+	public String getSearchStartDay() {
+		return searchStartDay;
+	}
+	public void setSearchStartDay(String searchStartDay) {
+		this.searchStartDay = searchStartDay;
+	}
+	public String getSearchEndDay() {
+		return searchEndDay;
+	}
+	public void setSearchEndDay(String searchEndDay) {
+		this.searchEndDay = searchEndDay;
+	}
+	public String getSearchErrorgubun() {
+		return searchErrorgubun;
+	}
+	public void setSearchErrorgubun(String searchErrorgubun) {
+		this.searchErrorgubun = searchErrorgubun;
+	}
+	public String getCodeNm() {
+		return codeNm;
+	}
+	public void setCodeNm(String codeNm) {
+		this.codeNm = codeNm;
+	}
+	public int getTotalRecordCount() {
+		return totalRecordCount;
+	}
+	public void setTotalRecordCount(int totalRecordCount) {
+		this.totalRecordCount = totalRecordCount;
+	}
 	public String getSearchError() {
 		return searchError;
 	}
