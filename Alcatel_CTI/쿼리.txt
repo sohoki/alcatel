@@ -105,7 +105,12 @@ CREATE TABLE `tb_managerinfo` (
   PRIMARY KEY (`ADMIN_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='관리자 정보';
 
-
+CREATE TABLE tb_telhis(
+      his_seq int(11) PRIMARY KEY  NOT NULL AUTO_INCREMENT COMMENT '시퀀스',
+      his_telNumber VARCHAR(20) NOT null,
+      his_telDay CHAR(8)
+ );
+      
 CREATE TABLE `tb_errorhis` (
   `ERROR_SEQ` int(11) NOT NULL AUTO_INCREMENT COMMENT '시퀀스',
   `ERROR_TYPE` varchar(80) DEFAULT NULL COMMENT '에러 타입',

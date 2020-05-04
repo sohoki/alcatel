@@ -16,6 +16,9 @@
 							</otherwise>
 						</choose>
 				</if>		        
+				<if test="searchError != ''">
+				AND DATE_FORMAT(NOW(),'%Y%m%d') = DATE_FORMAT(a.ERROR_REGDATE,'%Y%m%d') 
+				</if>
 				ORDER BY a.ERROR_SEQ  DESC
 	        ) TB 
 	        limit #{firstIndex}, #{recordCountPerPage}         		 	    

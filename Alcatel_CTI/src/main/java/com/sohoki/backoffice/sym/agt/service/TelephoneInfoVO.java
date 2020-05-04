@@ -69,8 +69,33 @@ public class TelephoneInfoVO extends TelephoneInfo implements Serializable {
     
     
     
+    private String hisSeq = "";
+    private String hisTelNumber = "";
+    private String hisTelDay = "";
     
     
+    
+    
+    
+    
+	public String getHisSeq() {
+		return hisSeq;
+	}
+	public void setHisSeq(String hisSeq) {
+		this.hisSeq = hisSeq;
+	}
+	public String getHisTelNumber() {
+		return hisTelNumber;
+	}
+	public void setHisTelNumber(String hisTelNumber) {
+		this.hisTelNumber = hisTelNumber;
+	}
+	public String getHisTelDay() {
+		return hisTelDay;
+	}
+	public void setHisTelDay(String hisTelDay) {
+		this.hisTelDay = hisTelDay;
+	}
 	public String getAgentNownumberSetting() {
 		return agentNownumberSetting;
 	}

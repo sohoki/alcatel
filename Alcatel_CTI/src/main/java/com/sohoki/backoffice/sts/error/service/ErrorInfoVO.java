@@ -28,8 +28,18 @@ public class ErrorInfoVO extends ErrorInfo implements  Serializable {
     private int lastIndex = 1;    
     private int recordCountPerPage = 10;
     
+    private String searchError = "";
     
     
+    
+    
+    
+	public String getSearchError() {
+		return searchError;
+	}
+	public void setSearchError(String searchError) {
+		this.searchError = searchError;
+	}
 	public String getSearchCondition() {
 		return searchCondition;
 	}

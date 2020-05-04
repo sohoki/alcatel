@@ -22,6 +22,9 @@ public interface TelephoneInfoManageMapper {
 	    public int selectRestChangeCount();
 	    
 	    public List<TelephoneInfoVO> selectRestChangeUpdate();
+	    
+	    public List<TelephoneInfoVO> selectTodayBackUplist();
+	    
 	    //신규 추가 끝 부분
 	    
 	    public int selectAgentExist (String agentCode);
@@ -30,9 +33,13 @@ public interface TelephoneInfoManageMapper {
 	    
 	    public int insertAgentInfoManage(TelephoneInfo vo);
 	    
+	    public int insertTelBackUp();
+	    
 	    public int updateAgentIpMac (TelephoneInfo vo);
 	    
 	    public int updateAgentChangeNumber(TelephoneInfo vo);
+	    //신규 추가
+	    public int updateAgentResetNumber(TelephoneInfo vo);
 	    
 	    public int updateAgentStateChange(TelephoneInfo vo);
 	    
