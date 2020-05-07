@@ -13,13 +13,35 @@
 	<bean id="resTelRestSchedulingTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="resTelRestScheduling" />
-		<property name="cronExpression" value="0 50 23 * * ?" />
+		<property name="cronExpression" value="0 0 3 * * ?" />
 	</bean>
 	
 	<bean id="agentStatsCreateBatchScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref bean="resTelRestSchedulingTrigger" />
+			</list>
+		</property>
+	</bean> 
+	
+	
+	<bean id="resTelBackupScheduling"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="TelStateResetSchedulerService" />
+		<property name="targetMethod" value="telStateBackupScheduling" />
+		<property name="concurrent" value="false" />
+	</bean> 
+	
+	<bean id="resTelBackupSchedulingTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="resTelBackupScheduling" />
+		<property name="cronExpression" value="0 0 16 * * ?" />
+	</bean>
+	
+	<bean id="agentBackUpCreateBatchScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="resTelBackupSchedulingTrigger" />
 			</list>
 		</property>
 	</bean> 

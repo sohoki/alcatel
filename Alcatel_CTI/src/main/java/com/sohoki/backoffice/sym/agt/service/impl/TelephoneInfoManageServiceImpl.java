@@ -171,4 +171,10 @@ public class TelephoneInfoManageServiceImpl extends EgovAbstractServiceImpl impl
 		
 		return result;
 	}
+
+	@Override
+	public int agentBackup() throws Exception {
+		// TODO Auto-generated method stub
+		return agentMapper.insertTelBackUp();
+	}
 }

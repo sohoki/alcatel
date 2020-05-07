@@ -7,8 +7,9 @@
 		<setting name="cacheEnabled" value="true"/>		
 	</settings>
 	
-	<!-- 전자정부 프레임워크 공통 Alias 정의-->	  
+		  
 	<typeAliases>
+	    <!-- 전자정부 프레임워크 공통 Alias 정의-->
 	    <package name="egovframework.com.cmm"/>
 	    <package name="egovframework.let.src.ram.service"/>
 	    <package name="egovframework.let.uat.uia.service"/>
@@ -16,39 +17,15 @@
 	    <package name="egovframework.let.sym.ccm.ccc.service"/>
 	    <package name="egovframework.let.sym.ccm.cde.service"/>
 	    
-	    
+	    <!-- sohoki 공통 Alias 정의-->
 	    <package name="com.sohoki.backoffice.util.service"/>
 	    <package name="com.sohoki.backoffice.sts.error.service"/>
 	    <package name="com.sohoki.backoffice.sts.cnt.service"/>
 	    <package name="com.sohoki.backoffice.sts.tran.service"/>
-	    
 	    <package name="com.sohoki.backoffice.uat.uia.service"/>
 	    <package name="com.sohoki.backoffice.sym.cnt.service"/>
+	    <package name="com.sohoki.backoffice.sym.agt.service"/>	    
 	    <package name="com.sohoki.backoffice.sym.agt.service"/>
-	    
 	</typeAliases>
 	
-	<!-- Mapper 정의 -->
-	<mappers>
-		<!-- 전자정부 프레임워크 공통 컴포넌트 -->
-		<mapper resource="egovframework/sqlmap/mariadb/sym/ccm/cca/EgovCmmnCodeManageMapper.xml"/>
-		<mapper resource="egovframework/sqlmap/mariadb/sym/ccm/ccc/EgovCmmnClCodeManageMapper.xml"/>
-		<mapper resource="egovframework/sqlmap/mariadb/sym/ccm/cde/EgovCmmnDetailCodeManageMapper.xml"/>
-		<mapper resource="egovframework/sqlmap/mariadb/sym/rnt/AuthorInfoManagerMapper.xml"/>
-		<mapper resource="egovframework/sqlmap/mariadb/uat/uia/AdminInfoManageMapper.xml"/>
-		<mapper resource="egovframework/sqlmap/mariadb/uat/uia/EgovLoginUsrMapper.xml"/>
-		<!--  sohoki 으로 이동 -->
-		<mapper resource="sohoki/sqlmap/mariadb/uti/UniUtilManageMapper.xml"/>
-		<mapper resource="sohoki/sqlmap/mariadb/sts/err/ErrorInfoManageMapper.xml"/>
-		<mapper resource="sohoki/sqlmap/mariadb/uat/uia/PartInfoManageMapper.xml"/>
-		<mapper resource="sohoki/sqlmap/mariadb/sym/cnt/CenterInfoManagerMapper.xml"/>
-		<mapper resource="sohoki/sqlmap/mariadb/sym/agt/TelephoneInfoManageMapper.xml"/>
-		<mapper resource="sohoki/sqlmap/mariadb/sym/agt/UserPhoneInfoManageMapper.xml"/>
-		
-		<mapper resource="sohoki/sqlmap/mariadb/sts/cnt/ContentFileManagerMapper.xml"/>
-		<mapper resource="sohoki/sqlmap/mariadb/sts/tran/TranInfoManageMapper.xml"/>
-		
-		
-								
-	</mappers>
 </configuration>

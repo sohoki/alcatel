@@ -18,6 +18,8 @@ public interface TelephoneInfoManageService {
     
     String agentResetAll( ) throws Exception;
     
+    int agentBackup() throws  Exception;
+    
     String agentResetBasicUpdate( ) throws Exception;
     
     int selectAgentPageInfoManageListTotCnt_S(TelephoneInfoVO searchVO) throws Exception;
