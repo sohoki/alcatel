@@ -8,17 +8,15 @@ import com.sohoki.backoffice.sts.error.service.ErrorInfoManageService;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
 import com.sohoki.backoffice.mapper.ErrorInfoManageMapper;
 
 @Service("ErrorInfoManageService")
 public class ErrorInfoManageServiceImpl extends EgovAbstractServiceImpl implements ErrorInfoManageService {
 
-	@Autowired
+	@Resource(name="ErrorInfoManageMapper")
 	private ErrorInfoManageMapper errorMapper;
 	
 	

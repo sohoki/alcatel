@@ -22,7 +22,7 @@ if(loginVO == null ){
                 <nav id="topMenu">
                     <ul>
                         <li class="dropdown">
-                            <a href="/backoffice/operManage/errorList.do" class="dropbtn"><spring:message code="menu.menu02_3" /></a>
+                            <a href="/backoffice/operManage/errList.do" class="dropbtn"><spring:message code="menu.menu02_3" /></a>
                         </li>
                         <li class="dropdown">
                             <a href="/backoffice/basicManage/AgentInfoList.do" class="dropbtn">

@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sohoki.backoffice.alcatel.service.alcatelServiceInfo;
@@ -19,8 +18,8 @@ import com.sohoki.backoffice.sym.agt.service.TelephoneInfoManageService;
 public class TelStateResetSchedulerService {
 
 	private static final Logger logger = Logger.getLogger(TelStateResetSchedulerService.class);
-	 
-	@Autowired
+	
+	@Resource(name="ErrorInfoManageMapper")
 	private ErrorInfoManageMapper errorMapper;
 	
 	@Resource(name="alcatelServiceInfo")

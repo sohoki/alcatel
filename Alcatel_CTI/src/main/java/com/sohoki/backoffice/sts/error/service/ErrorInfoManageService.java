@@ -14,5 +14,4 @@ public interface ErrorInfoManageService {
 	int deleteErrorMessage(String errorSeq)throws Exception;
 	
 
-	
 }

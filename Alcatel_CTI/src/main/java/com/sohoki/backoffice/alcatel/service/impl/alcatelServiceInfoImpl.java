@@ -4,7 +4,6 @@ package com.sohoki.backoffice.alcatel.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sohoki.backoffice.alcatel.service.alcatelServiceInfo;
@@ -25,7 +24,6 @@ import com.sohoki.backoffice.mapper.TelephoneInfoManageMapper;
 import com.sohoki.backoffice.mapper.TranInfoManagerMapper;
 import com.sohoki.backoffice.mapper.UserPhoneInfoManageMapper;
 import com.sohoki.backoffice.sts.error.service.ErrorInfo;
-import com.sohoki.backoffice.sts.error.service.ErrorInfoManageService;
 import com.sohoki.backoffice.sts.error.service.ErrorInfoVO;
 import com.sohoki.backoffice.sym.agt.service.TelephoneInfoVO;
 import com.sohoki.backoffice.sym.agt.service.UserPhoneInfoVO;
@@ -37,6 +35,8 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -62,6 +62,24 @@ import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -100,7 +118,7 @@ public class alcatelServiceInfoImpl  extends EgovAbstractServiceImpl  implements
 	private TelephoneInfoManageMapper agentMapper;
 	
 	
-	@Autowired
+	@Resource(name="ErrorInfoManageMapper")
 	private ErrorInfoManageMapper errorMapper;
 
 	

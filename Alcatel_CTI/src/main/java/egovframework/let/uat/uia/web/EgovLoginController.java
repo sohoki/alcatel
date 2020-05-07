@@ -100,8 +100,10 @@ public class EgovLoginController {
     	// 접속IP
     	String userIp = EgovClntInfo.getClntIP(request);
         
+    	
+    	// 
     	AdminLoginVO resultVO = loginService.actionLogin(adminLoginVO);   
-    	if (resultVO != null && resultVO.getAdminId() != null ) {
+        if (resultVO != null && resultVO.getAdminId() != null ) {
         	
             // 2. spring security 연동        
         	request.getSession().setAttribute("AdminLoginVO", resultVO);
@@ -132,8 +134,13 @@ public class EgovLoginController {
             String currentDay =  LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
      	   
             try{
-            	 model.addAttribute("message", "login_ok"); 
-                 return "forward:/backoffice/actionMain.do";	
+            	 if ( Integer.valueOf(resultVO.getUpdatePassword()) < Integer.valueOf(currentDay) ){
+                 	model.addAttribute("message", "패스워드가 만료 되었습니다.");
+                 	return "/backoffice/backoffice/passChangeView.do";
+                 }else {
+                	model.addAttribute("message", "login_ok"); 
+                 	return "forward:/backoffice/actionMain.do";	// 성공 시 페이지.. (redirect 불가)
+                 }
             }catch (Exception e1){
             	LOGGER.debug("login Error:" + e1.toString());
             	return "/backoffice/login";
